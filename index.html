@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Luchs Detailing">
+<title>Luchs Detailing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0d;--bg2:#1a1a17;--bg3:#242420;--bg4:#2e2e29;
+  --bo:rgba(255,255,255,.07);--bo2:rgba(255,255,255,.14);
+  --tx:#f0efe8;--tx2:#88887f;--tx3:#44443f;
+  --gd:#c8a45a;--gd2:#e8c47a;--gdbg:rgba(200,164,90,.1);--gdbo:rgba(200,164,90,.3);
+  --rd:#e05550;--rdbg:rgba(224,85,80,.1);
+  --gn:#4a9e6a;--gnbg:rgba(74,158,106,.1);
+  --bl:#5a8fc8;--blbg:rgba(90,143,200,.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --r:14px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:light){:root{
+  --bg:#f5f4ef;--bg2:#fff;--bg3:#eeecea;--bg4:#e5e3df;
+  --bo:rgba(0,0,0,.07);--bo2:rgba(0,0,0,.14);
+  --tx:#1a1a17;--tx2:#66665f;--tx3:#aaa9a0;
+  --gd:#8a6432;--gd2:#6a4418;--gdbg:rgba(138,100,50,.08);--gdbo:rgba(138,100,50,.25);
+  --rd:#c03530;--rdbg:rgba(192,53,48,.08);
+  --gn:#2a7e4a;--gnbg:rgba(42,126,74,.08);
+  --bl:#4a7fc8;--blbg:rgba(74,127,200,.08);
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;}
+.screen{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;overflow:hidden;z-index:1;}
+.screen.active{display:flex;}
+.nav{padding:calc(var(--st) + 12px) 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);flex-shrink:0;}
+.nav-back{background:none;border:none;color:var(--gd);font-size:16px;font-family:var(--sans);padding:8px 0;cursor:pointer;min-height:44px;display:flex;align-items:center;}
+.nav-title{font-size:15px;font-weight:500;flex:1;text-align:center;}
+.nav-sub{font-size:10px;color:var(--tx2);letter-spacing:.12em;text-transform:uppercase;flex:1;text-align:center;}
+.nav-action{background:none;border:none;color:var(--gd);font-size:14px;font-family:var(--sans);padding:8px 0;cursor:pointer;min-height:44px;display:flex;align-items:center;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px calc(var(--sb) + 90px);}
+.scroll.nop{padding-bottom:16px;}
+.btm{position:absolute;bottom:0;left:0;right:0;padding:12px 18px calc(var(--sb) + 12px);background:var(--bg);border-top:1px solid var(--bo);}
+.btn{display:block;width:100%;padding:15px;border-radius:var(--r);font-family:var(--sans);font-size:15px;font-weight:500;border:none;cursor:pointer;text-align:center;-webkit-appearance:none;min-height:50px;}
+.btn-gold{background:var(--gd);color:#1a1a17;}
+.btn-ghost{background:var(--bg3);color:var(--tx2);border:1px solid var(--bo2);}
+.btn-danger{background:var(--rdbg);color:var(--rd);border:1px solid rgba(224,85,80,.2);}
+.btn-blue{background:var(--blbg);color:var(--bl);border:1px solid rgba(90,143,200,.25);}
+.btn-green{background:var(--gnbg);color:var(--gn);border:1px solid rgba(74,158,106,.25);}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.card{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.field{margin-bottom:13px;}
+.field:last-child{margin-bottom:0;}
+.field label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);display:block;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--bo2);border-radius:10px;padding:13px 14px;color:var(--tx);font-family:var(--sans);font-size:15px;outline:none;-webkit-appearance:none;transition:border-color .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gd);}
+.field textarea{resize:none;height:80px;line-height:1.5;}
+.search-box{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.search-box input{flex:1;background:none;border:none;color:var(--tx);font-family:var(--sans);font-size:15px;outline:none;}
+.search-ico{color:var(--tx3);font-size:18px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:10px 16px;border-radius:99px;font-size:14px;border:1px solid var(--bo2);background:var(--bg3);color:var(--tx2);cursor:pointer;min-height:44px;display:flex;align-items:center;transition:all .15s;}
+.chip.on{background:var(--gdbg);border-color:var(--gdbo);color:var(--gd2);}
+.list-item{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:66px;transition:border-color .15s;}
+.list-item:active{border-color:var(--gdbo);}
+.list-ico{width:40px;height:40px;border-radius:10px;background:var(--gdbg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.list-content{flex:1;}
+.list-title{font-size:15px;font-weight:500;margin-bottom:2px;}
+.list-sub{font-size:12px;color:var(--tx2);}
+.list-arr{font-size:20px;color:var(--tx3);}
+.sec{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx2);margin:18px 0 10px;}
+.sec:first-child{margin-top:0;}
+.hero{padding:28px 18px 22px;border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:14px;}
+.hero-logo{height:40px;}
+@media(prefers-color-scheme:dark){.hero-logo{filter:invert(1);opacity:.9;}}
+.hero-title{font-family:var(--serif);font-size:26px;line-height:1.1;}
+.hero-title em{font-style:italic;color:var(--gd);}
+.empty{text-align:center;padding:40px 20px;color:var(--tx3);}
+.empty-ico{font-size:48px;margin-bottom:12px;opacity:.3;}
+.empty-txt{font-size:14px;line-height:1.6;}
+.badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;}
+.badge-g{background:var(--gnbg);color:var(--gn);}
+.badge-y{background:var(--gdbg);color:var(--gd);}
+.badge-r{background:var(--rdbg);color:var(--rd);}
+.badge-b{background:var(--blbg);color:var(--bl);}
+.pkg{background:var(--bg2);border:1.5px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;min-height:80px;transition:border-color .15s;}
+.pkg.sel{border-color:var(--gdbo);background:var(--gdbg);}
+.pkg-name{font-size:15px;font-weight:500;margin-bottom:3px;}
+.pkg-price{font-family:var(--serif);font-size:26px;color:var(--gd);margin-bottom:5px;line-height:1.1;}
+.pkg-desc{font-size:12px;color:var(--tx2);line-height:1.6;}
+.addon{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bo);cursor:pointer;min-height:48px;}
+.addon-l{display:flex;align-items:center;gap:12px;}
+.addon-cb{width:22px;height:22px;border-radius:5px;border:1.5px solid var(--bo2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.addon-cb.on{background:var(--gd);border-color:var(--gd);}
+.addon-cb.on::after{content:'✓';color:#1a1a17;font-size:14px;font-weight:700;}
+.addon-name{font-size:14px;}
+.addon-p{font-size:13px;color:var(--gd);}
+.tabs{display:flex;border-bottom:1px solid var(--bo);background:var(--bg);position:sticky;top:0;z-index:5;}
+.tab{flex:1;padding:12px 8px;text-align:center;font-size:13px;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.tab.active{color:var(--gd);border-bottom-color:var(--gd);font-weight:500;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.fab{position:fixed;bottom:calc(var(--sb) + 20px);right:20px;width:56px;height:56px;border-radius:50%;background:var(--gd);color:#1a1a17;border:none;font-size:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(200,164,90,.4);cursor:pointer;z-index:100;transition:transform .2s;}
+.fab:active{transform:scale(0.95);}
+.sig-box{border:1.5px dashed var(--bo2);border-radius:var(--r);padding:16px;background:var(--bg2);margin-bottom:16px;}
+.sig-label{font-size:12px;color:var(--tx2);margin-bottom:8px;letter-spacing:.05em;}
+.sig-canvas{width:100%;height:150px;border:1px solid var(--bo);border-radius:6px;background:#fff;touch-action:none;cursor:crosshair;}
+@media(prefers-color-scheme:dark){.sig-canvas{background:#f9f9f9;}}
+.sig-clear{font-size:12px;color:var(--rd);margin-top:8px;cursor:pointer;text-align:right;}
+.belehrung{font-size:12px;line-height:1.7;color:var(--tx2);padding:12px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px;}
+.belehrung h4{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:6px;}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--bo);}
+.checkbox-row:first-child{border-top:none;}
+.checkbox-box{width:20px;height:20px;border:1.5px solid var(--bo2);border-radius:4px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.checkbox-box.checked{background:var(--gd);border-color:var(--gd);}
+.checkbox-box.checked::after{content:'✓';color:#1a1a17;font-size:13px;font-weight:700;}
+.checkbox-label{font-size:13px;line-height:1.5;cursor:pointer;}
+.doc-item{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.doc-title{font-size:14px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.doc-meta{font-size:12px;color:var(--tx2);margin-bottom:10px;}
+.doc-actions{display:flex;gap:8px;}
+.doc-btn{flex:1;padding:8px 12px;border:1px solid var(--bo2);background:var(--bg);border-radius:6px;font-size:12px;text-align:center;cursor:pointer;}
+.doc-btn:active{background:var(--bg3);}
+
+/* ── ORDER DETAIL SPECIFIC ── */
+.status-bar{display:flex;align-items:center;gap:0;margin-bottom:16px;overflow:hidden;border-radius:var(--r);}
+.status-step{flex:1;padding:10px 4px;text-align:center;font-size:10px;font-weight:500;letter-spacing:.06em;background:var(--bg3);color:var(--tx3);border:1px solid var(--bo);border-right:none;cursor:pointer;transition:all .2s;}
+.status-step:first-child{border-radius:var(--r) 0 0 var(--r);}
+.status-step:last-child{border-radius:0 var(--r) var(--r) 0;border-right:1px solid var(--bo);}
+.status-step.active-step{background:var(--gdbg);color:var(--gd2);border-color:var(--gdbo);}
+.status-step.done-step{background:var(--gnbg);color:var(--gn);border-color:rgba(74,158,106,.25);}
+
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo);}
+.info-row:last-child{border-bottom:none;}
+.info-label{font-size:12px;color:var(--tx2);}
+.info-val{font-size:13px;font-weight:500;}
+
+.price-row{display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--bo);}
+.price-row:last-child{border-bottom:none;}
+.price-label{font-size:13px;color:var(--tx2);}
+.price-val{font-size:13px;}
+.price-total-row{display:flex;justify-content:space-between;padding:14px 16px;background:var(--gdbg);}
+.price-total-label{font-size:15px;font-weight:500;}
+.price-total-val{font-family:var(--serif);font-size:22px;color:var(--gd);}
+
+.notiz-field{width:100%;background:var(--bg3);border:1px solid var(--bo2);border-radius:10px;padding:12px 14px;color:var(--tx);font-family:var(--sans);font-size:14px;outline:none;resize:none;line-height:1.5;min-height:80px;}
+.notiz-field:focus{border-color:var(--gd);}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="s-home">
+  <div class="hero">
+    <img class="hero-logo" id="home-logo" alt="">
+    <div><div class="hero-title">Luchs <em>Detailing</em></div><div style="font-size:11px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;">Aufbereitungs-App</div></div>
+  </div>
+  <div class="scroll" style="padding-bottom:20px;">
+    <div class="search-box">
+      <div class="search-ico">🔍</div>
+      <input type="text" id="home-search" placeholder="Kunde, Kennzeichen oder Telefon...">
+    </div>
+    <div class="sec">Schnellzugriff</div>
+    <div class="list-item" id="btn-new-customer">
+      <div class="list-ico">➕</div>
+      <div class="list-content">
+        <div class="list-title">Neuer Kunde</div>
+        <div class="list-sub">Kunde anlegen & Auftrag starten</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="list-item" id="btn-customers">
+      <div class="list-ico">👥</div>
+      <div class="list-content">
+        <div class="list-title">Alle Kunden</div>
+        <div class="list-sub" id="customer-count">0 Kunden</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="sec">Letzte Aufträge</div>
+    <div id="recent-orders"></div>
+    <div class="sec">Tools</div>
+    <div class="list-item" id="btn-backup">
+      <div class="list-ico" style="background:var(--blbg);">💾</div>
+      <div class="list-content">
+        <div class="list-title">Daten sichern</div>
+        <div class="list-sub">Backup herunterladen</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="list-item" id="btn-restore">
+      <div class="list-ico" style="background:var(--blbg);">📥</div>
+      <div class="list-content">
+        <div class="list-title">Daten wiederherstellen</div>
+        <div class="list-sub">Backup hochladen</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="list-item" id="btn-settings">
+      <div class="list-ico">⚙️</div>
+      <div class="list-content">
+        <div class="list-title">Einstellungen</div>
+        <div class="list-sub">Kontakt, Produkte, Links</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- KUNDEN-LISTE -->
+<div class="screen" id="s-customers">
+  <div class="nav">
+    <button class="nav-back" id="back-customers">🏠 Home</button>
+    <div class="nav-title">Kunden</div>
+    <button class="nav-action" id="add-customer-from-list">＋</button>
+  </div>
+  <div class="scroll">
+    <div class="search-box">
+      <div class="search-ico">🔍</div>
+      <input type="text" id="customer-search" placeholder="Name, Kennzeichen, Telefon...">
+    </div>
+    <div id="customer-list"></div>
+  </div>
+</div>
+
+<!-- KUNDE ANLEGEN/BEARBEITEN -->
+<div class="screen" id="s-customer-edit">
+  <div class="nav">
+    <button class="nav-back" id="back-customer-edit">🏠 Home</button>
+    <div class="nav-sub" id="customer-edit-title">Neuer Kunde</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Anrede</div>
+    <div class="chips" id="anrede-chips">
+      <div class="chip on" data-val="Herr">Herr</div>
+      <div class="chip" data-val="Frau">Frau</div>
+      <div class="chip" data-val="Familie">Familie</div>
+      <div class="chip" data-val="Firma">Firma</div>
+    </div>
+    <div id="fields-person">
+      <div class="sec">Kontakt</div>
+      <div class="card">
+        <div class="field"><label>Vorname</label><input id="ce-vname" type="text" placeholder="Max"></div>
+        <div class="field"><label>Nachname</label><input id="ce-nname" type="text" placeholder="Mustermann"></div>
+        <div class="field"><label>E-Mail</label><input id="ce-email" type="email" placeholder="max@example.com"></div>
+        <div class="field"><label>Telefon / WhatsApp</label><input id="ce-tel" type="tel" placeholder="+49 151 ..."></div>
+      </div>
+    </div>
+    <div id="fields-familie" style="display:none;">
+      <div class="sec">Person 1</div>
+      <div class="card">
+        <div class="field"><label>Vorname</label><input id="ce-fam-vname1" type="text" placeholder="Max"></div>
+        <div class="field"><label>Nachname</label><input id="ce-fam-nname1" type="text" placeholder="Mustermann"></div>
+      </div>
+      <div class="sec">Person 2 (optional)</div>
+      <div class="card">
+        <div class="field"><label>Vorname</label><input id="ce-fam-vname2" type="text" placeholder="Maria"></div>
+        <div class="field"><label>Nachname</label><input id="ce-fam-nname2" type="text" placeholder="Mustermann"></div>
+      </div>
+      <div class="sec">Kontakt</div>
+      <div class="card">
+        <div class="field"><label>E-Mail</label><input id="ce-fam-email" type="email" placeholder="familie@example.com"></div>
+        <div class="field"><label>Telefon / WhatsApp</label><input id="ce-fam-tel" type="tel" placeholder="+49 151 ..."></div>
+      </div>
+    </div>
+    <div id="fields-firma" style="display:none;">
+      <div class="sec">Firma</div>
+      <div class="card">
+        <div class="field"><label>Firmenname</label><input id="ce-firma-name" type="text" placeholder="Mustermann GmbH"></div>
+        <div class="field"><label>USt-ID (optional)</label><input id="ce-firma-ustid" type="text" placeholder="DE123456789"></div>
+      </div>
+      <div class="sec">Ansprechpartner</div>
+      <div class="card">
+        <div class="field"><label>Name</label><input id="ce-firma-ansprech" type="text" placeholder="Max Mustermann"></div>
+        <div class="field"><label>E-Mail</label><input id="ce-firma-email" type="email" placeholder="kontakt@firma.de"></div>
+        <div class="field"><label>Telefon</label><input id="ce-firma-tel" type="tel" placeholder="+49 151 ..."></div>
+      </div>
+    </div>
+    <div class="sec">Adresse</div>
+    <div class="card">
+      <div class="field"><label>Straße & Hausnummer</label><input id="ce-strasse" type="text" placeholder="Musterstraße 12"></div>
+      <div style="display:grid;grid-template-columns:80px 1fr;gap:10px;">
+        <div class="field"><label>PLZ</label><input id="ce-plz" type="text" placeholder="09112" maxlength="5"></div>
+        <div class="field"><label>Ort</label><input id="ce-ort" type="text" placeholder="Chemnitz"></div>
+      </div>
+      <div class="field">
+        <label>Bundesland</label>
+        <select id="ce-bundesland">
+          <option value="">Bitte wählen</option>
+          <option value="BW">Baden-Württemberg</option>
+          <option value="BY">Bayern</option>
+          <option value="BE">Berlin</option>
+          <option value="BB">Brandenburg</option>
+          <option value="HB">Bremen</option>
+          <option value="HH">Hamburg</option>
+          <option value="HE">Hessen</option>
+          <option value="MV">Mecklenburg-Vorpommern</option>
+          <option value="NI">Niedersachsen</option>
+          <option value="NW">Nordrhein-Westfalen</option>
+          <option value="RP">Rheinland-Pfalz</option>
+          <option value="SL">Saarland</option>
+          <option value="SN">Sachsen</option>
+          <option value="ST">Sachsen-Anhalt</option>
+          <option value="SH">Schleswig-Holstein</option>
+          <option value="TH">Thüringen</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-customer">Kunde speichern</button>
+  </div>
+</div>
+
+<!-- KUNDEN-DETAIL -->
+<div class="screen" id="s-customer-detail">
+  <div class="nav">
+    <button class="nav-back" id="back-customer-detail">🏠 Home</button>
+    <div class="nav-title" id="cd-name"></div>
+    <button class="nav-action" id="edit-customer">✎</button>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Kontakt</div>
+      <div style="font-size:15px;margin-bottom:4px;" id="cd-full-name"></div>
+      <div style="font-size:14px;color:var(--tx2);" id="cd-contact"></div>
+    </div>
+    <div class="sec">Fahrzeuge</div>
+    <div id="cd-vehicles"></div>
+    <button class="btn btn-ghost" id="add-vehicle" style="margin-bottom:12px;">＋ Neues Fahrzeug</button>
+    <button class="btn btn-danger" id="delete-customer" style="margin-bottom:12px;">Kunde löschen</button>
+  </div>
+</div>
+
+<!-- FAHRZEUG ANLEGEN/BEARBEITEN -->
+<div class="screen" id="s-vehicle-edit">
+  <div class="nav">
+    <button class="nav-back" id="back-vehicle-edit">🏠 Home</button>
+    <div class="nav-sub" id="vehicle-edit-title">Neues Fahrzeug</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="field"><label>Kennzeichen</label><input id="ve-kz" type="text" placeholder="C-AB 1234" style="text-transform:uppercase;"></div>
+      <div class="field"><label>Marke & Modell</label><input id="ve-modell" type="text" placeholder="Audi RSQ8"></div>
+      <div class="field"><label>Farbe</label><input id="ve-farbe" type="text" placeholder="Schwarz metallic"></div>
+      <div class="field"><label>Baujahr</label><input id="ve-jahr" type="number" placeholder="2022"></div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-vehicle">Fahrzeug speichern</button>
+  </div>
+</div>
+
+<!-- FAHRZEUG-DETAIL -->
+<div class="screen" id="s-vehicle-detail">
+  <div class="nav">
+    <button class="nav-back" id="back-vehicle-detail">🏠 Home</button>
+    <div class="nav-title" id="vd-kz"></div>
+    <button class="nav-action" id="edit-vehicle">✎</button>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Fahrzeug</div>
+      <div style="font-size:18px;font-weight:500;margin-bottom:4px;" id="vd-modell"></div>
+      <div style="font-size:14px;color:var(--tx2);" id="vd-details"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:18px;">
+      <button class="btn btn-gold" id="start-order" style="flex:1;">Neuer Auftrag</button>
+    </div>
+    <div class="sec">Auftrags-Historie</div>
+    <div id="vd-orders"></div>
+    <button class="btn btn-danger" id="delete-vehicle" style="margin-top:12px;">Fahrzeug löschen</button>
+  </div>
+</div>
+
+<!-- EINSTELLUNGEN -->
+<div class="screen" id="s-settings">
+  <div class="nav">
+    <button class="nav-back" id="back-settings">🏠 Home</button>
+    <div class="nav-title">Einstellungen</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Kontaktdaten</div>
+    <div class="card">
+      <div class="field"><label>Name</label><input id="st-name" type="text"></div>
+      <div class="field"><label>Adresse</label><input id="st-addr" type="text"></div>
+      <div class="field"><label>Telefon</label><input id="st-tel" type="tel"></div>
+      <div class="field"><label>E-Mail</label><input id="st-email" type="email"></div>
+      <div class="field"><label>Steuer-ID</label><input id="st-steuerid" type="text"></div>
+      <div class="field"><label>IBAN (optional)</label><input id="st-iban" type="text"></div>
+    </div>
+    <div class="sec">Links</div>
+    <div class="card">
+      <div class="field"><label>Google Bewertungs-Link</label><input id="st-google" type="url" placeholder="https://g.page/..."></div>
+      <div class="field"><label>WhatsApp Bewertungs-Text</label><textarea id="st-review-msg" placeholder="Hey! Wie war deine Erfahrung? Bewerte uns gerne hier: [LINK]"></textarea></div>
+    </div>
+    <div class="sec">Pakete & Zeiten</div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo);">
+        <div style="font-size:12px;font-weight:500;">Paket</div>
+        <div style="font-size:11px;color:var(--tx2);text-align:center;">Preis</div>
+        <div style="font-size:11px;color:var(--tx2);text-align:center;">Soll (Min)</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo);">
+        <input id="prd-name1" type="text" value="Frisch" style="border:none;background:none;padding:0;font-size:14px;">
+        <input id="prd-price1" type="number" value="89" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+        <input id="prd-time1" type="number" value="210" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo);">
+        <input id="prd-name2" type="text" value="Makellos" style="border:none;background:none;padding:0;font-size:14px;">
+        <input id="prd-price2" type="number" value="149" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+        <input id="prd-time2" type="number" value="330" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 80px 80px;gap:10px;align-items:center;padding:10px 0;">
+        <input id="prd-name3" type="text" value="Perfektion" style="border:none;background:none;padding:0;font-size:14px;">
+        <input id="prd-price3" type="number" value="249" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+        <input id="prd-time3" type="number" value="510" style="border:1px solid var(--bo2);background:var(--bg3);padding:8px;border-radius:6px;text-align:center;font-size:14px;">
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-settings">Einstellungen speichern</button>
+  </div>
+</div>
+
+<input type="file" id="restore-input" accept=".json" style="display:none;">
+
+<!-- ORDER FLOW SCREENS -->
+
+<!-- ORDER: PAKET WÄHLEN -->
+<div class="screen" id="s-order-package">
+  <div class="nav">
+    <button class="nav-back" id="back-order-package">🏠 Home</button>
+    <div class="nav-sub">1 — Paket wählen</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Paket</div>
+    <div class="pkg" data-pkg="frisch">
+      <div class="pkg-name">Frisch</div>
+      <div class="pkg-price" id="pkg-price-frisch">89 €</div>
+      <div class="pkg-desc">Innenraumsaugen · Tornador · Dampfreinigung · Außenwäsche · Felgen · Scheiben · New Car Smell (~3.5h)</div>
+    </div>
+    <div class="pkg" data-pkg="makellos">
+      <div class="pkg-name">Makellos</div>
+      <div class="pkg-price" id="pkg-price-makellos">149 €</div>
+      <div class="pkg-desc">Alles aus Frisch + Maschinenpolitur · IPA-Entfettung · Sealant Lack · Felgenversiegelung (~5.5h)</div>
+    </div>
+    <div class="pkg" data-pkg="perfektion">
+      <div class="pkg-name">Perfektion</div>
+      <div class="pkg-price" id="pkg-price-perfektion">249 €</div>
+      <div class="pkg-desc">Alles aus Makellos + Keramik-Coating · Lackdickenmessung · 12 Monate Schutz (~8.5h)</div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-package" disabled>Weiter</button>
+  </div>
+</div>
+
+<!-- ORDER: FAHRZEUGKLASSE -->
+<div class="screen" id="s-order-vehicle-class">
+  <div class="nav">
+    <button class="nav-back" id="back-order-vehclass">‹ Zurück</button>
+    <div class="nav-sub">2 — Fahrzeugklasse</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Fahrzeugklasse</div>
+    <div class="chips" id="vehclass-chips">
+      <div class="chip on" data-val="kleinwagen" data-add="0">Kleinwagen (+0€)</div>
+      <div class="chip" data-val="mittelklasse" data-add="20">Mittelklasse (+20€)</div>
+      <div class="chip" data-val="oberklasse" data-add="40">Oberklasse (+40€)</div>
+      <div class="chip" data-val="suv" data-add="30">SUV (+30€)</div>
+      <div class="chip" data-val="van" data-add="35">Van (+35€)</div>
+      <div class="chip" data-val="transporter" data-add="50">Transporter (+50€)</div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-vehclass">Weiter</button>
+  </div>
+</div>
+
+<!-- ORDER: ADD-ONS -->
+<div class="screen" id="s-order-addons">
+  <div class="nav">
+    <button class="nav-back" id="back-order-addons">‹ Zurück</button>
+    <div class="nav-sub">3 — Add-ons</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Zusatzleistungen</div>
+    <div class="card" style="padding:0;">
+      <div class="addon" data-id="dampf" data-price="40">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Dampfreinigung Polster</div></div>
+        <div class="addon-p">40 €</div>
+      </div>
+      <div class="addon" data-id="leder" data-price="40">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Lederreinigung & Pflege</div></div>
+        <div class="addon-p">40 €</div>
+      </div>
+      <div class="addon" data-id="dach" data-price="60">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Dachhimmelreinigung</div></div>
+        <div class="addon-p">60 €</div>
+      </div>
+      <div class="addon" data-id="ozon" data-price="35">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Ozon-Behandlung</div></div>
+        <div class="addon-p">35 €</div>
+      </div>
+      <div class="addon" data-id="tier" data-price="40">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Tierhaarentfernung</div></div>
+        <div class="addon-p">40 €</div>
+      </div>
+      <div class="addon" data-id="sealant" data-price="35">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Sealant Lack</div></div>
+        <div class="addon-p">35 €</div>
+      </div>
+      <div class="addon" data-id="fv" data-price="20">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Felgenversiegelung</div></div>
+        <div class="addon-p">20 €</div>
+      </div>
+      <div class="addon" data-id="flugrost" data-price="30">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Flugrost & Teer</div></div>
+        <div class="addon-p">30 €</div>
+      </div>
+      <div class="addon" data-id="politur" data-price="80">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Hochglanzpolitur</div></div>
+        <div class="addon-p">80 €</div>
+      </div>
+      <div class="addon" data-id="stark" data-price="40">
+        <div class="addon-l"><div class="addon-cb"></div><div class="addon-name">Starkverschmutzung</div></div>
+        <div class="addon-p">40 €</div>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-addons">Weiter</button>
+  </div>
+</div>
+
+<!-- ORDER: ANFAHRT & DETAILS -->
+<div class="screen" id="s-order-details">
+  <div class="nav">
+    <button class="nav-back" id="back-order-details">‹ Zurück</button>
+    <div class="nav-sub">4 — Details</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Anfahrt</div>
+    <div class="card">
+      <div class="field">
+        <label>Anfahrtspauschale (€)</label>
+        <input type="number" id="order-anfahrt" value="0" min="0" step="5" placeholder="0">
+      </div>
+    </div>
+    <div class="sec">Verschmutzungsgrad</div>
+    <div class="chips" id="schmutz-chips">
+      <div class="chip" data-val="leicht">Leicht</div>
+      <div class="chip on" data-val="normal">Normal</div>
+      <div class="chip" data-val="stark">Stark</div>
+    </div>
+    <div class="sec">Datum</div>
+    <div class="card">
+      <div class="field">
+        <label>Auftragsdatum</label>
+        <input type="date" id="order-datum">
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-details">Weiter zur Zusammenfassung</button>
+  </div>
+</div>
+
+<!-- ORDER: ZUSAMMENFASSUNG -->
+<div class="screen" id="s-order-summary">
+  <div class="nav">
+    <button class="nav-back" id="back-order-summary">‹ Zurück</button>
+    <div class="nav-sub">Zusammenfassung</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll nop" style="padding:16px 18px 100px;">
+    <div class="card">
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Fahrzeug</div>
+      <div style="font-size:16px;font-weight:500;margin-bottom:4px;" id="sum-vehicle"></div>
+      <div style="font-size:14px;color:var(--tx2);" id="sum-customer"></div>
+    </div>
+    <div class="sec">Leistungen</div>
+    <div class="card" style="padding:0;">
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo);">
+        <div><span style="font-weight:500;" id="sum-paket-name"></span><span style="color:var(--tx2);font-size:13px;" id="sum-paket-class"></span></div>
+        <div style="font-weight:500;" id="sum-paket-price"></div>
+      </div>
+      <div id="sum-addons-list"></div>
+      <div id="sum-anfahrt-row" style="display:none;padding:12px 16px;border-bottom:1px solid var(--bo);">
+        <div style="display:flex;justify-content:space-between;">
+          <div>Anfahrt</div>
+          <div id="sum-anfahrt-price"></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:16px;background:var(--gdbg);">
+        <div style="font-size:15px;font-weight:500;">Gesamtpreis</div>
+        <div style="font-family:var(--serif);font-size:24px;color:var(--gd);" id="sum-total"></div>
+      </div>
+    </div>
+    <div class="sec">Info</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:13px;color:var(--tx2);">Datum</div>
+        <div style="font-size:13px;" id="sum-datum"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:13px;color:var(--tx2);">Verschmutzung</div>
+        <div style="font-size:13px;" id="sum-schmutz"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <div style="font-size:13px;color:var(--tx2);">Geschätzte Dauer</div>
+        <div style="font-size:13px;" id="sum-duration"></div>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="create-order">Weiter zur Auftragsbestätigung</button>
+  </div>
+</div>
+
+<!-- AUFTRAGSBESTÄTIGUNG -->
+<div class="screen" id="s-auftragsbestaetigung">
+  <div class="nav">
+    <button class="nav-back" id="back-auftragsbestaetigung">‹ Zurück</button>
+    <div class="nav-sub">Auftragsbestätigung</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx2);margin-bottom:4px;">Auftragsbestätigung</div>
+      <div style="font-family:var(--serif);font-size:20px;color:var(--gd);margin-bottom:16px;">Luchs Detailing</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Kunde</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px;" id="ab-customer"></div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Fahrzeug</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px;" id="ab-vehicle"></div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Datum</div>
+      <div style="font-size:14px;margin-bottom:16px;" id="ab-datum"></div>
+    </div>
+    <div class="sec">Leistungen & Preis</div>
+    <div class="card" style="padding:0;" id="ab-leistungen"></div>
+    <div class="sec">Rechtliche Hinweise</div>
+    <div class="belehrung">
+      <h4>Datenschutz (DSGVO)</h4>
+      <p>Ihre personenbezogenen Daten werden ausschließlich zur Auftragsabwicklung verwendet. Fotos Ihres Fahrzeugs dienen der Dokumentation und werden nicht veröffentlicht.</p>
+    </div>
+    <div class="belehrung">
+      <h4>Widerrufsrecht (§ 312g BGB)</h4>
+      <p>Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Das Widerrufsrecht erlischt, wenn die Leistung vollständig erbracht wurde und Sie ausdrücklich zugestimmt haben.</p>
+    </div>
+    <div class="belehrung">
+      <h4>AGB & Haftungsausschluss</h4>
+      <p>Die Aufbereitung erfolgt nach bestem Wissen. Bei bestehenden Vorschäden wird keine Haftung übernommen. Alle dokumentierten Schäden werden im Übergabeprotokoll festgehalten.</p>
+    </div>
+    <div class="sec">Zustimmung</div>
+    <div class="card">
+      <div class="checkbox-row">
+        <div class="checkbox-box" id="cb-dsgvo"></div>
+        <div class="checkbox-label">Ich habe die Datenschutzhinweise zur Kenntnis genommen.</div>
+      </div>
+      <div class="checkbox-row">
+        <div class="checkbox-box" id="cb-widerruf"></div>
+        <div class="checkbox-label">Ich wurde über mein Widerrufsrecht informiert und stimme der sofortigen Leistungserbringung zu.</div>
+      </div>
+      <div class="checkbox-row">
+        <div class="checkbox-box" id="cb-agb"></div>
+        <div class="checkbox-label">Ich akzeptiere die AGB und den Haftungsausschluss.</div>
+      </div>
+    </div>
+    <div class="sec">Unterschrift Kunde</div>
+    <div class="sig-box">
+      <div class="sig-label">Bitte hier unterschreiben</div>
+      <canvas class="sig-canvas" id="sig-kunde"></canvas>
+      <div class="sig-clear" id="clear-sig-kunde">Unterschrift löschen</div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-auftragsbestaetigung">Auftragsbestätigung speichern</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ORDER DETAIL SCREEN — NEU in v2
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="screen" id="s-order-detail">
+  <div class="nav">
+    <button class="nav-back" id="back-order-detail">‹ Zurück</button>
+    <div class="nav-title" id="od-title">Auftrag</div>
+    <button class="nav-action" id="od-delete-btn" style="color:var(--rd);font-size:20px;">🗑</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="od-overview">Übersicht</div>
+    <div class="tab" data-tab="od-notizen">Notizen</div>
+    <div class="tab" data-tab="od-docs">Dokumente</div>
+  </div>
+
+  <!-- TAB: ÜBERSICHT -->
+  <div class="scroll tab-content active" id="tab-od-overview">
+
+    <!-- Status-Stepper -->
+    <div class="sec">Status</div>
+    <div class="status-bar">
+      <div class="status-step" data-status="draft" id="stp-draft">Entwurf</div>
+      <div class="status-step" data-status="signed" id="stp-signed">Unterschrieben</div>
+      <div class="status-step" data-status="in_progress" id="stp-in_progress">In Arbeit</div>
+      <div class="status-step" data-status="completed" id="stp-completed">Fertig</div>
+    </div>
+
+    <!-- Schnell-Aktionen je Status -->
+    <div id="od-action-area" style="margin-bottom:12px;"></div>
+
+    <!-- Fahrzeug & Kunde -->
+    <div class="card">
+      <div class="info-row">
+        <span class="info-label">Fahrzeug</span>
+        <span class="info-val" id="od-veh"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Kunde</span>
+        <span class="info-val" id="od-cust"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Datum</span>
+        <span class="info-val" id="od-date"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Verschmutzung</span>
+        <span class="info-val" id="od-schmutz"></span>
+      </div>
+    </div>
+
+    <!-- Preisübersicht -->
+    <div class="sec">Leistungen</div>
+    <div class="card" style="padding:0;" id="od-price-block"></div>
+
+  </div>
+
+  <!-- TAB: NOTIZEN -->
+  <div class="scroll tab-content" id="tab-od-notizen">
+    <div class="sec">Interne Notizen</div>
+    <div class="card">
+      <div class="field">
+        <label>Motor / Motorraum</label>
+        <textarea class="notiz-field" id="od-note-motor" placeholder="z.B. starke Ölverschmutzung..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Innenraum</label>
+        <textarea class="notiz-field" id="od-note-innen" placeholder="z.B. Flecken auf Sitzen..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Lack</label>
+        <textarea class="notiz-field" id="od-note-lack" placeholder="z.B. Kratzer hinten rechts..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Felgen</label>
+        <textarea class="notiz-field" id="od-note-felgen" placeholder="z.B. Bremsstaub stark..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Glas / Scheiben</label>
+        <textarea class="notiz-field" id="od-note-glas" placeholder="z.B. Heckscheibe innen stark..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Polster / Leder</label>
+        <textarea class="notiz-field" id="od-note-polster" placeholder="z.B. Lederpflege nötig..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Sonstiges</label>
+        <textarea class="notiz-field" id="od-note-sonstiges" placeholder="Weitere Anmerkungen..."></textarea>
+      </div>
+    </div>
+    <button class="btn btn-gold" id="od-save-notes" style="margin-top:4px;">Notizen speichern</button>
+  </div>
+
+  <!-- TAB: DOKUMENTE -->
+  <div class="scroll tab-content" id="tab-od-docs">
+    <div class="sec">Dokumente</div>
+    <div id="od-docs-list"></div>
+    <div id="od-docs-empty" class="empty" style="display:none;">
+      <div class="empty-ico">📄</div>
+      <div class="empty-txt">Noch keine Dokumente</div>
+    </div>
+  </div>
+
+</div>
+<!-- ═══ END ORDER DETAIL ═══ -->
+
+<!-- DOKUMENTE (altes Screen, bleibt für Kompatibilität) -->
+<div class="screen" id="s-order-documents">
+  <div class="nav">
+    <button class="nav-back" id="back-order-documents">‹ Zurück</button>
+    <div class="nav-sub">Dokumente</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Auftragsdokumente</div>
+    <div id="documents-list"></div>
+    <div class="empty" id="documents-empty" style="display:none;">
+      <div class="empty-ico">📄</div>
+      <div class="empty-txt">Noch keine Dokumente vorhanden</div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fab">＋</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+'use strict';
+
+const LOGO = 'data:image/jpeg;base64,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';
+
+// ── DATENBANK ──────────────────────────────────────────────────────
+let DB = {
+  customers: {},
+  vehicles: {},
+  orders: {},
+  settings: {
+    name: 'Oskar Koch',
+    addr: 'Heinrich-Beck-Straße 9, 09112 Chemnitz',
+    tel: '015772948189',
+    email: 'skrkoch@gmail.com',
+    steuerID: '42317296050',
+    iban: '',
+    googleLink: '',
+    reviewMsg: 'Hey! Wie war deine Erfahrung mit der Aufbereitung? Würde mich über eine ehrliche Bewertung freuen: [LINK]',
+    packages: [
+      {name: 'Frisch', price: 89, time: 210},
+      {name: 'Makellos', price: 149, time: 330},
+      {name: 'Perfektion', price: 249, time: 510}
+    ]
+  }
+};
+
+// ── STORAGE ────────────────────────────────────────────────────────
+function saveDB() {
+  try { localStorage.setItem('luchsDB', JSON.stringify(DB)); return true; }
+  catch(e) { console.error('Save failed:', e); return false; }
+}
+function loadDB() {
+  try {
+    const stored = localStorage.getItem('luchsDB');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      DB = {
+        customers: parsed.customers || {},
+        vehicles: parsed.vehicles || {},
+        orders: parsed.orders || {},
+        settings: {...DB.settings, ...(parsed.settings || {})}
+      };
+    }
+  } catch(e) { console.error('Load failed:', e); }
+}
+
+// ── UTILITIES ──────────────────────────────────────────────────────
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+
+function formatDate(d) {
+  if (!d) return '';
+  if (typeof d === 'string') d = new Date(d);
+  return d.toLocaleDateString('de-DE');
+}
+
+function statusLabel(s) {
+  return {draft:'Entwurf', signed:'Unterschrieben', in_progress:'In Arbeit', completed:'Abgeschlossen'}[s] || s;
+}
+function statusBadgeClass(s) {
+  return {draft:'badge-b', signed:'badge-y', in_progress:'badge-y', completed:'badge-g'}[s] || 'badge-b';
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────────
+let navHistory = [];
+
+function go(screenId, data) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(screenId);
+  if (el) { el.classList.add('active'); el.querySelector('.scroll')?.scrollTo(0,0); }
+  onEnter(screenId, data);
+  updateFAB();
+}
+
+function onEnter(screenId, data) {
+  if (screenId === 's-home') renderHome();
+  if (screenId === 's-customers') renderCustomers();
+  if (screenId === 's-customer-detail') renderCustomerDetail(data);
+  if (screenId === 's-vehicle-detail') renderVehicleDetail(data);
+  if (screenId === 's-settings') renderSettings();
+  if (screenId === 's-order-detail') renderOrderDetail(data);
+}
+
+// ── HOME ───────────────────────────────────────────────────────────
+function renderHome() {
+  const customerCount = Object.keys(DB.customers).length;
+  document.getElementById('customer-count').textContent = customerCount === 1 ? '1 Kunde' : `${customerCount} Kunden`;
+
+  const recentDiv = document.getElementById('recent-orders');
+  const allOrders = Object.values(DB.orders).sort((a,b) => new Date(b.createdAt||b.date) - new Date(a.createdAt||a.date)).slice(0,5);
+
+  if (allOrders.length === 0) {
+    recentDiv.innerHTML = '<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Noch keine Aufträge vorhanden</div></div>';
+  } else {
+    recentDiv.innerHTML = allOrders.map(o => {
+      const c = DB.customers[o.customerId];
+      const v = DB.vehicles[o.vehicleId];
+      return `
+        <div class="list-item" onclick="go('s-order-detail','${o.id}')">
+          <div class="list-ico">🚗</div>
+          <div class="list-content">
+            <div class="list-title">${v?.kz||'?'} · ${c?.displayName||'?'}</div>
+            <div class="list-sub">${formatDate(o.date)} · ${o.paket?.name||'?'} · ${o.total||0} €
+              <span class="badge ${statusBadgeClass(o.status)}" style="margin-left:6px;">${statusLabel(o.status)}</span>
+            </div>
+          </div>
+          <div class="list-arr">›</div>
+        </div>`;
+    }).join('');
+  }
+}
+
+// ── KUNDEN-LISTE ───────────────────────────────────────────────────
+function renderCustomers(searchTerm = '') {
+  const list = document.getElementById('customer-list');
+  let customers = Object.values(DB.customers);
+  if (searchTerm) {
+    const q = searchTerm.toLowerCase();
+    customers = customers.filter(c => {
+      const vehicles = c.vehicles.map(vid => DB.vehicles[vid]).filter(Boolean);
+      const kzs = vehicles.map(v => v.kz.toLowerCase()).join(' ');
+      return c.displayName.toLowerCase().includes(q) ||
+             (c.tel||'').toLowerCase().includes(q) ||
+             (c.email||'').toLowerCase().includes(q) ||
+             kzs.includes(q);
+    });
+  }
+  customers.sort((a,b) => a.displayName.localeCompare(b.displayName));
+  if (customers.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-ico">👤</div><div class="empty-txt">Keine Kunden gefunden</div></div>';
+  } else {
+    list.innerHTML = customers.map(c => {
+      const vehCount = c.vehicles.length;
+      const vehText = vehCount === 0 ? 'Keine Fahrzeuge' : vehCount === 1 ? '1 Fahrzeug' : `${vehCount} Fahrzeuge`;
+      return `
+        <div class="list-item" onclick="openCustomer('${c.id}')">
+          <div class="list-ico">👤</div>
+          <div class="list-content">
+            <div class="list-title">${c.displayName}</div>
+            <div class="list-sub">${c.tel||'Keine Tel'} · ${vehText}</div>
+          </div>
+          <div class="list-arr">›</div>
+        </div>`;
+    }).join('');
+  }
+}
+
+// ── KUNDEN-DETAIL ──────────────────────────────────────────────────
+function renderCustomerDetail(customerId) {
+  const c = DB.customers[customerId];
+  if (!c) return go('s-home');
+  document.getElementById('cd-name').textContent = c.displayName;
+  document.getElementById('cd-full-name').textContent = c.displayName;
+  let contactStr = '';
+  if (c.tel) contactStr += c.tel;
+  if (c.email) contactStr += (contactStr?' · ':'')+c.email;
+  if (c.ort) contactStr += (contactStr?' · ':'')+c.plz+' '+c.ort;
+  document.getElementById('cd-contact').textContent = contactStr||'Keine Kontaktdaten';
+  const vehDiv = document.getElementById('cd-vehicles');
+  if (c.vehicles.length === 0) {
+    vehDiv.innerHTML = '<div class="empty"><div class="empty-ico">🚗</div><div class="empty-txt">Noch keine Fahrzeuge</div></div>';
+  } else {
+    vehDiv.innerHTML = c.vehicles.map(vid => {
+      const v = DB.vehicles[vid];
+      if (!v) return '';
+      const oc = v.orders.length;
+      return `
+        <div class="list-item" onclick="openVehicle('${v.id}')">
+          <div class="list-ico">🚗</div>
+          <div class="list-content">
+            <div class="list-title">${v.kz} · ${v.modell}</div>
+            <div class="list-sub">${v.farbe} · ${v.jahr} · ${oc===0?'Keine Aufträge':oc===1?'1 Auftrag':`${oc} Aufträge`}</div>
+          </div>
+          <div class="list-arr">›</div>
+        </div>`;
+    }).join('');
+  }
+  window.currentCustomerId = customerId;
+}
+
+// ── FAHRZEUG-DETAIL ────────────────────────────────────────────────
+function renderVehicleDetail(vehicleId) {
+  const v = DB.vehicles[vehicleId];
+  if (!v) return go('s-home');
+  const c = DB.customers[v.customerId];
+  document.getElementById('vd-kz').textContent = v.kz;
+  document.getElementById('vd-modell').textContent = v.modell;
+  document.getElementById('vd-details').textContent = `${v.farbe} · ${v.jahr} · ${c?.displayName||'?'}`;
+  const ordersDiv = document.getElementById('vd-orders');
+  if (v.orders.length === 0) {
+    ordersDiv.innerHTML = '<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Noch keine Aufträge</div></div>';
+  } else {
+    const orders = v.orders.map(oid => DB.orders[oid]).filter(Boolean).sort((a,b)=>new Date(b.createdAt||b.date)-new Date(a.createdAt||a.date));
+    ordersDiv.innerHTML = orders.map(o => `
+      <div class="list-item" onclick="go('s-order-detail','${o.id}')">
+        <div class="list-ico">📋</div>
+        <div class="list-content">
+          <div class="list-title">${formatDate(o.date)} · ${o.paket?.name||'?'}</div>
+          <div class="list-sub">${o.total||0} €
+            <span class="badge ${statusBadgeClass(o.status)}" style="margin-left:6px;">${statusLabel(o.status)}</span>
+          </div>
+        </div>
+        <div class="list-arr">›</div>
+      </div>`).join('');
+  }
+  window.currentVehicleId = vehicleId;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// ORDER DETAIL — NEU v2
+// ══════════════════════════════════════════════════════════════════
+window.currentOrderId = null;
+
+function renderOrderDetail(orderId) {
+  const o = DB.orders[orderId];
+  if (!o) return go('s-home');
+  window.currentOrderId = orderId;
+
+  const v = DB.vehicles[o.vehicleId];
+  const c = DB.customers[o.customerId];
+
+  document.getElementById('od-title').textContent = `${v?.kz||'?'} · ${formatDate(o.date)}`;
+
+  // Ensure all tabs start fresh
+  document.querySelectorAll('#s-order-detail .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#s-order-detail .tab-content').forEach(tc => tc.classList.remove('active'));
+  document.querySelector('#s-order-detail .tab[data-tab="od-overview"]').classList.add('active');
+  document.getElementById('tab-od-overview').classList.add('active');
+
+  // ── Status Stepper
+  const statuses = ['draft','signed','in_progress','completed'];
+  const currentIdx = statuses.indexOf(o.status);
+  statuses.forEach((s, i) => {
+    const el = document.getElementById(`stp-${s}`);
+    el.classList.remove('active-step','done-step');
+    if (i < currentIdx) el.classList.add('done-step');
+    else if (i === currentIdx) el.classList.add('active-step');
+  });
+
+  // ── Schnell-Aktionen
+  const actionArea = document.getElementById('od-action-area');
+  if (o.status === 'draft') {
+    actionArea.innerHTML = `<button class="btn btn-blue" onclick="changeOrderStatus('in_progress')">▶ Arbeit starten</button>`;
+  } else if (o.status === 'signed') {
+    actionArea.innerHTML = `<button class="btn btn-blue" onclick="changeOrderStatus('in_progress')">▶ Arbeit starten</button>`;
+  } else if (o.status === 'in_progress') {
+    actionArea.innerHTML = `<button class="btn btn-green" onclick="changeOrderStatus('completed')">✓ Als abgeschlossen markieren</button>`;
+  } else if (o.status === 'completed') {
+    actionArea.innerHTML = `<div style="text-align:center;padding:10px;font-size:13px;color:var(--gn);">✓ Auftrag abgeschlossen</div>`;
+  }
+
+  // ── Info
+  document.getElementById('od-veh').textContent = `${v?.kz||'?'} · ${v?.modell||'?'}`;
+  document.getElementById('od-cust').textContent = c?.displayName||'?';
+  document.getElementById('od-date').textContent = formatDate(o.date);
+  document.getElementById('od-schmutz').textContent = o.schmutz||'Normal';
+
+  // ── Preisblock
+  const pb = document.getElementById('od-price-block');
+  const addonNames = {
+    dampf:'Dampfreinigung Polster', leder:'Lederreinigung & Pflege', dach:'Dachhimmelreinigung',
+    ozon:'Ozon-Behandlung', tier:'Tierhaarentfernung', sealant:'Sealant Lack',
+    fv:'Felgenversiegelung', flugrost:'Flugrost & Teer', politur:'Hochglanzpolitur', stark:'Starkverschmutzung'
+  };
+  let pbHtml = `
+    <div class="price-row">
+      <span class="price-label">${o.paket?.name||'?'} · ${o.vehClass?.name||'?'}</span>
+      <span class="price-val">${(o.paket?.base||0)+(o.vehClass?.add||0)} €</span>
+    </div>`;
+  if (o.addons) {
+    Object.entries(o.addons).forEach(([k,v]) => {
+      pbHtml += `<div class="price-row"><span class="price-label">${addonNames[k]||k}</span><span class="price-val">${v} €</span></div>`;
+    });
+  }
+  if (o.anfahrt > 0) {
+    pbHtml += `<div class="price-row"><span class="price-label">Anfahrt</span><span class="price-val">${o.anfahrt} €</span></div>`;
+  }
+  pbHtml += `<div class="price-total-row"><span class="price-total-label">Gesamt</span><span class="price-total-val">${o.total||0} €</span></div>`;
+  pb.innerHTML = pbHtml;
+
+  // ── Notizen laden
+  const notes = o.notes || {};
+  document.getElementById('od-note-motor').value = notes.motor||'';
+  document.getElementById('od-note-innen').value = notes.innenraum||'';
+  document.getElementById('od-note-lack').value = notes.lack||'';
+  document.getElementById('od-note-felgen').value = notes.felgen||'';
+  document.getElementById('od-note-glas').value = notes.glas||'';
+  document.getElementById('od-note-polster').value = notes.polster||'';
+  document.getElementById('od-note-sonstiges').value = notes.sonstiges||'';
+
+  // ── Dokumente
+  renderOrderDocs(o);
+}
+
+function renderOrderDocs(o) {
+  const list = document.getElementById('od-docs-list');
+  const empty = document.getElementById('od-docs-empty');
+  const docs = o.documents||[];
+  if (docs.length === 0) {
+    list.innerHTML=''; empty.style.display='block';
+  } else {
+    empty.style.display='none';
+    const icons = {auftragsbestaetigung:'📋', belehrungen:'📜', protokoll:'📸', rechnung:'💰'};
+    list.innerHTML = docs.map((doc,i) => {
+      const icon = icons[doc.type]||'📄';
+      const dt = new Date(doc.createdAt);
+      const dateStr = `${dt.toLocaleDateString('de-DE')} ${dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}`;
+      return `
+        <div class="doc-item">
+          <div class="doc-title">${icon} ${doc.name}</div>
+          <div class="doc-meta">Erstellt: ${dateStr}</div>
+          <div class="doc-actions">
+            <div class="doc-btn" onclick="odOpenDoc(${i})">📖 Anzeigen</div>
+            <div class="doc-btn" onclick="odDownloadDoc(${i})">⬇️ Download</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+function changeOrderStatus(newStatus) {
+  const o = DB.orders[window.currentOrderId];
+  if (!o) return;
+  o.status = newStatus;
+  if (newStatus === 'in_progress' && !o.startedAt) o.startedAt = new Date().toISOString();
+  if (newStatus === 'completed' && !o.completedAt) o.completedAt = new Date().toISOString();
+  saveDB();
+  renderOrderDetail(window.currentOrderId);
+  // Refresh vehicle detail in background
+  if (window.currentVehicleId) renderVehicleDetail(window.currentVehicleId);
+}
+
+function saveOrderNotes() {
+  const o = DB.orders[window.currentOrderId];
+  if (!o) return;
+  if (!o.notes) o.notes = {};
+  o.notes.motor = document.getElementById('od-note-motor').value;
+  o.notes.innenraum = document.getElementById('od-note-innen').value;
+  o.notes.lack = document.getElementById('od-note-lack').value;
+  o.notes.felgen = document.getElementById('od-note-felgen').value;
+  o.notes.glas = document.getElementById('od-note-glas').value;
+  o.notes.polster = document.getElementById('od-note-polster').value;
+  o.notes.sonstiges = document.getElementById('od-note-sonstiges').value;
+  saveDB();
+  // Brief visual feedback
+  const btn = document.getElementById('od-save-notes');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Gespeichert';
+  btn.style.background = 'var(--gn)';
+  setTimeout(() => { btn.textContent = orig; btn.style.background=''; }, 1500);
+}
+
+function deleteOrder() {
+  const o = DB.orders[window.currentOrderId];
+  if (!o) return;
+  if (!confirm('Auftrag wirklich löschen?')) return;
+  const v = DB.vehicles[o.vehicleId];
+  if (v) v.orders = v.orders.filter(id => id !== o.id);
+  delete DB.orders[window.currentOrderId];
+  saveDB();
+  const prevVid = window.currentVehicleId;
+  go('s-vehicle-detail', prevVid);
+}
+
+function odOpenDoc(index) {
+  const o = DB.orders[window.currentOrderId];
+  if (!o||!o.documents[index]) return;
+  const doc = o.documents[index];
+  const win = window.open();
+  win.document.write(`<iframe width='100%' height='100%' src='${doc.pdfData}'></iframe>`);
+}
+function odDownloadDoc(index) {
+  const o = DB.orders[window.currentOrderId];
+  if (!o||!o.documents[index]) return;
+  const doc = o.documents[index];
+  const link = document.createElement('a');
+  link.href = doc.pdfData;
+  link.download = doc.name;
+  link.click();
+}
+
+// Order-detail tab switching
+document.querySelectorAll('#s-order-detail .tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const tabName = this.dataset.tab;
+    document.querySelectorAll('#s-order-detail .tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('#s-order-detail .tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-'+tabName).classList.add('active');
+  });
+});
+
+document.getElementById('back-order-detail').onclick = () => {
+  const o = DB.orders[window.currentOrderId];
+  if (o && window.currentVehicleId === o.vehicleId) {
+    go('s-vehicle-detail', o.vehicleId);
+  } else {
+    go('s-home');
+  }
+};
+document.getElementById('od-delete-btn').onclick = deleteOrder;
+document.getElementById('od-save-notes').onclick = saveOrderNotes;
+
+// ── EINSTELLUNGEN ──────────────────────────────────────────────────
+function renderSettings() {
+  const s = DB.settings;
+  document.getElementById('st-name').value = s.name||'';
+  document.getElementById('st-addr').value = s.addr||'';
+  document.getElementById('st-tel').value = s.tel||'';
+  document.getElementById('st-email').value = s.email||'';
+  document.getElementById('st-steuerid').value = s.steuerID||'';
+  document.getElementById('st-iban').value = s.iban||'';
+  document.getElementById('st-google').value = s.googleLink||'';
+  document.getElementById('st-review-msg').value = s.reviewMsg||'';
+  s.packages.forEach((pkg, i) => {
+    const idx = i+1;
+    document.getElementById(`prd-name${idx}`).value = pkg.name;
+    document.getElementById(`prd-price${idx}`).value = pkg.price;
+    document.getElementById(`prd-time${idx}`).value = pkg.time;
+  });
+  // Update package prices on order screen
+  if (s.packages[0]) document.getElementById('pkg-price-frisch').textContent = s.packages[0].price+' €';
+  if (s.packages[1]) document.getElementById('pkg-price-makellos').textContent = s.packages[1].price+' €';
+  if (s.packages[2]) document.getElementById('pkg-price-perfektion').textContent = s.packages[2].price+' €';
+}
+
+// ── CUSTOMER CRUD ──────────────────────────────────────────────────
+let editingCustomerId = null;
+
+function openCustomer(id) { go('s-customer-detail', id); }
+
+function newCustomer() {
+  editingCustomerId = null;
+  document.getElementById('customer-edit-title').textContent = 'Neuer Kunde';
+  ['ce-vname','ce-nname','ce-email','ce-tel','ce-strasse','ce-plz','ce-ort'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['ce-fam-vname1','ce-fam-nname1','ce-fam-vname2','ce-fam-nname2','ce-fam-email','ce-fam-tel'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['ce-firma-name','ce-firma-ustid','ce-firma-ansprech','ce-firma-email','ce-firma-tel'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('ce-bundesland').value='';
+  document.querySelectorAll('#anrede-chips .chip').forEach(c => c.classList.remove('on'));
+  document.querySelector('#anrede-chips .chip[data-val="Herr"]').classList.add('on');
+  toggleCustomerFields('Herr');
+  go('s-customer-edit');
+}
+
+function toggleCustomerFields(anrede) {
+  document.getElementById('fields-person').style.display = (anrede==='Herr'||anrede==='Frau') ? 'block' : 'none';
+  document.getElementById('fields-familie').style.display = anrede==='Familie' ? 'block' : 'none';
+  document.getElementById('fields-firma').style.display = anrede==='Firma' ? 'block' : 'none';
+}
+
+function editCustomer() {
+  const c = DB.customers[window.currentCustomerId];
+  if (!c) return;
+  editingCustomerId = c.id;
+  document.getElementById('customer-edit-title').textContent = 'Kunde bearbeiten';
+  document.querySelectorAll('#anrede-chips .chip').forEach(chip => chip.classList.toggle('on', chip.dataset.val===c.anrede));
+  toggleCustomerFields(c.anrede);
+  if (c.anrede==='Herr'||c.anrede==='Frau') {
+    document.getElementById('ce-vname').value=c.vname||'';
+    document.getElementById('ce-nname').value=c.nname||'';
+    document.getElementById('ce-email').value=c.email||'';
+    document.getElementById('ce-tel').value=c.tel||'';
+  } else if (c.anrede==='Familie') {
+    document.getElementById('ce-fam-vname1').value=c.vname1||'';
+    document.getElementById('ce-fam-nname1').value=c.nname1||'';
+    document.getElementById('ce-fam-vname2').value=c.vname2||'';
+    document.getElementById('ce-fam-nname2').value=c.nname2||'';
+    document.getElementById('ce-fam-email').value=c.email||'';
+    document.getElementById('ce-fam-tel').value=c.tel||'';
+  } else if (c.anrede==='Firma') {
+    document.getElementById('ce-firma-name').value=c.firmaName||'';
+    document.getElementById('ce-firma-ustid').value=c.ustId||'';
+    document.getElementById('ce-firma-ansprech').value=c.ansprechpartner||'';
+    document.getElementById('ce-firma-email').value=c.email||'';
+    document.getElementById('ce-firma-tel').value=c.tel||'';
+  }
+  document.getElementById('ce-strasse').value=c.strasse||'';
+  document.getElementById('ce-plz').value=c.plz||'';
+  document.getElementById('ce-ort').value=c.ort||'';
+  document.getElementById('ce-bundesland').value=c.bundesland||'';
+  go('s-customer-edit');
+}
+
+function saveCustomer() {
+  const anrede = document.querySelector('#anrede-chips .chip.on')?.dataset.val||'Herr';
+  let d = { anrede, strasse:document.getElementById('ce-strasse').value.trim(), plz:document.getElementById('ce-plz').value.trim(), ort:document.getElementById('ce-ort').value.trim(), bundesland:document.getElementById('ce-bundesland').value };
+  if (anrede==='Herr'||anrede==='Frau') {
+    d.vname=document.getElementById('ce-vname').value.trim();
+    d.nname=document.getElementById('ce-nname').value.trim();
+    d.email=document.getElementById('ce-email').value.trim();
+    d.tel=document.getElementById('ce-tel').value.trim();
+    d.displayName=`${anrede} ${d.vname} ${d.nname}`;
+    if (!d.vname||!d.nname||!d.tel) { alert('Bitte alle Pflichtfelder ausfüllen'); return; }
+  } else if (anrede==='Familie') {
+    d.vname1=document.getElementById('ce-fam-vname1').value.trim();
+    d.nname1=document.getElementById('ce-fam-nname1').value.trim();
+    d.vname2=document.getElementById('ce-fam-vname2').value.trim();
+    d.nname2=document.getElementById('ce-fam-nname2').value.trim();
+    d.email=document.getElementById('ce-fam-email').value.trim();
+    d.tel=document.getElementById('ce-fam-tel').value.trim();
+    d.displayName=(d.vname2&&d.nname2)?`Familie ${d.vname1} & ${d.vname2} ${d.nname1}`:`Familie ${d.vname1} ${d.nname1}`;
+    if (!d.vname1||!d.nname1||!d.tel) { alert('Bitte alle Pflichtfelder ausfüllen'); return; }
+  } else if (anrede==='Firma') {
+    d.firmaName=document.getElementById('ce-firma-name').value.trim();
+    d.ustId=document.getElementById('ce-firma-ustid').value.trim();
+    d.ansprechpartner=document.getElementById('ce-firma-ansprech').value.trim();
+    d.email=document.getElementById('ce-firma-email').value.trim();
+    d.tel=document.getElementById('ce-firma-tel').value.trim();
+    d.displayName=d.firmaName;
+    if (!d.firmaName||!d.ansprechpartner||!d.tel) { alert('Bitte alle Pflichtfelder ausfüllen'); return; }
+  }
+  if (editingCustomerId) {
+    DB.customers[editingCustomerId] = {...DB.customers[editingCustomerId], ...d};
+  } else {
+    const id = uid();
+    d.id=id; d.created=new Date().toISOString(); d.vehicles=[];
+    DB.customers[id]=d;
+    window.currentCustomerId=id;
+  }
+  saveDB();
+  go('s-customer-detail', editingCustomerId||window.currentCustomerId);
+}
+
+function deleteCustomer() {
+  const c = DB.customers[window.currentCustomerId];
+  if (!c) return;
+  if (!confirm(`Kunde "${c.displayName}" wirklich löschen? Alle Fahrzeuge und Aufträge werden ebenfalls gelöscht!`)) return;
+  c.vehicles.forEach(vid => {
+    const v = DB.vehicles[vid];
+    if (v) { v.orders.forEach(oid => delete DB.orders[oid]); delete DB.vehicles[vid]; }
+  });
+  delete DB.customers[window.currentCustomerId];
+  saveDB();
+  go('s-customers');
+}
+
+// ── VEHICLE CRUD ───────────────────────────────────────────────────
+let editingVehicleId = null;
+
+function openVehicle(id) { go('s-vehicle-detail', id); }
+
+function newVehicle() {
+  if (!window.currentCustomerId) return;
+  editingVehicleId = null;
+  document.getElementById('vehicle-edit-title').textContent = 'Neues Fahrzeug';
+  ['ve-kz','ve-modell','ve-farbe','ve-jahr'].forEach(id => document.getElementById(id).value='');
+  go('s-vehicle-edit');
+}
+
+function editVehicle() {
+  const v = DB.vehicles[window.currentVehicleId];
+  if (!v) return;
+  editingVehicleId = v.id;
+  document.getElementById('vehicle-edit-title').textContent = 'Fahrzeug bearbeiten';
+  document.getElementById('ve-kz').value=v.kz;
+  document.getElementById('ve-modell').value=v.modell;
+  document.getElementById('ve-farbe').value=v.farbe;
+  document.getElementById('ve-jahr').value=v.jahr;
+  go('s-vehicle-edit');
+}
+
+function saveVehicle() {
+  const kz=document.getElementById('ve-kz').value.trim().toUpperCase();
+  const modell=document.getElementById('ve-modell').value.trim();
+  const farbe=document.getElementById('ve-farbe').value.trim();
+  const jahr=document.getElementById('ve-jahr').value.trim();
+  if (!kz||!modell||!farbe||!jahr) { alert('Bitte alle Felder ausfüllen'); return; }
+  if (editingVehicleId) {
+    DB.vehicles[editingVehicleId]={...DB.vehicles[editingVehicleId], kz, modell, farbe, jahr};
+  } else {
+    const id=uid();
+    const customerId=window.currentCustomerId;
+    DB.vehicles[id]={id, customerId, kz, modell, farbe, jahr, orders:[]};
+    DB.customers[customerId].vehicles.push(id);
+    window.currentVehicleId=id;
+  }
+  saveDB();
+  go('s-vehicle-detail', editingVehicleId||window.currentVehicleId);
+}
+
+function deleteVehicle() {
+  const v = DB.vehicles[window.currentVehicleId];
+  if (!v) return;
+  if (!confirm(`Fahrzeug "${v.kz}" wirklich löschen? Alle Aufträge werden ebenfalls gelöscht!`)) return;
+  v.orders.forEach(oid => delete DB.orders[oid]);
+  const c = DB.customers[v.customerId];
+  if (c) c.vehicles = c.vehicles.filter(vid => vid!==v.id);
+  delete DB.vehicles[v.id];
+  saveDB();
+  go('s-customer-detail', v.customerId);
+}
+
+// ── SETTINGS SAVE ──────────────────────────────────────────────────
+function saveSettings() {
+  DB.settings.name=document.getElementById('st-name').value.trim();
+  DB.settings.addr=document.getElementById('st-addr').value.trim();
+  DB.settings.tel=document.getElementById('st-tel').value.trim();
+  DB.settings.email=document.getElementById('st-email').value.trim();
+  DB.settings.steuerID=document.getElementById('st-steuerid').value.trim();
+  DB.settings.iban=document.getElementById('st-iban').value.trim();
+  DB.settings.googleLink=document.getElementById('st-google').value.trim();
+  DB.settings.reviewMsg=document.getElementById('st-review-msg').value.trim();
+  DB.settings.packages=[1,2,3].map(i=>({
+    name:document.getElementById(`prd-name${i}`).value.trim(),
+    price:parseInt(document.getElementById(`prd-price${i}`).value)||0,
+    time:parseInt(document.getElementById(`prd-time${i}`).value)||0
+  }));
+  saveDB();
+  alert('Einstellungen gespeichert!');
+  go('s-home');
+}
+
+// ── BACKUP & RESTORE ───────────────────────────────────────────────
+function downloadBackup() {
+  const data = JSON.stringify(DB,null,2);
+  const blob = new Blob([data],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`luchs-backup-${new Date().toISOString().split('T')[0]}.json`; a.click();
+  URL.revokeObjectURL(url);
+  alert('Backup heruntergeladen!');
+}
+function restoreBackup() { document.getElementById('restore-input').click(); }
+document.getElementById('restore-input').onchange = e => {
+  const file=e.target.files[0]; if (!file) return;
+  const reader=new FileReader();
+  reader.onload=evt=>{
+    try {
+      const restored=JSON.parse(evt.target.result);
+      if (confirm('Alle aktuellen Daten werden überschrieben. Fortfahren?')) {
+        DB=restored; saveDB(); alert('Daten wiederhergestellt!'); go('s-home');
+      }
+    } catch(e) { alert('Fehler beim Laden: '+e.message); }
+  };
+  reader.readAsText(file); e.target.value='';
+};
+
+// ── ORDER FLOW ─────────────────────────────────────────────────────
+let currentOrder = null;
+
+function startOrder() {
+  const vehicleId = window.currentVehicleId;
+  const v = DB.vehicles[vehicleId];
+  if (!v) return;
+
+  // Reset addon checkboxes
+  document.querySelectorAll('.addon-cb').forEach(cb => cb.classList.remove('on'));
+
+  // Reset package selection
+  document.querySelectorAll('.pkg').forEach(p => p.classList.remove('sel'));
+  document.getElementById('next-package').disabled = true;
+
+  // Reset vehclass
+  document.querySelectorAll('#vehclass-chips .chip').forEach(c => c.classList.remove('on'));
+  document.querySelector('#vehclass-chips .chip[data-val="kleinwagen"]').classList.add('on');
+
+  // Reset schmutz
+  document.querySelectorAll('#schmutz-chips .chip').forEach(c => c.classList.remove('on'));
+  document.querySelector('#schmutz-chips .chip[data-val="normal"]').classList.add('on');
+
+  document.getElementById('order-anfahrt').value = '0';
+  document.getElementById('order-datum').value = new Date().toISOString().split('T')[0];
+
+  currentOrder = {
+    id: uid(),
+    customerId: v.customerId,
+    vehicleId: vehicleId,
+    date: new Date().toISOString().split('T')[0],
+    paket: null,
+    vehClass: {name:'Kleinwagen', add:0},
+    addons: {},
+    anfahrt: 0,
+    schmutz: 'Normal',
+    status: 'draft',
+    total: 0,
+    notes: {},
+    documents: []
+  };
+
+  go('s-order-package');
+}
+
+document.querySelectorAll('.pkg').forEach(pkg => {
+  pkg.onclick = () => {
+    document.querySelectorAll('.pkg').forEach(p => p.classList.remove('sel'));
+    pkg.classList.add('sel');
+    document.getElementById('next-package').disabled = false;
+    const pkgName = pkg.dataset.pkg;
+    const pkgData = DB.settings.packages.find(p => p.name.toLowerCase()===pkgName);
+    if (pkgData) currentOrder.paket = {name:pkgData.name, base:pkgData.price, time:pkgData.time};
+  };
+});
+
+document.getElementById('back-order-package').onclick = () => { currentOrder=null; go('s-vehicle-detail', window.currentVehicleId); };
+document.getElementById('next-package').onclick = () => { if (!currentOrder.paket) { alert('Bitte Paket wählen'); return; } go('s-order-vehicle-class'); };
+
+document.querySelectorAll('#vehclass-chips .chip').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('#vehclass-chips .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    currentOrder.vehClass = {name:chip.textContent.trim(), add:parseInt(chip.dataset.add)};
+  };
+});
+document.getElementById('back-order-vehclass').onclick = () => go('s-order-package');
+document.getElementById('next-vehclass').onclick = () => go('s-order-addons');
+
+document.querySelectorAll('.addon').forEach(addon => {
+  addon.onclick = () => {
+    const cb=addon.querySelector('.addon-cb');
+    const addonId=addon.dataset.id;
+    const addonPrice=parseInt(addon.dataset.price);
+    if (cb.classList.contains('on')) { cb.classList.remove('on'); delete currentOrder.addons[addonId]; }
+    else { cb.classList.add('on'); currentOrder.addons[addonId]=addonPrice; }
+  };
+});
+document.getElementById('back-order-addons').onclick = () => go('s-order-vehicle-class');
+document.getElementById('next-addons').onclick = () => go('s-order-details');
+
+document.querySelectorAll('#schmutz-chips .chip').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('#schmutz-chips .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    currentOrder.schmutz = chip.dataset.val.charAt(0).toUpperCase()+chip.dataset.val.slice(1);
+  };
+});
+document.getElementById('back-order-details').onclick = () => go('s-order-addons');
+document.getElementById('next-details').onclick = () => {
+  currentOrder.anfahrt = parseInt(document.getElementById('order-anfahrt').value)||0;
+  currentOrder.date = document.getElementById('order-datum').value;
+  renderOrderSummary();
+  go('s-order-summary');
+};
+
+function renderOrderSummary() {
+  const v=DB.vehicles[currentOrder.vehicleId];
+  const c=DB.customers[currentOrder.customerId];
+  document.getElementById('sum-vehicle').textContent=`${v.kz} · ${v.modell}`;
+  document.getElementById('sum-customer').textContent=c.displayName;
+  document.getElementById('sum-paket-name').textContent=currentOrder.paket.name;
+  document.getElementById('sum-paket-class').textContent=` · ${currentOrder.vehClass.name}`;
+  document.getElementById('sum-paket-price').textContent=`${currentOrder.paket.base+currentOrder.vehClass.add} €`;
+  const addonsList=document.getElementById('sum-addons-list');
+  addonsList.innerHTML=Object.keys(currentOrder.addons).map(key=>{
+    const addonEl=document.querySelector(`.addon[data-id="${key}"]`);
+    const addonName=addonEl?addonEl.querySelector('.addon-name').textContent:key;
+    return `<div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo);"><div style="font-size:13px;">${addonName}</div><div style="font-size:13px;">${currentOrder.addons[key]} €</div></div>`;
+  }).join('');
+  if (currentOrder.anfahrt>0) {
+    document.getElementById('sum-anfahrt-row').style.display='block';
+    document.getElementById('sum-anfahrt-price').textContent=`${currentOrder.anfahrt} €`;
+  } else {
+    document.getElementById('sum-anfahrt-row').style.display='none';
+  }
+  let total=currentOrder.paket.base+currentOrder.vehClass.add;
+  Object.values(currentOrder.addons).forEach(p=>total+=p);
+  total+=currentOrder.anfahrt;
+  currentOrder.total=total;
+  document.getElementById('sum-total').textContent=`${total} €`;
+  document.getElementById('sum-datum').textContent=formatDate(currentOrder.date);
+  document.getElementById('sum-schmutz').textContent=currentOrder.schmutz;
+  const h=Math.floor(currentOrder.paket.time/60);
+  const m=currentOrder.paket.time%60;
+  document.getElementById('sum-duration').textContent=`${h}h${m>0?' '+m+'min':''}`;
+}
+
+document.getElementById('back-order-summary').onclick = () => go('s-order-details');
+document.getElementById('create-order').onclick = () => {
+  if (!currentOrder) return;
+  currentOrder.status='draft';
+  currentOrder.createdAt=new Date().toISOString();
+  DB.orders[currentOrder.id]=currentOrder;
+  const v=DB.vehicles[currentOrder.vehicleId];
+  if (v) v.orders.push(currentOrder.id);
+  saveDB();
+  renderAuftragsbestaetigung();
+  go('s-auftragsbestaetigung');
+};
+
+// ── AUFTRAGSBESTÄTIGUNG ────────────────────────────────────────────
+let signatureKunde=null;
+
+function renderAuftragsbestaetigung() {
+  const v=DB.vehicles[currentOrder.vehicleId];
+  const c=DB.customers[currentOrder.customerId];
+  document.getElementById('ab-customer').textContent=c.displayName;
+  document.getElementById('ab-vehicle').textContent=`${v.kz} · ${v.modell}`;
+  document.getElementById('ab-datum').textContent=formatDate(currentOrder.date);
+  const addonEl_names = {dampf:'Dampfreinigung Polster',leder:'Lederreinigung & Pflege',dach:'Dachhimmelreinigung',ozon:'Ozon-Behandlung',tier:'Tierhaarentfernung',sealant:'Sealant Lack',fv:'Felgenversiegelung',flugrost:'Flugrost & Teer',politur:'Hochglanzpolitur',stark:'Starkverschmutzung'};
+  const leistungenHTML=`
+    <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo);">
+      <div><strong>${currentOrder.paket.name}</strong> · ${currentOrder.vehClass.name}</div>
+      <div><strong>${currentOrder.paket.base+currentOrder.vehClass.add} €</strong></div>
+    </div>
+    ${Object.keys(currentOrder.addons).map(key=>`
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo);">
+        <div style="font-size:13px;">${addonEl_names[key]||key}</div>
+        <div style="font-size:13px;">${currentOrder.addons[key]} €</div>
+      </div>`).join('')}
+    ${currentOrder.anfahrt>0?`<div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo);"><div style="font-size:13px;">Anfahrt</div><div style="font-size:13px;">${currentOrder.anfahrt} €</div></div>`:''}
+    <div style="display:flex;justify-content:space-between;padding:16px;background:var(--gdbg);">
+      <div style="font-size:15px;font-weight:500;">Gesamtpreis</div>
+      <div style="font-family:var(--serif);font-size:24px;color:var(--gd);"><strong>${currentOrder.total} €</strong></div>
+    </div>`;
+  document.getElementById('ab-leistungen').innerHTML=leistungenHTML;
+  // Reset checkboxes
+  ['cb-dsgvo','cb-widerruf','cb-agb'].forEach(id => document.getElementById(id).classList.remove('checked'));
+  signatureKunde=null;
+  setTimeout(()=>setupSignatureCanvas('sig-kunde'),100);
+}
+
+function setupSignatureCanvas(canvasId) {
+  const canvas=document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const rect=canvas.getBoundingClientRect();
+  canvas.width=rect.width*window.devicePixelRatio;
+  canvas.height=rect.height*window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio,window.devicePixelRatio);
+  let isDrawing=false, lastX=0, lastY=0;
+  function getCoords(e) {
+    const rect=canvas.getBoundingClientRect();
+    const touch=e.touches?e.touches[0]:e;
+    return {x:touch.clientX-rect.left, y:touch.clientY-rect.top};
+  }
+  function startDrawing(e) { e.preventDefault(); isDrawing=true; const {x,y}=getCoords(e); lastX=x; lastY=y; }
+  function draw(e) {
+    if (!isDrawing) return; e.preventDefault();
+    const {x,y}=getCoords(e);
+    ctx.strokeStyle='#000'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(x,y); ctx.stroke();
+    lastX=x; lastY=y;
+  }
+  function stopDrawing() { if (isDrawing) { isDrawing=false; if (canvasId==='sig-kunde') signatureKunde=canvas.toDataURL(); } }
+  canvas.addEventListener('touchstart',startDrawing);
+  canvas.addEventListener('touchmove',draw);
+  canvas.addEventListener('touchend',stopDrawing);
+  canvas.addEventListener('mousedown',startDrawing);
+  canvas.addEventListener('mousemove',draw);
+  canvas.addEventListener('mouseup',stopDrawing);
+  canvas.addEventListener('mouseleave',stopDrawing);
+}
+
+['cb-dsgvo','cb-widerruf','cb-agb'].forEach(id => {
+  document.getElementById(id).onclick = function() { this.classList.toggle('checked'); };
+});
+document.getElementById('clear-sig-kunde').onclick = () => {
+  const canvas=document.getElementById('sig-kunde');
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  signatureKunde=null;
+};
+document.getElementById('back-auftragsbestaetigung').onclick = () => go('s-order-summary');
+
+document.getElementById('save-auftragsbestaetigung').onclick = () => {
+  if (!document.getElementById('cb-dsgvo').classList.contains('checked')||
+      !document.getElementById('cb-widerruf').classList.contains('checked')||
+      !document.getElementById('cb-agb').classList.contains('checked')) {
+    alert('Bitte alle Zustimmungen abhaken'); return;
+  }
+  if (!signatureKunde) { alert('Bitte Unterschrift des Kunden eintragen'); return; }
+
+  currentOrder.signatureKunde=signatureKunde;
+  currentOrder.signedAt=new Date().toISOString();
+  currentOrder.status='signed';
+
+  if (!currentOrder.documents) currentOrder.documents=[];
+
+  const aufPdf = generateAuftragsbestaetigungPDF();
+  const belPdf = generateBelehrungenPDF();
+
+  currentOrder.documents.push({type:'auftragsbestaetigung', name:'Auftragsbestätigung.pdf', createdAt:new Date().toISOString(), pdfData:aufPdf});
+  currentOrder.documents.push({type:'belehrungen', name:'Rechtliche_Belehrungen.pdf', createdAt:new Date().toISOString(), pdfData:belPdf});
+
+  DB.orders[currentOrder.id]=currentOrder;
+  saveDB();
+
+  const savedOrderId = currentOrder.id;
+  currentOrder=null;
+  signatureKunde=null;
+  alert('✓ Auftragsbestätigung gespeichert!\n\nDokumente archiviert:\n• Auftragsbestätigung.pdf\n• Rechtliche_Belehrungen.pdf');
+  go('s-order-detail', savedOrderId);
+};
+
+// ── PDF GENERATION ─────────────────────────────────────────────────
+function generateAuftragsbestaetigungPDF() {
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const o=currentOrder;
+  const v=DB.vehicles[o.vehicleId];
+  const c=DB.customers[o.customerId];
+  const s=DB.settings;
+  const addonNames={dampf:'Dampfreinigung Polster',leder:'Lederreinigung & Pflege',dach:'Dachhimmelreinigung',ozon:'Ozon-Behandlung',tier:'Tierhaarentfernung',sealant:'Sealant Lack',fv:'Felgenversiegelung',flugrost:'Flugrost & Teer',politur:'Hochglanzpolitur',stark:'Starkverschmutzung'};
+
+  doc.setFontSize(20); doc.setFont(undefined,'bold'); doc.text('Luchs Detailing',20,20);
+  doc.setFontSize(9); doc.setFont(undefined,'normal'); doc.setTextColor(120);
+  doc.text(`${s.name} · ${s.addr}`,20,27);
+  doc.text(`Tel: ${s.tel} · ${s.email}`,20,32);
+  doc.text(`Steuer-ID: ${s.steuerID} · Kleinunternehmer gem. §19 UStG`,20,37);
+  doc.setTextColor(0);
+
+  doc.setFontSize(14); doc.setFont(undefined,'bold'); doc.text('Auftragsbestätigung',20,50);
+  doc.setFontSize(10); doc.setFont(undefined,'normal'); doc.text(`Datum: ${formatDate(o.date)}`,20,58);
+
+  doc.setFontSize(11); doc.setFont(undefined,'bold'); doc.text('Kunde:',20,72);
+  doc.setFont(undefined,'normal');
+  doc.text(c.displayName,20,79);
+  if (c.strasse) doc.text(`${c.strasse}, ${c.plz} ${c.ort}`,20,85);
+  if (c.tel) doc.text(`Tel: ${c.tel}`,20,91);
+
+  doc.setFont(undefined,'bold'); doc.text('Fahrzeug:',20,105);
+  doc.setFont(undefined,'normal');
+  doc.text(`${v.kz} · ${v.modell}`,20,112);
+  doc.text(`${v.farbe} · ${v.jahr}`,20,118);
+
+  doc.setFont(undefined,'bold'); doc.text('Leistungen:',20,132);
+  let y=139;
+  doc.setFont(undefined,'normal');
+  doc.text(`${o.paket.name} · ${o.vehClass.name}`,20,y);
+  doc.text(`${o.paket.base+o.vehClass.add} €`,180,y,{align:'right'}); y+=7;
+  Object.entries(o.addons).forEach(([k,p])=>{
+    doc.text(addonNames[k]||k,20,y); doc.text(`${p} €`,180,y,{align:'right'}); y+=7;
+  });
+  if (o.anfahrt>0) { doc.text('Anfahrt',20,y); doc.text(`${o.anfahrt} €`,180,y,{align:'right'}); y+=7; }
+  y+=5;
+  doc.setFont(undefined,'bold');
+  doc.text('Gesamtpreis (netto, §19 UStG):',20,y);
+  doc.setFontSize(14); doc.text(`${o.total} €`,180,y,{align:'right'}); y+=15;
+  doc.setFontSize(10); doc.setFont(undefined,'normal');
+  doc.text('Keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung §19 UStG)',20,y); y+=20;
+
+  doc.setFont(undefined,'bold'); doc.text('Unterschrift Kunde:',20,y); y+=8;
+  if (signatureKunde) { doc.addImage(signatureKunde,'PNG',20,y,60,20); y+=25; }
+  doc.setFont(undefined,'normal');
+  doc.text(`Ort, Datum: Chemnitz, ${formatDate(o.date)}`,20,y);
+
+  const pdfData=doc.output('datauristring');
+  doc.save(`Auftragsbestätigung_${v.kz}_${o.date}.pdf`);
+  return pdfData;
+}
+
+function generateBelehrungenPDF() {
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const o=currentOrder;
+  const v=DB.vehicles[o.vehicleId];
+
+  doc.setFontSize(16); doc.setFont(undefined,'bold'); doc.text('Rechtliche Belehrungen',20,20);
+  doc.setFontSize(9); doc.setFont(undefined,'normal'); doc.setTextColor(120);
+  doc.text('Luchs Detailing · Oskar Koch · Heinrich-Beck-Straße 9, 09112 Chemnitz',20,28);
+  doc.text(`Datum: ${formatDate(o.date)} · Fahrzeug: ${v.kz}`,20,34);
+  doc.setTextColor(0);
+
+  let y=48;
+  const sections=[
+    ['Datenschutzhinweise (DSGVO Art. 13)',
+     ['Verantwortlicher: Oskar Koch, Heinrich-Beck-Straße 9, 09112 Chemnitz',
+      'Kontakt: skrkoch@gmail.com | Tel: 015772948189',
+      'Zweck: Auftragsabwicklung der Fahrzeugaufbereitung',
+      'Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)',
+      'Speicherdauer: Gemäß §147 AO (10 Jahre) für steuerrelevante Belege.',
+      'Empfänger: Keine Weitergabe an Dritte.',
+      'Rechte: Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit,',
+      'Widerspruch und Beschwerde bei der zuständigen Datenschutzbehörde.']],
+    ['Widerrufsrecht (§ 312g BGB)',
+     ['Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen',
+      'Vertrag zu widerrufen. Die Frist beginnt ab Vertragsabschluss.',
+      'Widerruf per E-Mail: skrkoch@gmail.com oder schriftlich an obige Adresse.',
+      'Hinweis: Das Widerrufsrecht erlischt, wenn wir die Leistung vollständig',
+      'erbracht haben und Sie der Ausführung ausdrücklich zugestimmt haben.']],
+    ['AGB & Haftungsausschluss',
+     ['1. Die Aufbereitung erfolgt nach bestem Wissen und Gewissen.',
+      '2. Vorschäden werden im Übergabeprotokoll dokumentiert; keine Haftung',
+      '   für vorhandene Schäden am Fahrzeug.',
+      '3. Bei grober Fahrlässigkeit oder Vorsatz haften wir uneingeschränkt.',
+      '4. Gewährleistung: 12 Monate ab Abnahme; Mängel binnen 14 Tagen anzeigen.',
+      '5. Zahlung sofort nach Leistungserbringung (netto, §19 UStG).',
+      '6. Erfüllungsort und Gerichtsstand: Chemnitz. Es gilt deutsches Recht.']]
+  ];
+
+  sections.forEach(([title, lines]) => {
+    if (y>250) { doc.addPage(); y=20; }
+    doc.setFontSize(12); doc.setFont(undefined,'bold'); doc.text(title,20,y); y+=8;
+    doc.setFontSize(9); doc.setFont(undefined,'normal');
+    lines.forEach(line => {
+      if (y>270) { doc.addPage(); y=20; }
+      doc.text(line,22,y); y+=5.5;
+    });
+    y+=8;
+  });
+
+  if (y>220) { doc.addPage(); y=20; }
+  doc.setFontSize(11); doc.setFont(undefined,'bold'); doc.text('Bestätigung durch den Kunden',20,y); y+=10;
+  doc.setFontSize(9); doc.setFont(undefined,'normal');
+  doc.text('Ich bestätige, dass ich die oben stehenden Belehrungen (Datenschutz, Widerrufsrecht,',20,y); y+=5;
+  doc.text('AGB) vollständig zur Kenntnis genommen und verstanden habe.',20,y); y+=15;
+  doc.text('Unterschrift: ___________________________',20,y); y+=7;
+  doc.text(`Ort, Datum: Chemnitz, ${formatDate(o.date)}`,20,y);
+
+  const pdfData=doc.output('datauristring');
+  doc.save(`Rechtliche_Belehrungen_${v.kz}_${o.date}.pdf`);
+  return pdfData;
+}
+
+// ── FAB ────────────────────────────────────────────────────────────
+function updateFAB() {
+  const fab=document.getElementById('fab');
+  const active=document.querySelector('.screen.active');
+  if (!active) { fab.style.display='none'; return; }
+  const id=active.id;
+  if (id==='s-home') { fab.style.display='flex'; fab.textContent='＋'; fab.onclick=newCustomer; }
+  else if (id==='s-customers') { fab.style.display='flex'; fab.textContent='＋'; fab.onclick=newCustomer; }
+  else if (id==='s-customer-detail') { fab.style.display='flex'; fab.textContent='🚗'; fab.onclick=newVehicle; }
+  else if (id==='s-vehicle-detail') { fab.style.display='flex'; fab.textContent='＋'; fab.onclick=startOrder; }
+  else { fab.style.display='none'; }
+}
+
+// ── HOME SEARCH ────────────────────────────────────────────────────
+document.getElementById('home-search').oninput = e => {
+  const q=e.target.value.trim();
+  if (q.length>1) { renderCustomers(q); go('s-customers'); }
+};
+
+// ── GLOBAL NAV BUTTONS ─────────────────────────────────────────────
+document.getElementById('home-logo').src=LOGO;
+document.getElementById('btn-new-customer').onclick=newCustomer;
+document.getElementById('btn-customers').onclick=()=>go('s-customers');
+document.getElementById('btn-backup').onclick=downloadBackup;
+document.getElementById('btn-restore').onclick=restoreBackup;
+document.getElementById('btn-settings').onclick=()=>go('s-settings');
+document.getElementById('back-customers').onclick=()=>go('s-home');
+document.getElementById('add-customer-from-list').onclick=newCustomer;
+document.getElementById('customer-search').oninput=e=>renderCustomers(e.target.value.trim());
+document.getElementById('back-customer-edit').onclick=()=>go('s-home');
+document.getElementById('save-customer').onclick=saveCustomer;
+document.getElementById('back-customer-detail').onclick=()=>go('s-home');
+document.getElementById('edit-customer').onclick=editCustomer;
+document.getElementById('add-vehicle').onclick=newVehicle;
+document.getElementById('delete-customer').onclick=deleteCustomer;
+document.getElementById('back-vehicle-edit').onclick=()=>go('s-home');
+document.getElementById('save-vehicle').onclick=saveVehicle;
+document.getElementById('back-vehicle-detail').onclick=()=>{ go('s-customer-detail', DB.vehicles[window.currentVehicleId]?.customerId||null)||go('s-home'); };
+document.getElementById('edit-vehicle').onclick=editVehicle;
+document.getElementById('start-order').onclick=startOrder;
+document.getElementById('delete-vehicle').onclick=deleteVehicle;
+document.getElementById('back-settings').onclick=()=>go('s-home');
+document.getElementById('save-settings').onclick=saveSettings;
+document.getElementById('back-order-documents').onclick=()=>go('s-home');
+
+document.querySelectorAll('#anrede-chips .chip').forEach(chip => {
+  chip.onclick=()=>{
+    document.querySelectorAll('#anrede-chips .chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    toggleCustomerFields(chip.dataset.val);
+  };
+});
+
+// Fix: vehicle-detail back button
+document.getElementById('back-vehicle-detail').onclick = () => {
+  const v = DB.vehicles[window.currentVehicleId];
+  if (v) go('s-customer-detail', v.customerId);
+  else go('s-home');
+};
+
+// ── INIT ───────────────────────────────────────────────────────────
+loadDB();
+renderHome();
+updateFAB();
+</script>
+</body>
+</html>
