@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Glanzkoch Detailing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0d;--bg2:#1a1a17;--bg3:#242420;
+  --bo:rgba(255,255,255,.07);--bo2:rgba(255,255,255,.14);
+  --tx:#f0efe8;--tx2:#88887f;--tx3:#44443f;
+  --gd:#c8a45a;--gd2:#e8c47a;--gdbg:rgba(200,164,90,.1);--gdbo:rgba(200,164,90,.3);
+  --rd:#e05550;--rdbg:rgba(224,85,80,.1);
+  --gn:#4a9e6a;--gnbg:rgba(74,158,106,.1);
+  --bl:#5a8fc8;--blbg:rgba(90,143,200,.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:light){:root{
+  --bg:#f5f4ef;--bg2:#fff;--bg3:#eeecea;
+  --bo:rgba(0,0,0,.07);--bo2:rgba(0,0,0,.14);
+  --tx:#1a1a17;--tx2:#66665f;--tx3:#aaa9a0;
+  --gd:#8a6432;--gd2:#6a4418;--gdbg:rgba(138,100,50,.08);--gdbo:rgba(138,100,50,.25);
+  --rd:#c03530;--rdbg:rgba(192,53,48,.08);
+  --gn:#2a7e4a;--gnbg:rgba(42,126,74,.08);
+  --bl:#4a7fc8;--blbg:rgba(74,127,200,.08);
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;}
+.screen{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+.nav{padding:calc(var(--st) + 12px) 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);flex-shrink:0;}
+.nav-back{background:none;border:none;color:var(--gd);font-size:16px;font-family:var(--sans);padding:8px 0;cursor:pointer;min-height:44px;}
+.nav-title{font-size:15px;font-weight:500;flex:1;text-align:center;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px calc(var(--sb) + 100px);}
+.btm{position:fixed;bottom:70px;left:0;right:0;padding:12px 18px;background:var(--bg);border-top:1px solid var(--bo);z-index:100;}
+.btn{display:block;width:100%;padding:15px;border-radius:12px;font-family:var(--sans);font-size:15px;font-weight:500;border:none;cursor:pointer;text-align:center;min-height:50px;touch-action:manipulation;}
+.btn-gold{background:var(--gd);color:#1a1a17;}
+.btn-ghost{background:var(--bg3);color:var(--tx2);border:1px solid var(--bo2);}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.card{background:var(--bg2);border:1px solid var(--bo);border-radius:12px;padding:16px;margin-bottom:12px;}
+.field{margin-bottom:13px;}
+.field:last-child{margin-bottom:0;}
+.field label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);display:block;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--bo2);border-radius:10px;padding:13px 14px;color:var(--tx);font-family:var(--sans);font-size:15px;outline:none;-webkit-appearance:none;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gd);}
+.field textarea{resize:none;height:80px;}
+.list-item{background:var(--bg2);border:1px solid var(--bo);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:66px;touch-action:manipulation;}
+.list-item:active{border-color:var(--gdbo);background:var(--gdbg);}
+.list-ico{width:40px;height:40px;border-radius:10px;background:var(--gdbg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.list-content{flex:1;}
+.list-title{font-size:15px;font-weight:500;margin-bottom:2px;}
+.list-sub{font-size:12px;color:var(--tx2);}
+.list-arr{font-size:20px;color:var(--tx3);}
+.sec{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx2);margin:18px 0 10px;}
+.sec:first-child{margin-top:0;}
+.hero{padding:28px 18px 22px;border-bottom:1px solid var(--bo);}
+.hero-title{font-family:var(--serif);font-size:26px;line-height:1.1;margin-bottom:4px;}
+.hero-title em{font-style:italic;color:var(--gd);}
+.hero-sub{font-size:11px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;}
+.empty{text-align:center;padding:40px 20px;color:var(--tx3);}
+.empty-ico{font-size:48px;margin-bottom:12px;opacity:.3;}
+.empty-txt{font-size:14px;line-height:1.6;}
+.badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;}
+.badge-g{background:var(--gnbg);color:var(--gn);}
+.badge-y{background:var(--gdbg);color:var(--gd);}
+.pkg{background:var(--bg2);border:1.5px solid var(--bo);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;touch-action:manipulation;}
+.pkg.sel{border-color:var(--gdbo);background:var(--gdbg);}
+.pkg-name{font-size:15px;font-weight:500;margin-bottom:3px;}
+.pkg-price{font-family:var(--serif);font-size:26px;color:var(--gd);margin-bottom:5px;}
+.pkg-desc{font-size:12px;color:var(--tx2);line-height:1.6;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:10px 16px;border-radius:99px;font-size:14px;border:1px solid var(--bo2);background:var(--bg3);color:var(--tx2);cursor:pointer;min-height:44px;display:flex;align-items:center;touch-action:manipulation;}
+.chip.on{background:var(--gdbg);border-color:var(--gdbo);color:var(--gd2);}
+.checklist-item{background:var(--bg2);border:1px solid var(--bo);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;min-height:50px;}
+.checklist-item.done{opacity:.4;}
+.checklist-cb{width:24px;height:24px;border-radius:6px;border:2px solid var(--bo2);flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;}
+.checklist-cb.on{background:var(--gd);border-color:var(--gd);}
+.checklist-cb.on::after{content:'✓';color:#1a1a17;font-size:16px;font-weight:700;}
+.checklist-txt{flex:1;font-size:14px;line-height:1.5;}
+.timer{background:var(--gdbg);border:1px solid var(--gdbo);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;}
+.timer-display{font-family:var(--serif);font-size:48px;color:var(--gd);margin-bottom:12px;line-height:1;}
+.timer-btns{display:flex;gap:8px;justify-content:center;}
+.timer-btn{padding:10px 20px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;background:var(--gd);color:#1a1a17;min-height:44px;touch-action:manipulation;}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.photo-item{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--bg3);border:1px solid var(--bo);}
+.photo-item img{width:100%;height:100%;object-fit:cover;}
+.photo-del{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(224,85,80,.9);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;}
+.photo-upload{aspect-ratio:1;border:2px dashed var(--bo2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx3);font-size:13px;cursor:pointer;background:var(--bg2);touch-action:manipulation;}
+.photo-upload-ico{font-size:32px;margin-bottom:8px;}
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--bo);display:flex;z-index:1000;padding-bottom:var(--sb);pointer-events:auto;}
+.nav-btn{flex:1;padding:12px;border:none;background:none;color:var(--tx2);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.nav-btn:active{background:var(--bg3);transform:scale(0.95);}
+.nav-btn.active{color:var(--gd);font-weight:500;}
+.nav-btn-ico{font-size:20px;}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="s-home">
+  <div class="hero">
+    <div class="hero-title">Glanzkoch <em>Detailing</em></div>
+    <div class="hero-sub">Aufbereitungs-App</div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Letzte Aufträge</div>
+    <div id="recent-orders"></div>
+    <div class="sec">Einstellungen</div>
+    <div class="list-item" id="btn-backup">
+      <div class="list-ico" style="background:var(--blbg);">💾</div>
+      <div class="list-content">
+        <div class="list-title">Backup</div>
+        <div class="list-sub">Daten sichern</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="list-item" id="btn-restore">
+      <div class="list-ico" style="background:var(--blbg);">📥</div>
+      <div class="list-content">
+        <div class="list-title">Wiederherstellen</div>
+        <div class="list-sub">Backup laden</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+    <div class="list-item" id="btn-settings">
+      <div class="list-ico">⚙️</div>
+      <div class="list-content">
+        <div class="list-title">Einstellungen</div>
+        <div class="list-sub">Name, Steuer-ID, Pakete</div>
+      </div>
+      <div class="list-arr">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- KUNDE ANLEGEN -->
+<div class="screen" id="s-customer">
+  <div class="nav">
+    <button class="nav-back" id="back-customer">← Zurück</button>
+    <div class="nav-title">Neuer Kunde</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="cust-name" placeholder="Max Mustermann">
+      </div>
+      <div class="field">
+        <label>Telefon</label>
+        <input type="tel" id="cust-tel" placeholder="0171 1234567">
+      </div>
+      <div class="field">
+        <label>Email (optional)</label>
+        <input type="email" id="cust-email" placeholder="max@beispiel.de">
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-customer">Kunde speichern</button>
+  </div>
+</div>
+
+<!-- FAHRZEUG ANLEGEN -->
+<div class="screen" id="s-vehicle">
+  <div class="nav">
+    <button class="nav-back" id="back-vehicle">← Zurück</button>
+    <div class="nav-title">Neues Fahrzeug</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="field">
+        <label>Kennzeichen</label>
+        <input type="text" id="veh-kz" placeholder="C-AB 1234">
+      </div>
+      <div class="field">
+        <label>Marke & Modell</label>
+        <input type="text" id="veh-model" placeholder="Audi A4">
+      </div>
+      <div class="field">
+        <label>Fahrzeugklasse</label>
+        <select id="veh-class">
+          <option value="klein">Kleinwagen</option>
+          <option value="mittel" selected>Mittelklasse</option>
+          <option value="suv">SUV / Kombi</option>
+          <option value="van">Van</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-vehicle">Fahrzeug speichern</button>
+  </div>
+</div>
+
+<!-- PAKET WÄHLEN -->
+<div class="screen" id="s-paket">
+  <div class="nav">
+    <button class="nav-back" id="back-paket">← Zurück</button>
+    <div class="nav-title">Paket wählen</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Fahrzeug: <span id="paket-veh"></span></div>
+    <div id="paket-list"></div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-paket">Weiter</button>
+  </div>
+</div>
+
+<!-- ANFAHRT & KM -->
+<div class="screen" id="s-anfahrt">
+  <div class="nav">
+    <button class="nav-back" id="back-anfahrt">← Zurück</button>
+    <div class="nav-title">Anfahrt</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="field">
+        <label>Entfernung (km)</label>
+        <input type="number" id="km" value="0" min="0" step="1">
+      </div>
+      <div class="field">
+        <label>Preis pro km (€)</label>
+        <input type="number" id="km-rate" value="0.50" min="0" step="0.10">
+      </div>
+      <div style="font-size:12px;color:var(--tx2);margin-top:8px;">
+        Anfahrtspauschale: <strong id="anfahrt-total" style="color:var(--gd);">0,00 €</strong>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-anfahrt">Weiter zu Fotos</button>
+  </div>
+</div>
+
+<!-- VORHER-FOTOS -->
+<div class="screen" id="s-fotos-vorher">
+  <div class="nav">
+    <button class="nav-back" id="back-fotos-vorher">← Zurück</button>
+    <div class="nav-title">Vorher-Fotos</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Fotos vor der Aufbereitung</div>
+    <div class="photo-grid" id="fotos-vorher-grid">
+      <label class="photo-upload" for="upload-vorher">
+        <div class="photo-upload-ico">📷</div>
+        <div>Foto hinzufügen</div>
+      </label>
+    </div>
+    <input type="file" id="upload-vorher" accept="image/*" capture="environment" style="display:none;" multiple>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-fotos-vorher">Weiter zur Anleitung</button>
+  </div>
+</div>
+
+<!-- TEAM-PLANUNG -->
+<div class="screen" id="s-team">
+  <div class="nav">
+    <button class="nav-back" id="back-team">← Zurück</button>
+    <div class="nav-title">Personalplanung</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Wie viele Personen arbeiten?</div>
+    <div class="chips">
+      <div class="chip on" data-team="solo">Allein (1 Person)</div>
+      <div class="chip" data-team="team">Zu zweit (2 Personen)</div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-team">Zur Checkliste</button>
+  </div>
+</div>
+
+<!-- CHECKLISTE -->
+<div class="screen" id="s-checklist">
+  <div class="nav">
+    <button class="nav-back" id="back-checklist">← Zurück</button>
+    <div class="nav-title">Arbeitsanleitung</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="timer">
+      <div class="timer-display" id="timer-display">00:00</div>
+      <div class="timer-btns">
+        <button class="timer-btn" id="timer-start">Start</button>
+        <button class="timer-btn" id="timer-pause" style="display:none;">Pause</button>
+        <button class="timer-btn" id="timer-resume" style="display:none;">Fortsetzen</button>
+      </div>
+    </div>
+    <div class="sec">Paket: <span id="checklist-paket"></span> • <span id="checklist-team"></span></div>
+    <div id="checklist-items"></div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-checklist">Nachher-Fotos</button>
+  </div>
+</div>
+
+<!-- NACHHER-FOTOS -->
+<div class="screen" id="s-fotos-nachher">
+  <div class="nav">
+    <button class="nav-back" id="back-fotos-nachher">← Zurück</button>
+    <div class="nav-title">Nachher-Fotos</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Fotos nach der Aufbereitung</div>
+    <div class="photo-grid" id="fotos-nachher-grid">
+      <label class="photo-upload" for="upload-nachher">
+        <div class="photo-upload-ico">📷</div>
+        <div>Foto hinzufügen</div>
+      </label>
+    </div>
+    <input type="file" id="upload-nachher" accept="image/*" capture="environment" style="display:none;" multiple>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-fotos-nachher">Zum Controlling</button>
+  </div>
+</div>
+
+<!-- CONTROLLING -->
+<div class="screen" id="s-controlling">
+  <div class="nav">
+    <button class="nav-back" id="back-controlling">← Zurück</button>
+    <div class="nav-title">Controlling</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="field">
+        <label>Materialkosten (€)</label>
+        <input type="number" id="ctrl-material" value="0" min="0" step="1">
+      </div>
+      <div class="field">
+        <label>Zeit (Minuten)</label>
+        <input type="number" id="ctrl-time" value="0" min="0" step="1" readonly style="background:var(--bg2);">
+      </div>
+      <div class="field">
+        <label>Akquise-Kanal</label>
+        <select id="ctrl-channel">
+          <option value="">Bitte wählen</option>
+          <option value="empfehlung">Empfehlung</option>
+          <option value="instagram">Instagram</option>
+          <option value="kleinanzeigen">Kleinanzeigen</option>
+          <option value="google">Google</option>
+          <option value="facebook">Facebook</option>
+          <option value="direkt">Direkt</option>
+          <option value="sonstiges">Sonstiges</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="next-controlling">Rechnung erstellen</button>
+  </div>
+</div>
+
+<!-- RECHNUNG -->
+<div class="screen" id="s-rechnung">
+  <div class="nav">
+    <button class="nav-back" id="back-rechnung">← Zurück</button>
+    <div class="nav-title">Rechnung</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div id="rechnung-preview"></div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Status</label>
+        <div class="chips">
+          <div class="chip on" data-paid="false">Offen</div>
+          <div class="chip" data-paid="true">Bezahlt</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btm">
+    <button class="btn btn-gold" id="save-rechnung">Rechnung speichern & PDF</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="s-dashboard">
+  <div class="nav">
+    <button class="nav-back" id="back-dashboard">🏠 Home</button>
+    <div class="nav-title">Dashboard</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div class="sec">Übersicht</div>
+    <div id="dashboard-stats"></div>
+  </div>
+</div>
+
+<!-- OFFENE AUFTRÄGE -->
+<div class="screen" id="s-open">
+  <div class="nav">
+    <button class="nav-back" id="back-open">🏠 Home</button>
+    <div class="nav-title">Offene Aufträge</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="scroll">
+    <div id="open-list"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<div id="bottom-nav">
+  <button class="nav-btn active" id="nav-home">
+    <div class="nav-btn-ico">🏠</div>
+    <div>Home</div>
+  </button>
+  <button class="nav-btn" id="nav-stats">
+    <div class="nav-btn-ico">📊</div>
+    <div>Stats</div>
+  </button>
+  <button class="nav-btn" id="nav-open">
+    <div class="nav-btn-ico">🔄</div>
+    <div>Offen</div>
+  </button>
+  <button class="nav-btn" id="nav-new" style="color:var(--gd);">
+    <div class="nav-btn-ico" style="font-size:24px;font-weight:bold;">＋</div>
+    <div>Neu</div>
+  </button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── DATABASE ────────────────────────────────────────────────────────
+let DB = {
+  customers: {},
+  vehicles: {},
+  orders: {},
+  settings: {
+    name: 'Oskar Koch',
+    businessName: 'Glanzkoch',
+    addr: 'Heinrich-Beck-Straße 9, 09112 Chemnitz',
+    tel: '015772948189',
+    email: 'skrkoch@gmail.com',
+    steuerID: '42317296050',
+    steuernummer: '',
+    iban: '',
+    bic: '',
+    kleinunternehmer: true,
+    packages: [
+      {name:'Frisch', klein:89, mittel:119, suv:149, van:179, time:210},
+      {name:'Makellos', klein:189, mittel:219, suv:249, van:279, time:300},
+      {name:'Perfektion', klein:349, mittel:379, suv:409, van:439, time:420}
+    ]
+  }
+};
+
+let currentOrder = null;
+let timerSeconds = 0;
+let timerInterval = null;
+let timerRunning = false;
+
+// ── CHECKLISTEN ─────────────────────────────────────────────────────
+const CHECKLISTS = {
+  frisch: {
+    solo: [
+      '✓ Fahrzeug annehmen, Rundgang, Vorschäden dokumentieren (Fotos)',
+      '✓ Fußmatten rausnehmen',
+      '✓ Innenraum grob absaugen (Sitze, Fußraum, Kofferraum)',
+      '✓ Fußmatten separat absaugen und schrubben',
+      '✓ Tornador Black Z-020: Sitze, Türverkleidungen, Armaturen, Lenkrad',
+      '✓ Kärcher SC 3 Dampfreiniger: Polster gründlich behandeln',
+      '✓ Kärcher SC 3 Dampfreiniger: Armaturen, Mittelkonsole',
+      '✓ Lüftungsschlitze mit feiner Bürste reinigen',
+      '✓ Scheiben innen mit Koch Chemie Glas Star',
+      '✓ Fußmatten zurücklegen',
+      '✓ Außenwäsche: Vorwäsche mit Snow Foam (Parkside HDR + MTM PF22)',
+      '✓ Felgen einsprühen mit Sonax FelgenBeast',
+      '✓ Hauptwäsche mit Two-Bucket-Methode (oben → unten)',
+      '✓ Felgen mit Felgenbürsten reinigen',
+      '✓ Reifenflanken mit steifer Reifenbürste schrubben',
+      '✓ Komplett abspülen (oben → unten)',
+      '✓ Trocknen mit Dry Me A River XL 1200GSM',
+      '✓ Scheiben außen mit Koch Chemie Glas Star',
+      '✓ Türdichtungen mit Sonax GummiPfleger behandeln',
+      '✓ Chemical Guys New Car Smell (1 Sprühstoß Innenraum)',
+      '✓ Endkontrolle (Innen + Außen)',
+      '✓ Nachher-Fotos'
+    ],
+    team: [
+      '✓ Beide: Fahrzeug annehmen, Rundgang, Vorschäden dokumentieren',
+      '🔵 Person 1: Fußmatten rausnehmen und separat absaugen',
+      '🟢 Person 2: Innenraum grob absaugen (Sitze, Fußraum, Kofferraum)',
+      '🔵 Person 1: Fußmatten schrubben und trocknen lassen',
+      '🟢 Person 2: Tornador Sitze, Türverkleidungen, Armaturen komplett',
+      '🔵 Person 1: Dampfreiniger Polster',
+      '🟢 Person 2: Dampfreiniger Armaturen, Mittelkonsole',
+      '🔵 Person 1: Lüftungsschlitze mit feiner Bürste',
+      '🟢 Person 2: Scheiben innen mit Glasreiniger',
+      '🔵 Person 1: Fußmatten zurücklegen',
+      '✓ Beide: Außenwäsche Vorwäsche Snow Foam auftragen',
+      '🔵 Person 1: Felgen einsprühen mit Felgenreiniger',
+      '🟢 Person 2: Hauptwäsche starten (oben)',
+      '🔵 Person 1: Felgen mit Bürsten reinigen',
+      '🟢 Person 2: Hauptwäsche fortsetzen (Seiten, unten)',
+      '🔵 Person 1: Reifenflanken schrubben',
+      '🟢 Person 2: Komplett abspülen',
+      '✓ Beide: Trocknen mit Mikrofasertüchern',
+      '🔵 Person 1: Scheiben außen',
+      '🟢 Person 2: Türdichtungen Gummipflege',
+      '✓ New Car Smell, Endkontrolle, Nachher-Fotos'
+    ]
+  },
+  makellos: {
+    solo: [
+      '✓ Fahrzeug annehmen, Rundgang, Vorschäden dokumentieren',
+      '✓ Fußmatten rausnehmen',
+      '✓ Innenraum grob absaugen (Sitze, Fußraum, Kofferraum)',
+      '✓ Fußmatten separat absaugen und schrubben',
+      '✓ Tornador: Sitze, Türverkleidungen, Armaturen komplett',
+      '✓ Dampfreiniger: Polster gründlich behandeln',
+      '✓ Dampfreiniger: Armaturen, Mittelkonsole, Türgriffe',
+      '✓ Lüftungsschlitze mit feiner Bürste reinigen',
+      '✓ Scheiben innen mit Glasreiniger',
+      '✓ Fußmatten zurücklegen',
+      '✓ Außenwäsche: Vorwäsche mit Snow Foam (lange einwirken)',
+      '✓ Insekten mit Sonax InsektenStar behandeln',
+      '✓ Teer mit Sonax TeerEntferner behandeln',
+      '✓ Felgen einsprühen mit Felgenreiniger',
+      '✓ Hauptwäsche mit Two-Bucket-Methode',
+      '✓ Felgen mit Felgenbürsten gründlich reinigen',
+      '✓ Reifenflanken mit Bürste schrubben',
+      '✓ Komplett abspülen',
+      '✓ Trocknen mit Mikrofasertuch',
+      '✓ IPA 70% Lack entfetten (Vorbereitung Politur)',
+      '✓ Rupes LHR 15 + Menzerna 2500: Swirls entfernen',
+      '✓ Lack abwischen',
+      '✓ Rupes LHR 15 + Menzerna 3800: Hochglanz',
+      '✓ Lack abwischen',
+      '✓ Gyeon WetCoat auf nassen Lack sprühen',
+      '✓ Felgenversiegelung Gyeon Rim auftragen',
+      '✓ Scheiben außen reinigen',
+      '✓ Scheibenversiegelung Gyeon View auftragen',
+      '✓ Reifenpflege Gyeon Tire auftragen',
+      '✓ Türdichtungen mit Gummipflege',
+      '✓ New Car Smell',
+      '✓ Endkontrolle',
+      '✓ Nachher-Fotos'
+    ],
+    team: [
+      '✓ Beide: Fahrzeug annehmen, Vorschäden dokumentieren',
+      '🔵 Person 1: Fußmatten rausnehmen, absaugen',
+      '🟢 Person 2: Innenraum grob absaugen komplett',
+      '🔵 Person 1: Fußmatten schrubben',
+      '🟢 Person 2: Tornador Sitze, Türen, Armaturen',
+      '🔵 Person 1: Dampfreiniger Polster gründlich',
+      '🟢 Person 2: Dampfreiniger Armaturen, Details',
+      '🔵 Person 1: Lüftungsschlitze',
+      '🟢 Person 2: Scheiben innen',
+      '🔵 Person 1: Fußmatten zurücklegen',
+      '✓ Beide: Außenwäsche Vorwäsche Snow Foam',
+      '🔵 Person 1: Insekten und Teer behandeln',
+      '🟢 Person 2: Felgen einsprühen',
+      '🔵 Person 1: Hauptwäsche starten (oben)',
+      '🟢 Person 2: Felgen gründlich reinigen',
+      '🔵 Person 1: Hauptwäsche fortsetzen',
+      '🟢 Person 2: Reifenflanken schrubben',
+      '🔵 Person 1: Komplett abspülen',
+      '✓ Beide: Trocknen',
+      '🟢 Person 2: IPA 70% Lack entfetten komplett',
+      '🔵 Person 1: Scheiben außen reinigen',
+      '🟢 Person 2: Maschinenpolitur Medium Cut',
+      '🔵 Person 1: Scheibenversiegelung Gyeon View',
+      '🟢 Person 2: Lack abwischen, Pad wechseln',
+      '🟢 Person 2: Maschinenpolitur Finishing',
+      '🔵 Person 1: Reifenpflege Gyeon Tire',
+      '🟢 Person 2: Lack abwischen',
+      '🟢 Person 2: Lack-Sealant WetCoat',
+      '🔵 Person 1: Felgenversiegelung Gyeon Rim',
+      '🟢 Person 2: Türdichtungen Gummipflege',
+      '✓ New Car Smell, Endkontrolle, Nachher-Fotos'
+    ]
+  },
+  perfektion: {
+    solo: [
+      '✓ Fahrzeug annehmen, Vorschäden fotografieren',
+      '✓ Innenraum komplett ausräumen',
+      '✓ Fußmatten rausnehmen',
+      '✓ Innenraum intensiv absaugen (Ritzen)',
+      '✓ Fußmatten mit Drill Brush intensiv bearbeiten',
+      '✓ Tornador: Alle Bereiche komplett',
+      '✓ Dampfreiniger: Polster intensiv (mehrfach)',
+      '✓ Dampfreiniger: Armaturen, Lenkrad detailliert',
+      '✓ Dampfreiniger: Türverkleidungen, Ablagen',
+      '✓ Lüftungsschlitze gründlich',
+      '✓ Dachhimmel mit Dampfreiniger (falls gebucht)',
+      '✓ Leder mit Meguiars Leather Conditioner',
+      '✓ Scheiben innen streifenfrei',
+      '✓ Fußmatten zurücklegen',
+      '✓ Innenraum-Endkontrolle',
+      '✓ Außenwäsche: Vorwäsche Snow Foam (lange einwirken)',
+      '✓ Insekten mit InsektenStar',
+      '✓ Teer mit TeerEntferner',
+      '✓ Flugrost behandeln (falls nötig)',
+      '✓ Felgen mit Felgenreiniger',
+      '✓ Radkästen mit APC',
+      '✓ Hauptwäsche Two-Bucket',
+      '✓ Felgen mit Wheel Woolies intensiv',
+      '✓ Radkästen mit Bürste',
+      '✓ Reifenflanken gründlich schrubben',
+      '✓ Komplett abspülen',
+      '✓ Türdichtungen mit Druckluft ausblasen',
+      '✓ Trocknen',
+      '✓ IPA 70% Lack komplett entfetten',
+      '✓ Maschinenpolitur: Heavy Cut (tiefe Kratzer)',
+      '✓ Lack abwischen',
+      '✓ Maschinenpolitur: Medium Cut (Swirls)',
+      '✓ Lack abwischen',
+      '✓ Maschinenpolitur: Finishing (Perfektion)',
+      '✓ Lack abwischen',
+      '✓ Lack-Versiegelung auftragen',
+      '✓ Felgenversiegelung Gyeon Rim',
+      '✓ Scheiben streifenfrei',
+      '✓ Scheibenversiegelung Gyeon View',
+      '✓ Reifenpflege Gyeon Tire',
+      '✓ Türdichtungen Gummipflege',
+      '✓ Motorraum reinigen (optional)',
+      '✓ New Car Smell',
+      '✓ Finale Endkontrolle',
+      '✓ Nachher-Fotos aus allen Winkeln'
+    ],
+    team: [
+      '✓ Beide: Fahrzeug annehmen, Vorschäden fotografieren',
+      '🔵 Person 1: Innenraum komplett ausräumen',
+      '🟢 Person 2: Fußmatten rausnehmen',
+      '🔵 Person 1: Innenraum intensiv absaugen',
+      '🟢 Person 2: Fußmatten absaugen',
+      '🟢 Person 2: Fußmatten Drill Brush intensiv',
+      '🔵 Person 1: Tornador komplett',
+      '🔵 Person 1: Dampfreiniger Polster intensiv',
+      '🟢 Person 2: Fußmatten trocknen lassen',
+      '🔵 Person 1: Dampfreiniger Armaturen detailliert',
+      '🟢 Person 2: Dampfreiniger Türverkleidungen',
+      '🔵 Person 1: Lüftungsschlitze gründlich',
+      '🟢 Person 2: Dachhimmel (falls gebucht)',
+      '🔵 Person 1: Leder reinigen + pflegen',
+      '🟢 Person 2: Scheiben innen streifenfrei',
+      '🔵 Person 1: Fußmatten zurücklegen',
+      '✓ Beide: Innenraum-Endkontrolle',
+      '✓ Beide: Außenwäsche Vorwäsche Snow Foam',
+      '🔵 Person 1: Insekten, Teer, Flugrost',
+      '🟢 Person 2: Felgen + Radkästen einsprühen',
+      '🔵 Person 1: Hauptwäsche starten',
+      '🟢 Person 2: Felgen Wheel Woolies intensiv',
+      '🔵 Person 1: Hauptwäsche fortsetzen',
+      '🟢 Person 2: Radkästen mit Bürste',
+      '🔵 Person 1: Hauptwäsche beenden',
+      '🟢 Person 2: Reifenflanken gründlich',
+      '🔵 Person 1: Komplett abspülen',
+      '🟢 Person 2: Türdichtungen mit Druckluft',
+      '✓ Beide: Trocknen',
+      '🟢 Person 2: IPA 70% Lack entfetten komplett',
+      '🔵 Person 1: Scheiben außen streifenfrei',
+      '🟢 Person 2: Maschinenpolitur Heavy Cut',
+      '🔵 Person 1: Motorraum (optional)',
+      '🟢 Person 2: Lack abwischen, Pad wechseln',
+      '🟢 Person 2: Maschinenpolitur Medium Cut',
+      '🔵 Person 1: Scheibenversiegelung Gyeon View',
+      '🟢 Person 2: Lack abwischen, Pad wechseln',
+      '🟢 Person 2: Maschinenpolitur Finishing',
+      '🔵 Person 1: Reifenpflege Gyeon Tire',
+      '🟢 Person 2: Lack abwischen',
+      '🟢 Person 2: Lack-Versiegelung',
+      '🔵 Person 1: Felgenversiegelung Gyeon Rim',
+      '🟢 Person 2: Türdichtungen Gummipflege',
+      '✓ New Car Smell',
+      '✓ Beide: Finale Endkontrolle',
+      '✓ Nachher-Fotos aus allen Winkeln'
+    ]
+  }
+};
+
+// ── STORAGE ─────────────────────────────────────────────────────────
+function saveDB() {
+  localStorage.setItem('glanzkochDB', JSON.stringify(DB));
+}
+
+function loadDB() {
+  const saved = localStorage.getItem('glanzkochDB');
+  if (saved) {
+    DB = JSON.parse(saved);
+  }
+}
+
+// ── NAVIGATION ──────────────────────────────────────────────────────
+function go(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+}
+
+function updateNav(navId) {
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  if (navId) document.getElementById(navId).classList.add('active');
+}
+
+// ── HELPERS ─────────────────────────────────────────────────────────
+function formatDate(date) {
+  if (!date) return '';
+  const d = new Date(date);
+  return `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`;
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function compressImage(file, callback) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const max = 800;
+      let w = img.width;
+      let h = img.height;
+      if (w > h) {
+        if (w > max) {
+          h = h * (max / w);
+          w = max;
+        }
+      } else {
+        if (h > max) {
+          w = w * (max / h);
+          h = max;
+        }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL('image/jpeg', 0.7));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── HOME ────────────────────────────────────────────────────────────
+function renderHome() {
+  const container = document.getElementById('recent-orders');
+  const orders = Object.values(DB.orders).sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0,5);
+  
+  if (orders.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Noch keine Aufträge</div></div>';
+    return;
+  }
+  
+  container.innerHTML = orders.map(o => {
+    const v = DB.vehicles[o.vehicleId];
+    const c = DB.customers[o.customerId];
+    if (!v || !c) return '';
+    return `
+      <div class="list-item">
+        <div class="list-ico">${o.paid ? '✅' : '⏳'}</div>
+        <div class="list-content">
+          <div class="list-title">${v.kz} • ${c.name}</div>
+          <div class="list-sub">${o.paket} • ${formatDate(o.date)} • ${o.total}€</div>
+        </div>
+        <div class="list-arr">›</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── KUNDE ANLEGEN ───────────────────────────────────────────────────
+document.getElementById('save-customer').onclick = () => {
+  const name = document.getElementById('cust-name').value.trim();
+  const tel = document.getElementById('cust-tel').value.trim();
+  const email = document.getElementById('cust-email').value.trim();
+  
+  if (!name || !tel) {
+    alert('Bitte Name und Telefon eingeben');
+    return;
+  }
+  
+  const id = 'c' + Date.now();
+  DB.customers[id] = {id, name, tel, email, created: new Date().toISOString()};
+  saveDB();
+  
+  currentOrder = {customerId: id};
+  
+  // Reset
+  document.getElementById('cust-name').value = '';
+  document.getElementById('cust-tel').value = '';
+  document.getElementById('cust-email').value = '';
+  
+  go('s-vehicle');
+};
+
+document.getElementById('back-customer').onclick = () => {
+  go('s-home');
+  updateNav('nav-home');
+};
+
+// ── FAHRZEUG ANLEGEN ────────────────────────────────────────────────
+document.getElementById('save-vehicle').onclick = () => {
+  const kz = document.getElementById('veh-kz').value.trim().toUpperCase();
+  const model = document.getElementById('veh-model').value.trim();
+  const vehClass = document.getElementById('veh-class').value;
+  
+  if (!kz || !model) {
+    alert('Bitte Kennzeichen und Modell eingeben');
+    return;
+  }
+  
+  const id = 'v' + Date.now();
+  DB.vehicles[id] = {id, customerId: currentOrder.customerId, kz, model, vehClass, created: new Date().toISOString()};
+  saveDB();
+  
+  currentOrder.vehicleId = id;
+  currentOrder.vehClass = vehClass;
+  
+  // Reset
+  document.getElementById('veh-kz').value = '';
+  document.getElementById('veh-model').value = '';
+  
+  go('s-paket');
+  renderPakets();
+};
+
+document.getElementById('back-vehicle').onclick = () => go('s-customer');
+
+// ── PAKET WÄHLEN ────────────────────────────────────────────────────
+function renderPakets() {
+  const v = DB.vehicles[currentOrder.vehicleId];
+  document.getElementById('paket-veh').textContent = v.kz + ' • ' + v.model;
+  
+  const classMap = {klein:'klein', mittel:'mittel', suv:'suv', van:'van'};
+  const priceKey = classMap[v.vehClass];
+  
+  const container = document.getElementById('paket-list');
+  container.innerHTML = DB.settings.packages.map(p => `
+    <div class="pkg" data-paket="${p.name}">
+      <div class="pkg-name">${p.name}</div>
+      <div class="pkg-price">${p[priceKey]}€</div>
+      <div class="pkg-desc">ca. ${p.time} Minuten</div>
+    </div>
+  `).join('');
+  
+  container.querySelectorAll('.pkg').forEach(el => {
+    el.onclick = () => {
+      container.querySelectorAll('.pkg').forEach(x => x.classList.remove('sel'));
+      el.classList.add('sel');
+      currentOrder.paket = el.dataset.paket;
+      const pkg = DB.settings.packages.find(p => p.name === currentOrder.paket);
+      currentOrder.price = pkg[priceKey];
+      currentOrder.estimatedTime = pkg.time;
+    };
+  });
+}
+
+document.getElementById('back-paket').onclick = () => go('s-vehicle');
+document.getElementById('next-paket').onclick = () => {
+  if (!currentOrder.paket) {
+    alert('Bitte Paket wählen');
+    return;
+  }
+  go('s-anfahrt');
+};
+
+// ── ANFAHRT ─────────────────────────────────────────────────────────
+function updateAnfahrt() {
+  const km = parseFloat(document.getElementById('km').value) || 0;
+  const rate = parseFloat(document.getElementById('km-rate').value) || 0.50;
+  const total = km * rate;
+  document.getElementById('anfahrt-total').textContent = total.toFixed(2) + ' €';
+  currentOrder.km = km;
+  currentOrder.kmRate = rate;
+  currentOrder.anfahrt = total;
+}
+
+document.getElementById('km').oninput = updateAnfahrt;
+document.getElementById('km-rate').oninput = updateAnfahrt;
+document.getElementById('back-anfahrt').onclick = () => go('s-paket');
+document.getElementById('next-anfahrt').onclick = () => go('s-fotos-vorher');
+
+// ── VORHER-FOTOS ────────────────────────────────────────────────────
+document.getElementById('upload-vorher').onchange = (e) => {
+  Array.from(e.target.files).forEach(file => {
+    compressImage(file, (dataURL) => {
+      if (!currentOrder.fotosVorher) currentOrder.fotosVorher = [];
+      currentOrder.fotosVorher.push(dataURL);
+      saveDB();
+      renderFotosVorher();
+    });
+  });
+};
+
+function renderFotosVorher() {
+  const grid = document.getElementById('fotos-vorher-grid');
+  const fotos = currentOrder.fotosVorher || [];
+  
+  grid.innerHTML = fotos.map((src, i) => `
+    <div class="photo-item">
+      <img src="${src}" alt="Vorher ${i+1}">
+      <button class="photo-del" onclick="deleteFotoVorher(${i})">×</button>
+    </div>
+  `).join('') + `
+    <label class="photo-upload" for="upload-vorher">
+      <div class="photo-upload-ico">📷</div>
+      <div>Foto hinzufügen</div>
+    </label>
+  `;
+}
+
+function deleteFotoVorher(index) {
+  currentOrder.fotosVorher.splice(index, 1);
+  saveDB();
+  renderFotosVorher();
+}
+
+document.getElementById('back-fotos-vorher').onclick = () => go('s-anfahrt');
+document.getElementById('next-fotos-vorher').onclick = () => go('s-team');
+
+// ── TEAM-PLANUNG ────────────────────────────────────────────────────
+document.querySelectorAll('[data-team]').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('[data-team]').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    currentOrder.team = chip.dataset.team;
+  };
+});
+
+document.getElementById('back-team').onclick = () => go('s-fotos-vorher');
+document.getElementById('next-team').onclick = () => {
+  if (!currentOrder.team) currentOrder.team = 'solo';
+  go('s-checklist');
+  renderChecklist();
+};
+
+// ── CHECKLISTE ──────────────────────────────────────────────────────
+function renderChecklist() {
+  const paket = currentOrder.paket.toLowerCase();
+  const team = currentOrder.team;
+  const items = CHECKLISTS[paket][team];
+  
+  document.getElementById('checklist-paket').textContent = currentOrder.paket;
+  document.getElementById('checklist-team').textContent = team === 'solo' ? '1 Person' : '2 Personen';
+  
+  const container = document.getElementById('checklist-items');
+  if (!currentOrder.checklistDone) currentOrder.checklistDone = [];
+  
+  container.innerHTML = items.map((text, i) => `
+    <div class="checklist-item ${currentOrder.checklistDone.includes(i) ? 'done' : ''}" data-idx="${i}">
+      <div class="checklist-cb ${currentOrder.checklistDone.includes(i) ? 'on' : ''}"></div>
+      <div class="checklist-txt">${text}</div>
+    </div>
+  `).join('');
+  
+  container.querySelectorAll('.checklist-item').forEach(item => {
+    item.querySelector('.checklist-cb').onclick = () => {
+      const idx = parseInt(item.dataset.idx);
+      if (currentOrder.checklistDone.includes(idx)) {
+        currentOrder.checklistDone = currentOrder.checklistDone.filter(x => x !== idx);
+      } else {
+        currentOrder.checklistDone.push(idx);
+      }
+      saveDB();
+      renderChecklist();
+    };
+  });
+}
+
+// Timer
+document.getElementById('timer-start').onclick = () => {
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    document.getElementById('timer-display').textContent = formatTime(timerSeconds);
+  }, 1000);
+  document.getElementById('timer-start').style.display = 'none';
+  document.getElementById('timer-pause').style.display = 'inline-block';
+};
+
+document.getElementById('timer-pause').onclick = () => {
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('timer-pause').style.display = 'none';
+  document.getElementById('timer-resume').style.display = 'inline-block';
+};
+
+document.getElementById('timer-resume').onclick = () => {
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    document.getElementById('timer-display').textContent = formatTime(timerSeconds);
+  }, 1000);
+  document.getElementById('timer-resume').style.display = 'none';
+  document.getElementById('timer-pause').style.display = 'inline-block';
+};
+
+document.getElementById('back-checklist').onclick = () => {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+  }
+  go('s-team');
+};
+
+document.getElementById('next-checklist').onclick = () => {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+  }
+  currentOrder.timeSpent = Math.floor(timerSeconds / 60);
+  go('s-fotos-nachher');
+};
+
+// ── NACHHER-FOTOS ───────────────────────────────────────────────────
+document.getElementById('upload-nachher').onchange = (e) => {
+  Array.from(e.target.files).forEach(file => {
+    compressImage(file, (dataURL) => {
+      if (!currentOrder.fotosNachher) currentOrder.fotosNachher = [];
+      currentOrder.fotosNachher.push(dataURL);
+      saveDB();
+      renderFotosNachher();
+    });
+  });
+};
+
+function renderFotosNachher() {
+  const grid = document.getElementById('fotos-nachher-grid');
+  const fotos = currentOrder.fotosNachher || [];
+  
+  grid.innerHTML = fotos.map((src, i) => `
+    <div class="photo-item">
+      <img src="${src}" alt="Nachher ${i+1}">
+      <button class="photo-del" onclick="deleteFotoNachher(${i})">×</button>
+    </div>
+  `).join('') + `
+    <label class="photo-upload" for="upload-nachher">
+      <div class="photo-upload-ico">📷</div>
+      <div>Foto hinzufügen</div>
+    </label>
+  `;
+}
+
+function deleteFotoNachher(index) {
+  currentOrder.fotosNachher.splice(index, 1);
+  saveDB();
+  renderFotosNachher();
+}
+
+document.getElementById('back-fotos-nachher').onclick = () => go('s-checklist');
+document.getElementById('next-fotos-nachher').onclick = () => {
+  document.getElementById('ctrl-time').value = currentOrder.timeSpent || 0;
+  go('s-controlling');
+};
+
+// ── CONTROLLING ─────────────────────────────────────────────────────
+document.getElementById('back-controlling').onclick = () => go('s-fotos-nachher');
+document.getElementById('next-controlling').onclick = () => {
+  currentOrder.materialCosts = parseFloat(document.getElementById('ctrl-material').value) || 0;
+  currentOrder.channel = document.getElementById('ctrl-channel').value;
+  
+  if (!currentOrder.channel) {
+    alert('Bitte Akquise-Kanal wählen');
+    return;
+  }
+  
+  currentOrder.total = currentOrder.price + currentOrder.anfahrt;
+  currentOrder.date = new Date().toISOString();
+  currentOrder.paid = false;
+  
+  go('s-rechnung');
+  renderRechnung();
+};
+
+// ── RECHNUNG ────────────────────────────────────────────────────────
+function renderRechnung() {
+  const v = DB.vehicles[currentOrder.vehicleId];
+  const c = DB.customers[currentOrder.customerId];
+  
+  const preview = document.getElementById('rechnung-preview');
+  preview.innerHTML = `
+    <div style="font-size:13px;line-height:1.8;">
+      <div style="margin-bottom:12px;"><strong>Kunde:</strong> ${c.name}<br>${c.tel}</div>
+      <div style="margin-bottom:12px;"><strong>Fahrzeug:</strong> ${v.kz} • ${v.model}</div>
+      <div style="margin-bottom:12px;"><strong>Paket:</strong> ${currentOrder.paket}<br>${currentOrder.price}€</div>
+      ${currentOrder.anfahrt > 0 ? `<div style="margin-bottom:12px;"><strong>Anfahrt:</strong> ${currentOrder.km} km × ${currentOrder.kmRate}€<br>${currentOrder.anfahrt.toFixed(2)}€</div>` : ''}
+      <div style="padding-top:12px;border-top:1px solid var(--bo);"><strong>Gesamt:</strong> <span style="font-size:18px;color:var(--gd);font-family:var(--serif);">${currentOrder.total.toFixed(2)}€</span></div>
+    </div>
+  `;
+}
+
+document.querySelectorAll('[data-paid]').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('[data-paid]').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    currentOrder.paid = chip.dataset.paid === 'true';
+  };
+});
+
+document.getElementById('back-rechnung').onclick = () => go('s-controlling');
+document.getElementById('save-rechnung').onclick = () => {
+  const id = 'o' + Date.now();
+  currentOrder.id = id;
+  DB.orders[id] = currentOrder;
+  saveDB();
+  
+  generatePDF();
+  
+  alert('Auftrag gespeichert!');
+  
+  // Reset
+  currentOrder = null;
+  timerSeconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('timer-start').style.display = 'inline-block';
+  document.getElementById('timer-pause').style.display = 'none';
+  document.getElementById('timer-resume').style.display = 'none';
+  
+  renderHome();
+  go('s-home');
+  updateNav('nav-home');
+};
+
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const v = DB.vehicles[currentOrder.vehicleId];
+  const c = DB.customers[currentOrder.customerId];
+  const s = DB.settings;
+  
+  // Header
+  doc.setFontSize(20);
+  doc.setFont(undefined, 'bold');
+  doc.text(s.businessName, 20, 20);
+  
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text(s.addr, 20, 27);
+  doc.text(`Tel: ${s.tel} • ${s.email}`, 20, 32);
+  doc.text(`Steuer-ID: ${s.steuerID}`, 20, 37);
+  
+  // Rechnung
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text('Rechnung', 20, 55);
+  
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text(`Datum: ${formatDate(currentOrder.date)}`, 20, 62);
+  
+  // Kunde
+  doc.setFont(undefined, 'bold');
+  doc.text('Kunde:', 20, 75);
+  doc.setFont(undefined, 'normal');
+  doc.text(c.name, 20, 81);
+  doc.text(c.tel, 20, 86);
+  
+  // Fahrzeug
+  doc.setFont(undefined, 'bold');
+  doc.text('Fahrzeug:', 20, 98);
+  doc.setFont(undefined, 'normal');
+  doc.text(`${v.kz} • ${v.model}`, 20, 104);
+  
+  // Leistungen
+  doc.setFont(undefined, 'bold');
+  doc.text('Leistungen:', 20, 116);
+  
+  let y = 123;
+  doc.setFont(undefined, 'normal');
+  doc.text(currentOrder.paket, 20, y);
+  doc.text(`${currentOrder.price.toFixed(2)} €`, 180, y, {align: 'right'});
+  
+  if (currentOrder.anfahrt > 0) {
+    y += 7;
+    doc.text(`Anfahrt (${currentOrder.km} km)`, 20, y);
+    doc.text(`${currentOrder.anfahrt.toFixed(2)} €`, 180, y, {align: 'right'});
+  }
+  
+  y += 10;
+  doc.setFont(undefined, 'bold');
+  doc.text('Gesamt:', 20, y);
+  doc.setFontSize(14);
+  doc.text(`${currentOrder.total.toFixed(2)} €`, 180, y, {align: 'right'});
+  
+  // Kleinunternehmer
+  if (s.kleinunternehmer) {
+    y += 15;
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'normal');
+    doc.text('Gemäß §19 UStG wird keine Umsatzsteuer berechnet.', 20, y);
+  }
+  
+  doc.save(`Rechnung_${v.kz}_${formatDate(currentOrder.date)}.pdf`);
+}
+
+// ── DASHBOARD ───────────────────────────────────────────────────────
+function renderDashboard() {
+  const orders = Object.values(DB.orders);
+  const total = orders.reduce((sum, o) => sum + o.total, 0);
+  const paid = orders.filter(o => o.paid).reduce((sum, o) => sum + o.total, 0);
+  const material = orders.reduce((sum, o) => sum + (o.materialCosts || 0), 0);
+  const profit = paid - material;
+  
+  const stats = document.getElementById('dashboard-stats');
+  stats.innerHTML = `
+    <div class="card">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx2);margin-bottom:8px;">Gesamtumsatz</div>
+      <div style="font-family:var(--serif);font-size:32px;color:var(--gd);margin-bottom:4px;">${total.toFixed(0)}€</div>
+      <div style="font-size:12px;color:var(--tx2);">${orders.length} Aufträge</div>
+    </div>
+    <div class="card">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx2);margin-bottom:8px;">Bezahlt</div>
+      <div style="font-family:var(--serif);font-size:32px;color:var(--gn);margin-bottom:4px;">${paid.toFixed(0)}€</div>
+      <div style="font-size:12px;color:var(--tx2);">Materialkosten: ${material.toFixed(0)}€</div>
+    </div>
+    <div class="card">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx2);margin-bottom:8px;">Gewinn</div>
+      <div style="font-family:var(--serif);font-size:32px;color:var(--gd);margin-bottom:4px;">${profit.toFixed(0)}€</div>
+      <div style="font-size:12px;color:var(--tx2);">nach Materialkosten</div>
+    </div>
+  `;
+}
+
+document.getElementById('back-dashboard').onclick = () => {
+  go('s-home');
+  updateNav('nav-home');
+};
+
+// ── OFFENE AUFTRÄGE ─────────────────────────────────────────────────
+function renderOpen() {
+  const orders = Object.values(DB.orders).filter(o => !o.paid);
+  const container = document.getElementById('open-list');
+  
+  if (orders.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="empty-ico">✅</div><div class="empty-txt">Keine offenen Aufträge</div></div>';
+    return;
+  }
+  
+  container.innerHTML = orders.map(o => {
+    const v = DB.vehicles[o.vehicleId];
+    const c = DB.customers[o.customerId];
+    return `
+      <div class="list-item">
+        <div class="list-ico" style="background:var(--gdbg);">⏳</div>
+        <div class="list-content">
+          <div class="list-title">${v.kz} • ${c.name}</div>
+          <div class="list-sub">${o.paket} • ${formatDate(o.date)} • ${o.total}€</div>
+        </div>
+        <div class="list-arr">›</div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('back-open').onclick = () => {
+  go('s-home');
+  updateNav('nav-home');
+};
+
+// ── BOTTOM NAV ──────────────────────────────────────────────────────
+document.getElementById('nav-home').onclick = () => {
+  updateNav('nav-home');
+  renderHome();
+  go('s-home');
+};
+
+document.getElementById('nav-stats').onclick = () => {
+  updateNav('nav-stats');
+  renderDashboard();
+  go('s-dashboard');
+};
+
+document.getElementById('nav-open').onclick = () => {
+  updateNav('nav-open');
+  renderOpen();
+  go('s-open');
+};
+
+document.getElementById('nav-new').onclick = () => {
+  updateNav(null);
+  currentOrder = {};
+  go('s-customer');
+};
+
+// ── BACKUP / RESTORE ────────────────────────────────────────────────
+document.getElementById('btn-backup').onclick = () => {
+  const data = JSON.stringify(DB, null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `glanzkoch_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+};
+
+document.getElementById('btn-restore').onclick = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        DB = JSON.parse(ev.target.result);
+        saveDB();
+        alert('Backup wiederhergestellt!');
+        renderHome();
+      } catch (err) {
+        alert('Fehler beim Laden: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
+// ── INIT ────────────────────────────────────────────────────────────
+loadDB();
+renderHome();
+</script>
+</body>
+</html>
