@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Glanzkoch Pro">
+<title>Glanzkoch Pro — Fahrzeugaufbereitung Business System</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0d;--bg2:#1a1a17;--bg3:#242420;--bg4:#2e2e29;
+  --bo:rgba(255,255,255,.07);--bo2:rgba(255,255,255,.14);
+  --tx:#f0efe8;--tx2:#88887f;--tx3:#44443f;
+  --gd:#c8a45a;--gd2:#e8c47a;--gdbg:rgba(200,164,90,.1);--gdbo:rgba(200,164,90,.3);
+  --rd:#e05550;--rdbg:rgba(224,85,80,.1);--rdbo:rgba(224,85,80,.3);
+  --gn:#4a9e6a;--gnbg:rgba(74,158,106,.1);--gnbo:rgba(74,158,106,.3);
+  --bl:#6a9fd8;--blbg:rgba(106,159,216,.1);--blbo:rgba(106,159,216,.3);
+  --or:#e89550;--orbg:rgba(232,149,80,.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --r:14px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:light){:root{
+  --bg:#f5f4ef;--bg2:#fff;--bg3:#eeecea;--bg4:#e5e3df;
+  --bo:rgba(0,0,0,.07);--bo2:rgba(0,0,0,.14);
+  --tx:#1a1a17;--tx2:#66665f;--tx3:#aaa9a0;
+  --gd:#8a6432;--gd2:#6a4418;--gdbg:rgba(138,100,50,.08);--gdbo:rgba(138,100,50,.25);
+  --rd:#c03530;--rdbg:rgba(192,53,48,.08);--rdbo:rgba(192,53,48,.3);
+  --gn:#2a7e4a;--gnbg:rgba(42,126,74,.08);--gnbo:rgba(42,126,74,.3);
+  --bl:#4a7fc8;--blbg:rgba(74,127,200,.08);--blbo:rgba(74,127,200,.3);
+  --or:#c87530;--orbg:rgba(200,117,48,.08);
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden;}
+.screen{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;overflow:hidden;z-index:1;}
+.screen.active{display:flex;}
+.nav{padding:calc(var(--st) + 12px) 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);flex-shrink:0;}
+.nav-back{background:none;border:none;color:var(--gd);font-size:14px;font-family:var(--sans);padding:8px 0;cursor:pointer;min-height:44px;display:flex;align-items:center;}
+.nav-title{font-size:15px;font-weight:500;flex:1;text-align:center;}
+.nav-sub{font-size:10px;color:var(--tx2);letter-spacing:.12em;text-transform:uppercase;flex:1;text-align:center;}
+.nav-action{background:none;border:none;color:var(--gd);font-size:14px;font-family:var(--sans);padding:8px 0;cursor:pointer;min-height:44px;display:flex;align-items:center;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px calc(var(--sb) + 90px);}
+.scroll.nop{padding-bottom:16px;}
+.btm{position:absolute;bottom:0;left:0;right:0;padding:12px 18px calc(var(--sb) + 12px);background:var(--bg);border-top:1px solid var(--bo);}
+.btn{display:block;width:100%;padding:15px;border-radius:var(--r);font-family:var(--sans);font-size:15px;font-weight:500;border:none;cursor:pointer;text-align:center;-webkit-appearance:none;min-height:50px;transition:all .15s;}
+.btn-gold{background:var(--gd);color:#1a1a17;}
+.btn-gold:active{opacity:.8;}
+.btn-ghost{background:var(--bg3);color:var(--tx2);border:1px solid var(--bo2);}
+.btn-danger{background:var(--rdbg);color:var(--rd);border:1px solid var(--rdbo);}
+.btn-blue{background:var(--blbg);color:var(--bl);border:1px solid var(--blbo);}
+.btn-green{background:var(--gnbg);color:var(--gn);border:1px solid var(--gnbo);}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.card{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.field{margin-bottom:13px;}
+.field:last-child{margin-bottom:0;}
+.field label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);display:block;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--bo2);border-radius:10px;padding:13px 14px;color:var(--tx);font-family:var(--sans);font-size:15px;outline:none;-webkit-appearance:none;transition:border-color .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gd);}
+.field textarea{resize:none;height:80px;line-height:1.5;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:10px 16px;border-radius:99px;font-size:14px;border:1px solid var(--bo2);background:var(--bg3);color:var(--tx2);cursor:pointer;min-height:44px;display:flex;align-items:center;transition:all .15s;}
+.chip.on{background:var(--gdbg);border-color:var(--gdbo);color:var(--gd2);}
+.chk{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid var(--bo);cursor:pointer;min-height:44px;}
+.chk:last-child{border:none;}
+.chk.done{opacity:.38;}
+.chk-box{width:24px;height:24px;border-radius:6px;border:1.5px solid var(--bo2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.chk.done .chk-box{background:var(--gn);border-color:var(--gn);}
+.chk-v{color:#fff;font-size:13px;display:none;}
+.chk.done .chk-v{display:block;}
+.chk-content{flex:1;}
+.chk-name{font-size:14px;line-height:1.4;}
+.chk-hint{font-size:12px;color:var(--tx2);margin-top:2px;line-height:1.4;}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;margin-top:4px;font-weight:500;}
+.tag-r{background:var(--rdbg);color:var(--rd);}
+.tag-w{background:var(--gdbg);color:var(--gd);}
+.tag-g{background:var(--gnbg);color:var(--gn);}
+.tag-b{background:var(--blbg);color:var(--bl);}
+.prog{margin-bottom:18px;}
+.prog-row{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:6px;}
+.prog-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--gd);border-radius:2px;transition:width .3s;}
+.sec{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx2);margin:18px 0 10px;}
+.sec:first-child{margin-top:0;}
+.hero{padding:28px 18px 22px;border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:14px;}
+.hero-title{font-family:var(--serif);font-size:26px;line-height:1.1;}
+.hero-title em{font-style:italic;color:var(--gd);}
+.hc{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:9px;display:flex;align-items:center;gap:14px;cursor:pointer;min-height:60px;position:relative;}
+.hc-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.hc-content{flex:1;}
+.hc-title{font-size:15px;font-weight:500;margin-bottom:2px;}
+.hc-sub{font-size:12px;color:var(--tx2);}
+.hc-arr{font-size:20px;color:var(--tx3);}
+.hc-badge{position:absolute;top:10px;right:10px;background:var(--gd);color:#1a1a17;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;min-width:24px;text-align:center;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
+.stat{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:14px 10px;text-align:center;}
+.stat-n{font-family:var(--serif);font-size:24px;line-height:1;margin-bottom:4px;}
+.stat-l{font-size:10px;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;}
+.pkg{background:var(--bg2);border:1.5px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;min-height:80px;}
+.pkg.sel{border-color:var(--gdbo);background:var(--gdbg);}
+.pkg-name{font-size:15px;font-weight:500;margin-bottom:3px;}
+.pkg-price{font-family:var(--serif);font-size:26px;color:var(--gd);margin-bottom:5px;line-height:1.1;}
+.pkg-desc{font-size:12px;color:var(--tx2);line-height:1.6;}
+.total{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:15px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.total-lbl{font-size:10px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.total-amt{font-family:var(--serif);font-size:30px;}
+.addon{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--bo);cursor:pointer;min-height:48px;}
+.addon-l{display:flex;align-items:center;gap:12px;}
+.addon-cb{width:22px;height:22px;border-radius:5px;border:1.5px solid var(--bo2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.addon-cb.on{background:var(--gd);border-color:var(--gd);}
+.addon-name{font-size:14px;}
+.addon-p{font-size:13px;color:var(--gd);}
+.list-item{background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;min-height:64px;}
+.list-item-content{flex:1;}
+.list-item-title{font-size:15px;font-weight:500;margin-bottom:3px;}
+.list-item-sub{font-size:12px;color:var(--tx2);}
+.list-item-meta{font-size:14px;font-weight:500;}
+.list-item-arr{font-size:18px;color:var(--tx3);}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--bo);display:flex;padding-bottom:var(--sb);z-index:100;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 8px;cursor:pointer;min-height:60px;text-decoration:none;color:var(--tx3);transition:all .15s;}
+.tab.active{color:var(--gd);}
+.tab-ico{font-size:22px;}
+.tab-lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;}
+.warn-box{background:var(--gdbg);border:1px solid var(--gdbo);border-radius:var(--r);padding:13px 15px;margin-bottom:14px;font-size:13px;color:var(--gd2);line-height:1.6;}
+.info-box{background:var(--blbg);border:1px solid var(--blbo);border-radius:var(--r);padding:13px 15px;margin-bottom:14px;font-size:13px;color:var(--bl);line-height:1.6;}
+.success-box{background:var(--gnbg);border:1px solid var(--gnbo);border-radius:var(--r);padding:13px 15px;margin-bottom:14px;font-size:13px;color:var(--gn);line-height:1.6;}
+.empty{text-align:center;padding:40px 20px;color:var(--tx2);}
+.empty-ico{font-size:48px;margin-bottom:12px;opacity:.3;}
+.empty-txt{font-size:14px;line-height:1.6;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;}
+.modal.active{display:flex;}
+.modal-content{background:var(--bg2);border-radius:var(--r);max-width:400px;width:100%;max-height:80vh;overflow:auto;border:1px solid var(--bo);}
+.modal-header{padding:18px 20px;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:17px;font-weight:500;}
+.modal-close{background:none;border:none;color:var(--tx3);font-size:24px;cursor:pointer;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.photo-slot{aspect-ratio:1;border-radius:10px;border:1.5px dashed var(--bo2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;position:relative;background:var(--bg3);}
+.photo-slot.filled{border-style:solid;}
+.photo-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.photo-lbl{font-size:9px;color:var(--tx2);text-align:center;padding:3px 4px;line-height:1.3;position:relative;z-index:1;}
+.photo-slot.filled .photo-lbl{display:none;}
+.photo-add{font-size:22px;color:var(--tx3);}
+.photo-del{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.65);border:none;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+.sig-wrap{border:1.5px dashed var(--bo2);border-radius:var(--r);background:var(--bg3);overflow:hidden;margin-bottom:12px;}
+canvas{width:100%;display:block;touch-action:none;}
+.sig-row{display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--bo);}
+.sig-btn{font-size:13px;color:var(--tx2);background:none;border:1px solid var(--bo2);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:var(--sans);}
+.ph{margin-bottom:10px;}
+.ph-hdr{display:flex;align-items:center;gap:10px;padding:13px 15px;background:var(--bg2);border:1px solid var(--bo);border-radius:var(--r);cursor:pointer;min-height:50px;}
+.ph-hdr.open{border-radius:var(--r) var(--r) 0 0;}
+.ph-ico{width:32px;height:32px;border-radius:8px;background:var(--gdbg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ph-title{flex:1;font-size:14px;font-weight:500;}
+.ph-cnt{font-size:12px;color:var(--tx2);}
+.ph-body{display:none;background:var(--bg2);border:1px solid var(--bo);border-top:none;border-radius:0 0 var(--r) var(--r);padding:0 15px;}
+.ph-body.open{display:block;}
+.dmg-map{position:relative;width:100%;aspect-ratio:2/1;background:var(--bg3);border-radius:var(--r);border:1px solid var(--bo2);overflow:visible;margin-bottom:10px;}
+.dmg-map svg{width:100%;height:100%;overflow:visible;}
+.dmg-dot{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--rd);border:2px solid rgba(255,255,255,.3);transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;box-shadow:0 0 0 5px var(--rdbg);z-index:10;pointer-events:none;}
+.zone{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bo);font-size:13px;}
+.zone:last-child{border:none;}
+.zone.active{color:var(--gd);}
+.zone label{color:var(--tx2);}
+.zone.active label{color:var(--gd);}
+</style>
+</head>
+<body>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <a class="tab active" data-tab="home"><div class="tab-ico">🏠</div><div class="tab-lbl">Home</div></a>
+  <a class="tab" data-tab="dashboard"><div class="tab-ico">📊</div><div class="tab-lbl">Dashboard</div></a>
+  <a class="tab" data-tab="kunden"><div class="tab-ico">👥</div><div class="tab-lbl">Kunden</div></a>
+  <a class="tab" data-tab="finanzen"><div class="tab-ico">💰</div><div class="tab-lbl">Finanzen</div></a>
+  <a class="tab" data-tab="mehr"><div class="tab-ico">⚙️</div><div class="tab-lbl">Mehr</div></a>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="home">
+  <div class="hero"><div><div class="hero-title">Glanz<em>koch</em></div><div style="font-size:11px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;">Business System</div></div></div>
+  <div class="scroll">
+    <div class="sec">Neuer Auftrag</div>
+    <div class="hc" onclick="startAuftrag()"><div class="hc-ico" style="background:var(--gdbg);">🚗</div><div class="hc-content"><div class="hc-title">Auftrag starten</div><div class="hc-sub">Annahme → Aufbereitung → Übergabe</div></div><div class="hc-arr">›</div></div>
+    <div class="sec">Verwaltung</div>
+    <div class="hc" onclick="switchTab('kunden')"><div class="hc-ico" style="background:var(--blbg);">👤</div><div class="hc-content"><div class="hc-title">Kunden</div><div class="hc-sub">CRM · Historie · Fahrzeuge</div></div><div class="hc-arr">›</div><div class="hc-badge" id="home-kunden-count">0</div></div>
+    <div class="hc" onclick="goTo('equipment')"><div class="hc-ico" style="background:var(--gnbg);">🧰</div><div class="hc-content"><div class="hc-title">Equipment</div><div class="hc-sub">Produkte bearbeiten</div></div><div class="hc-arr">›</div></div>
+    <div class="hc" onclick="goTo('prozesse')"><div class="hc-ico" style="background:var(--orbg);">📖</div><div class="hc-content"><div class="hc-title">Prozesse</div><div class="hc-sub">Arbeitsabläufe anpassen</div></div><div class="hc-arr">›</div></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="dashboard">
+  <div class="nav"><div class="nav-title">Dashboard</div></div>
+  <div class="scroll">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="dash-umsatz">0 €</div><div class="stat-l">Monat</div></div>
+      <div class="stat"><div class="stat-n" id="dash-auftraege">0</div><div class="stat-l">Aufträge</div></div>
+      <div class="stat"><div class="stat-n" id="dash-schnitt">0 €</div><div class="stat-l">Ø Wert</div></div>
+    </div>
+    <div class="sec">Bewertungen</div>
+    <div class="card"><div class="prog"><div class="prog-row"><span>Google Reviews</span><span style="color:var(--gd);" id="reviews-status">0 / 15</span></div><div class="prog-bar"><div class="prog-fill" id="reviews-fill" style="width:0%"></div></div></div></div>
+    <div class="sec">Kundenquellen</div>
+    <div class="card" id="dash-quellen"><div style="font-size:12px;color:var(--tx2);">Noch keine Daten</div></div>
+    <div class="sec">Pakete</div>
+    <div class="card" id="dash-pakete"><div style="font-size:12px;color:var(--tx2);">Noch keine Daten</div></div>
+  </div>
+</div>
+
+<!-- KUNDEN -->
+<div class="screen" id="kunden">
+  <div class="nav"><div class="nav-title">Kunden</div><button class="nav-action" onclick="openModal('modal-kunde-neu')">+ Neu</button></div>
+  <div class="scroll">
+    <div class="field"><input type="text" id="kunden-search" placeholder="Suchen..." oninput="renderKunden()"></div>
+    <div id="kunden-list"><div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Keine Kunden</div></div></div>
+  </div>
+</div>
+
+<!-- FINANZEN -->
+<div class="screen" id="finanzen">
+  <div class="nav"><div class="nav-title">Finanzen</div><button class="nav-action" onclick="openModal('modal-ausgabe')">+ Ausgabe</button></div>
+  <div class="scroll">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="fin-umsatz">0 €</div><div class="stat-l">Umsatz</div></div>
+      <div class="stat"><div class="stat-n" id="fin-ausgaben">0 €</div><div class="stat-l">Ausgaben</div></div>
+      <div class="stat"><div class="stat-n" id="fin-gewinn">0 €</div><div class="stat-l">Gewinn</div></div>
+    </div>
+    <div class="sec">Monatliche Belastungen</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);"><span style="font-size:13px;color:var(--tx2);">Versicherungen & Verträge</span><span style="font-size:14px;font-weight:500;color:var(--gd);" id="fin-monthly-total">0 €</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:13px;color:var(--tx2);">Sparrate Depot</span><span style="font-size:14px;font-weight:500;">3.000 €</span></div>
+    </div>
+    <div class="hc" onclick="goTo('versicherungen')" style="margin-bottom:12px;">
+      <div class="hc-ico" style="background:var(--blbg);">📋</div>
+      <div class="hc-content">
+        <div class="hc-title">Versicherungen & Verträge</div>
+        <div class="hc-sub">Monatliche Übersicht</div>
+      </div>
+      <div class="hc-arr">›</div>
+    </div>
+    <div class="sec">Kennzahlen</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);"><span style="font-size:13px;color:var(--tx2);">Ø Material/Auto</span><span style="font-size:14px;font-weight:500;" id="fin-mat">0 €</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:13px;color:var(--tx2);">Ø Stundensatz</span><span style="font-size:14px;font-weight:500;" id="fin-stunden">0 €</span></div>
+    </div>
+    <div class="sec">Ausgaben</div>
+    <div id="ausgaben-list"><div class="empty"><div class="empty-ico">💸</div><div class="empty-txt">Keine Ausgaben</div></div></div>
+  </div>
+</div>
+
+<!-- MEHR -->
+<div class="screen" id="mehr">
+  <div class="nav"><div class="nav-title">Mehr</div></div>
+  <div class="scroll">
+    <div class="sec">Daten</div>
+    <div class="hc" onclick="createBackup()"><div class="hc-ico" style="background:var(--blbg);">💾</div><div class="hc-content"><div class="hc-title">Backup</div><div class="hc-sub">Sichern</div></div><div class="hc-arr">›</div></div>
+    <div class="hc" onclick="restoreBackup()"><div class="hc-ico" style="background:var(--gnbg);">📥</div><div class="hc-content"><div class="hc-title">Wiederherstellen</div><div class="hc-sub">Importieren</div></div><div class="hc-arr">›</div></div>
+    <div class="sec">Einstellungen</div>
+    <div class="hc" onclick="goTo('stammdaten')"><div class="hc-ico" style="background:var(--gdbg);">📋</div><div class="hc-content"><div class="hc-title">Stammdaten</div><div class="hc-sub">Kontakt · Steuer</div></div><div class="hc-arr">›</div></div>
+  </div>
+</div>
+
+<!-- EQUIPMENT -->
+<div class="screen" id="equipment">
+  <div class="nav"><button class="nav-back" onclick="goTo('home')">‹ Zurück</button><div class="nav-title">Equipment</div><button class="nav-action" onclick="openModal('modal-produkt-neu')">+ Neu</button></div>
+  <div class="scroll">
+    <div class="sec">Maschinen</div>
+    <div id="equipment-maschinen"></div>
+    <div class="sec">Chemie</div>
+    <div id="equipment-chemie"></div>
+    <button class="btn btn-ghost" onclick="resetEquipment()" style="margin-top:12px;">Auf Standard zurücksetzen</button>
+  </div>
+</div>
+
+<!-- PROZESSE -->
+<div class="screen" id="prozesse">
+  <div class="nav"><button class="nav-back" onclick="goTo('home')">‹ Zurück</button><div class="nav-title">Prozesse</div><button class="nav-action" onclick="openModal('modal-schritt-neu')">+ Schritt</button></div>
+  <div class="scroll">
+    <div class="chips" id="prozess-paket-chips">
+      <div class="chip on" onclick="selectProzessPaket('frisch')">Frisch</div>
+      <div class="chip" onclick="selectProzessPaket('makellos')">Makellos</div>
+      <div class="chip" onclick="selectProzessPaket('perfektion')">Perfektion</div>
+    </div>
+    <div class="sec">Arbeitsschritte</div>
+    <div id="prozess-schritte"></div>
+    <button class="btn btn-ghost" onclick="resetProzesse()" style="margin-top:12px;">Standard wiederherstellen</button>
+  </div>
+</div>
+
+<!-- STAMMDATEN -->
+<div class="screen" id="stammdaten">
+  <div class="nav"><button class="nav-back" onclick="goTo('mehr')">‹ Zurück</button><div class="nav-title">Stammdaten</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="sec">Kontakt</div>
+    <div class="card">
+      <div class="field"><label>Name</label><input id="set-name" value="Oskar Koch"></div>
+      <div class="field"><label>Firma</label><input id="set-firma" value="Glanzkoch"></div>
+      <div class="field"><label>Adresse</label><input id="set-adresse" value="Heinrich-Beck-Straße 9, 09112 Chemnitz"></div>
+      <div class="field"><label>Telefon</label><input id="set-telefon" value="015772948189"></div>
+      <div class="field"><label>E-Mail</label><input id="set-email" value="skrkoch@gmail.com"></div>
+    </div>
+    <div class="sec">Steuer</div>
+    <div class="card">
+      <div class="field"><label>Steuer-ID</label><input id="set-steuerid" value="42317296050"></div>
+      <div class="field"><label>Steuernummer</label><input id="set-steuernummer" placeholder="Noch nicht vorhanden"></div>
+      <div class="field"><label>USt-Status</label><select id="set-ust"><option>§19 UStG Kleinunternehmer</option><option>Regelbesteuerung 19%</option></select></div>
+    </div>
+    <button class="btn btn-gold" onclick="saveStammdaten()">Speichern</button>
+  </div>
+</div>
+
+<!-- VERSICHERUNGEN -->
+<div class="screen" id="versicherungen">
+  <div class="nav"><button class="nav-back" onclick="switchTab('finanzen')">‹ Zurück</button><div class="nav-title">Versicherungen</div><button class="nav-action" onclick="openModal('modal-versicherung')">+ Neu</button></div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:13px;font-weight:500;margin-bottom:12px;">Monatliche Belastung gesamt: <span style="color:var(--gd);font-size:16px;" id="vers-total">0 €</span></div>
+    </div>
+    <div class="sec">Alle Verträge</div>
+    <div id="versicherungen-list"></div>
+  </div>
+</div>
+
+<!-- AUFTRAG S1: KUNDE -->
+<div class="screen" id="s-kunde">
+  <div class="nav"><button class="nav-back" onclick="abortAuftrag()">‹ Abbrechen</button><div class="nav-sub">1 — Kunde</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="sec">Anrede</div>
+    <div class="chips" id="anrede-chips"><div class="chip on" data-val="Herr">Herr</div><div class="chip" data-val="Frau">Frau</div><div class="chip" data-val="Familie">Familie</div><div class="chip" data-val="Firma">Firma</div></div>
+    <div class="sec">Kontakt</div>
+    <div class="card">
+      <div class="field"><label>Vorname</label><input id="k-vname" placeholder="Max"></div>
+      <div class="field"><label>Nachname</label><input id="k-nname" placeholder="Mustermann"></div>
+      <div class="field"><label>Telefon</label><input id="k-tel" type="tel" placeholder="+49 151 ..."></div>
+      <div class="field"><label>E-Mail</label><input id="k-email" type="email" placeholder="max@beispiel.de"></div>
+    </div>
+    <div class="sec">Fahrzeug</div>
+    <div class="card">
+      <div class="field"><label>Kennzeichen</label><input id="f-kz" placeholder="C-AB 1234" style="text-transform:uppercase;"></div>
+      <div class="field"><label>Marke & Modell</label><input id="f-modell" placeholder="Audi RSQ8"></div>
+      <div class="field"><label>Farbe</label><input id="f-farbe" placeholder="Schwarz metallic"></div>
+    </div>
+    <div class="sec">Quelle</div>
+    <div class="chips" id="quelle-chips"><div class="chip on" data-val="Instagram">Instagram</div><div class="chip" data-val="Empfehlung">Empfehlung</div><div class="chip" data-val="Kleinanzeigen">Kleinanzeigen</div><div class="chip" data-val="Google">Google</div></div>
+    <div class="sec">Verschmutzung</div>
+    <div class="chips" id="schmutz-chips"><div class="chip on" data-val="Normal">Normal</div><div class="chip" data-val="Stark">Stark</div><div class="chip" data-val="Raucher">Raucher</div><div class="chip" data-val="Tierhaar">Tierhaar</div></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-paket')">Weiter — Paket ›</button></div>
+</div>
+
+<!-- AUFTRAG S2: PAKET -->
+<div class="screen" id="s-paket">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-kunde')">‹ Zurück</button><div class="nav-sub">2 — Paket</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="sec">Fahrzeugklasse</div>
+    <div class="chips" id="veh-chips"><div class="chip on" data-name="klein" data-add="0">Klein</div><div class="chip" data-name="mittel" data-add="30">Mittel +30€</div><div class="chip" data-name="suv" data-add="60">SUV +60€</div><div class="chip" data-name="van" data-add="90">Van +90€</div></div>
+    <div class="sec">Paket</div>
+    <div class="pkg sel" id="pkg-frisch" onclick="selectPaket('frisch')"><div class="pkg-name">Frisch</div><div class="pkg-price" id="pp-frisch">89 €</div><div class="pkg-desc">Innenreinigung + Außenwäsche · 3–3.5h</div></div>
+    <div class="pkg" id="pkg-makellos" onclick="selectPaket('makellos')"><div class="pkg-name">Makellos</div><div class="pkg-price" id="pp-makellos">189 €</div><div class="pkg-desc">Frisch + Politur + Versiegelung · 5–6h</div></div>
+    <div class="pkg" id="pkg-perfektion" onclick="selectPaket('perfektion')"><div class="pkg-name">Perfektion</div><div class="pkg-price" id="pp-perfektion">349 €</div><div class="pkg-desc">Makellos + Keramik-Coating · 8–9h</div></div>
+    <div class="sec">Zusatzleistungen</div>
+    <div class="card" id="addons-wrap"></div>
+    <div class="sec">Team</div>
+    <div class="chips" id="team-chips"><div class="chip on" data-val="1">1 Person (Solo)</div><div class="chip" data-val="2">2 Personen (Team)</div></div>
+    <div class="sec">Anfahrt</div>
+    <div class="card"><div class="field"><label>Entfernung (km)</label><input id="km-inp" type="number" placeholder="15" min="0"></div><div id="zones"></div></div>
+    <div class="total"><div><div class="total-lbl">Gesamt</div><div class="total-amt" id="total-amt">89 €</div></div></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-vorher')">Weiter — Fotos ›</button></div>
+</div>
+
+<!-- AUFTRAG S3: VORHER-FOTOS -->
+<div class="screen" id="s-vorher">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-paket')">‹ Zurück</button><div class="nav-sub">3 — Vorher</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="warn-box">⚠️ JETZT fotografieren — vor der Aufbereitung</div>
+    <div class="sec">6 Pflichtfotos</div>
+    <div class="photo-grid" id="photos-vor"></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-sig1')">Weiter — Unterschrift ›</button></div>
+</div>
+
+<!-- AUFTRAG S4: ANNAHME-UNTERSCHRIFT -->
+<div class="screen" id="s-sig1">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-vorher')">‹ Zurück</button><div class="nav-sub">4 — Annahme</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="card" style="font-size:13px;line-height:1.8;color:var(--tx2);">
+      <div style="font-weight:500;color:var(--tx);margin-bottom:8px;">Auftragserteilung</div>
+      Ich, <span id="sig1-name" style="color:var(--gd);font-weight:500;"></span>, bestätige:<br><br>
+      • Auftrag zur Fahrzeugaufbereitung<br>
+      • AGB zur Kenntnis genommen<br>
+      • DSGVO-Einwilligung für Fotos
+    </div>
+    <div class="sec">Unterschrift</div>
+    <div class="sig-wrap"><canvas id="sigCanvas1" height="160"></canvas><div class="sig-row"><button class="sig-btn" onclick="clearSig('sigCanvas1')">Löschen</button></div></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-checkliste')">Aufbereitung starten ›</button></div>
+</div>
+
+<!-- AUFTRAG S5: CHECKLISTE -->
+<div class="screen" id="s-checkliste">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-sig1')">‹ Zurück</button><div class="nav-sub">5 — Aufbereitung</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="prog"><div class="prog-row"><span id="chk-lbl">0 / 0</span><span id="chk-pct" style="color:var(--gd);">0%</span></div><div class="prog-bar"><div class="prog-fill" id="chk-fill" style="width:0%"></div></div></div>
+    <div id="phases-wrap"></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-nachher')">Weiter — Nachher-Fotos ›</button></div>
+</div>
+
+<!-- AUFTRAG S6: NACHHER-FOTOS -->
+<div class="screen" id="s-nachher">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-checkliste')">‹ Zurück</button><div class="nav-sub">6 — Nachher</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="sec">6 Fotos (gleiche Winkel)</div>
+    <div class="photo-grid" id="photos-nach"></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="nextStep('s-sig2')">Weiter — Übergabe ›</button></div>
+</div>
+
+<!-- AUFTRAG S7: ÜBERGABE-UNTERSCHRIFT -->
+<div class="screen" id="s-sig2">
+  <div class="nav"><button class="nav-back" onclick="backStep('s-nachher')">‹ Zurück</button><div class="nav-sub">7 — Übergabe</div><div style="width:60px;"></div></div>
+  <div class="scroll">
+    <div class="card" style="font-size:13px;line-height:1.8;color:var(--tx2);">
+      <div style="font-weight:500;color:var(--tx);margin-bottom:8px;">Abnahme</div>
+      Ich, <span id="sig2-name" style="color:var(--gd);font-weight:500;"></span>, bestätige die Abnahme der durchgeführten Leistungen.
+      <div id="sig2-leistungen" style="margin-top:12px;"></div>
+    </div>
+    <div class="sec">Unterschrift</div>
+    <div class="sig-wrap"><canvas id="sigCanvas2" height="160"></canvas><div class="sig-row"><button class="sig-btn" onclick="clearSig('sigCanvas2')">Löschen</button></div></div>
+  </div>
+  <div class="btm"><button class="btn btn-gold" onclick="finishAuftrag()">Auftrag abschließen</button></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="modal-ausgabe">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Ausgabe</div><button class="modal-close" onclick="closeModal('modal-ausgabe')">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Kategorie</label><select id="ausgabe-kategorie"><option>Equipment</option><option>Chemie</option><option>Versicherung</option><option>BG Verkehr</option><option>Marketing</option><option>Sonstiges</option></select></div>
+      <div class="field"><label>Beschreibung</label><input id="ausgabe-beschreibung" placeholder="z.B. Hochdruckreiniger"></div>
+      <div class="field"><label>Betrag (€)</label><input type="number" id="ausgabe-betrag" placeholder="0.00" step="0.01"></div>
+      <div class="field"><label>Datum</label><input type="date" id="ausgabe-datum"></div>
+      <button class="btn btn-gold" onclick="saveAusgabe()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-kunde-neu">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Neuer Kunde</div><button class="modal-close" onclick="closeModal('modal-kunde-neu')">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Vorname</label><input id="neu-kunde-vorname" placeholder="Max"></div>
+      <div class="field"><label>Nachname</label><input id="neu-kunde-nachname" placeholder="Mustermann"></div>
+      <div class="field"><label>Telefon</label><input type="tel" id="neu-kunde-telefon" placeholder="+49 151 ..."></div>
+      <div class="field"><label>E-Mail</label><input type="email" id="neu-kunde-email" placeholder="max@beispiel.de"></div>
+      <button class="btn btn-gold" onclick="saveNeuerKunde()">Anlegen</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-produkt-neu">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Neues Produkt</div><button class="modal-close" onclick="closeModal('modal-produkt-neu')">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Typ</label><select id="neu-produkt-typ"><option>Maschine</option><option>Chemie</option></select></div>
+      <div class="field"><label>Name</label><input id="neu-produkt-name" placeholder="z.B. Parkside HDR"></div>
+      <div class="field"><label>Beschreibung</label><input id="neu-produkt-desc" placeholder="Hochdruckreiniger"></div>
+      <button class="btn btn-gold" onclick="saveNeuesProdukt()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-schritt-neu">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Neuer Schritt</div><button class="modal-close" onclick="closeModal('modal-schritt-neu')">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Paket</label><select id="neu-schritt-paket"><option>frisch</option><option>makellos</option><option>perfektion</option></select></div>
+      <div class="field"><label>Name</label><input id="neu-schritt-name" placeholder="z.B. Felgenreinigung"></div>
+      <div class="field"><label>Zeit (min)</label><input type="number" id="neu-schritt-zeit" placeholder="15"></div>
+      <div class="field"><label>Werkzeug</label><input id="neu-schritt-tool" placeholder="FelgenBeast, Bürsten"></div>
+      <div class="field"><label>Hinweis</label><input id="neu-schritt-hint" placeholder="Alle Speichen erreichen"></div>
+      <button class="btn btn-gold" onclick="saveNeuerSchritt()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-versicherung">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Versicherung/Vertrag</div><button class="modal-close" onclick="closeModal('modal-versicherung')">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Gesellschaft</label><input id="neu-vers-gesellschaft" placeholder="z.B. Allianz"></div>
+      <div class="field"><label>Art der Versicherung/Vertrag</label><input id="neu-vers-art" placeholder="z.B. KFZ-Haftpflicht"></div>
+      <div class="field"><label>Was ist grob drin?</label><input id="neu-vers-leistung" placeholder="Kurze Beschreibung"></div>
+      <div class="field"><label>Beitrag monatlich (€)</label><input type="number" id="neu-vers-beitrag" placeholder="0.00" step="0.01"></div>
+      <div class="field"><label>Auf wen läuft es?</label><input id="neu-vers-person" placeholder="z.B. Oskar Koch"></div>
+      <button class="btn btn-gold" onclick="saveVersicherung()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept=".json" style="display:none">
+<input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none">
+
+<script>
+// ========================================
+// DATABASE
+// ========================================
+const DB = {
+  kunden: [],
+  auftraege: [],
+  ausgaben: [],
+  versicherungen: [],
+  settings: {
+    name: 'Oskar Koch',
+    firma: 'Glanzkoch',
+    adresse: 'Heinrich-Beck-Straße 9, 09112 Chemnitz',
+    telefon: '015772948189',
+    email: 'skrkoch@gmail.com',
+    steuerid: '42317296050',
+    steuernummer: '',
+    ust_status: '§19 UStG Kleinunternehmer',
+    reviews_aktuell: 0,
+    reviews_ziel: 15
+  },
+  equipment: {
+    maschinen: [
+      {id:'m1',name:'Parkside PHDP 180 D',desc:'Hochdruckreiniger',preis:190.98},
+      {id:'m2',name:'Kärcher WD 6 P S V-30',desc:'Nass-Trockensauger',preis:136.33},
+      {id:'m3',name:'Kärcher SC 3 EasyFix',desc:'Dampfreiniger',preis:138.98},
+      {id:'m4',name:'Tornador Black Z-020',desc:'Druckluft Innenraum',preis:129.24},
+      {id:'m5',name:'Einhell Akkuschrauber',desc:'Mit Drill Brush',preis:64.98}
+    ],
+    chemie: [
+      {id:'c1',name:'KC Gentle Snow Foam',desc:'Vorwäsche',preis:12},
+      {id:'c2',name:'KC Green Star GS',desc:'Aktivschaum',preis:12},
+      {id:'c3',name:'Sonax FelgenBeast',desc:'Felgenreiniger',preis:15},
+      {id:'c4',name:'KC Glas Star GS',desc:'Glasreiniger',preis:12},
+      {id:'c5',name:'Gyeon Q²M WetCoat',desc:'Nassversiegelung',preis:35},
+      {id:'c6',name:'KC MultiInteriorCleaner',desc:'Innenraum APC',preis:12},
+      {id:'c7',name:'ValetPro Carpet Cleaner',desc:'Polsterreiniger',preis:18},
+      {id:'c8',name:'Meguiars Leather Conditioner',desc:'Lederpflege',preis:14}
+    ]
+  },
+  prozesse: {
+    frisch: [
+      {name:'Fahrzeugannahme',zeit:10,tool:'Smartphone, App',hint:'Fotos + Schadensprotokoll'},
+      {name:'Vorwäsche',zeit:15,tool:'HDR, Schaumlanze, Green Star',hint:'Groben Schmutz lösen'},
+      {name:'Hauptwäsche',zeit:20,tool:'HDR, Waschhandschuh, Gentle Snow Foam',hint:'Zwei-Eimer-Methode'},
+      {name:'Felgenreinigung',zeit:15,tool:'FelgenBeast, Felgenbürsten',hint:'Alle Speichen erreichen'},
+      {name:'Trocknung',zeit:10,tool:'Dry Me A River XL',hint:'Dichtungen und Fugen'},
+      {name:'Innenraum Vorbereitung',zeit:15,tool:'Müllsack, Handstaubsauger',hint:'Groben Müll entfernen'},
+      {name:'Saugen',zeit:25,tool:'Kärcher WD 6, Düsenset',hint:'Alle Ritzen, unter Sitzen',team:true},
+      {name:'Innenraumreinigung',zeit:30,tool:'APC, Mikrofaser, Tornador',hint:'Dashboard, Türen, Mittelkonsole',team:true},
+      {name:'Scheiben innen',zeit:15,tool:'Glas Star, Waffeltücher',hint:'Streifenfrei'},
+      {name:'Scheibenversiegelung',zeit:10,tool:'Gyeon Q2 View',hint:'Außen auftragen'},
+      {name:'Reifenpflege',zeit:10,tool:'Gyeon Tire, Applikator',hint:'Gleichmäßig verteilen'},
+      {name:'Endkontrolle',zeit:10,tool:'Detailing-Lampe',hint:'Checkliste durchgehen'},
+      {name:'Fotodokumentation',zeit:5,tool:'Smartphone',hint:'Nachher-Fotos'}
+    ],
+    makellos: [
+      {name:'Alle Schritte aus Frisch',zeit:210,tool:'Siehe Frisch',hint:'Kompletter Basis-Flow'},
+      {name:'Lackdekontamination',zeit:20,tool:'IPA 70%, Clay Bar',hint:'Vor Politur zwingend'},
+      {name:'Maschinenpolitur',zeit:60,tool:'Rupes LHR 15, Menzerna 2500',hint:'Swirls entfernen',team:true},
+      {name:'Finishing',zeit:30,tool:'Menzerna 3800, weißes Pad',hint:'Hochglanz erzeugen'},
+      {name:'Sealant Auftrag',zeit:20,tool:'WetCoat, Applikator',hint:'Gleichmäßig verteilen'},
+      {name:'Felgenversiegelung',zeit:25,tool:'Gyeon Q2 Rim',hint:'Pro Felge 5 min'}
+    ],
+    perfektion: [
+      {name:'Alle Schritte aus Makellos',zeit:360,tool:'Siehe Makellos',hint:'Kompletter Flow'},
+      {name:'Lackdickenmessung',zeit:30,tool:'Lackdickenmessgerät',hint:'Vor Keramik dokumentieren'},
+      {name:'Keramik-Vorbereitung',zeit:45,tool:'IPA 100%, Panel Wipe',hint:'Absolut fettfrei'},
+      {name:'Keramik-Coating',zeit:90,tool:'Keramikversiegelung, Applikatoren',hint:'Sektion für Sektion',team:true},
+      {name:'Aushärtezeit',zeit:60,tool:'Keine',hint:'Fahrzeug nicht bewegen'}
+    ]
+  },
+  addons: [
+    {id:'dampf',name:'Dampfreinigung Polster',preis:40},
+    {id:'leder',name:'Lederreinigung & Pflege',preis:40},
+    {id:'dachhimmel',name:'Dachhimmelreinigung',preis:60},
+    {id:'ozon',name:'Ozon-Behandlung',preis:35},
+    {id:'tierhaar',name:'Tierhaarentfernung',preis:40},
+    {id:'politur',name:'Hochglanzpolitur',preis:80}
+  ]
+};
+
+// AKTUELLER AUFTRAG
+let AUFTRAG = {
+  anrede:'Herr',vname:'',nname:'',tel:'',email:'',
+  kz:'',modell:'',farbe:'',quelle:'Instagram',schmutz:'Normal',
+  paket:'frisch',vehKlasse:'klein',team:1,addons:{},anfahrt:0,
+  photos:{vor:[],nach:[]},sig1:null,sig2:null,checked:{}
+};
+
+function saveDB() {
+  localStorage.setItem('glanzkoch_db', JSON.stringify(DB));
+}
+
+function loadDB() {
+  const saved = localStorage.getItem('glanzkoch_db');
+  if (saved) {
+    const loaded = JSON.parse(saved);
+    Object.assign(DB, loaded);
+  }
+}
+
+// ========================================
+// NAVIGATION
+// ========================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(tab)?.classList.add('active');
+  
+  if (tab === 'dashboard') renderDashboard();
+  if (tab === 'kunden') renderKunden();
+  if (tab === 'finanzen') renderFinanzen();
+}
+
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screen)?.classList.add('active');
+  
+  if (screen === 'equipment') renderEquipment();
+  if (screen === 'prozesse') renderProzesse();
+  if (screen === 'versicherungen') renderVersicherungen();
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+    switchTab(tab.dataset.tab);
+  });
+});
+
+// ========================================
+// MODALS
+// ========================================
+function openModal(id) {
+  document.getElementById(id)?.classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove('active');
+}
+
+// ========================================
+// CHIPS HANDLING
+// ========================================
+function initChips(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      container.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      
+      // Update AUFTRAG
+      if (containerId === 'anrede-chips') AUFTRAG.anrede = chip.dataset.val;
+      if (containerId === 'quelle-chips') AUFTRAG.quelle = chip.dataset.val;
+      if (containerId === 'schmutz-chips') AUFTRAG.schmutz = chip.dataset.val;
+      if (containerId === 'team-chips') AUFTRAG.team = parseInt(chip.dataset.val);
+      if (containerId === 'veh-chips') {
+        AUFTRAG.vehKlasse = chip.dataset.name;
+        updatePaketPreise();
+      }
+    });
+  });
+}
+
+// ========================================
+// DASHBOARD
+// ========================================
+function renderDashboard() {
+  const heute = new Date();
+  const monatsauftraege = DB.auftraege.filter(a => {
+    const d = new Date(a.datum);
+    return d.getMonth() === heute.getMonth() && d.getFullYear() === heute.getFullYear();
+  });
+  
+  const umsatz = monatsauftraege.reduce((sum, a) => sum + a.preis, 0);
+  const anzahl = monatsauftraege.length;
+  const schnitt = anzahl > 0 ? Math.round(umsatz / anzahl) : 0;
+  
+  document.getElementById('dash-umsatz').textContent = umsatz + ' €';
+  document.getElementById('dash-auftraege').textContent = anzahl;
+  document.getElementById('dash-schnitt').textContent = schnitt + ' €';
+  
+  const reviewsPct = Math.min(100, Math.round((DB.settings.reviews_aktuell / DB.settings.reviews_ziel) * 100));
+  document.getElementById('reviews-status').textContent = DB.settings.reviews_aktuell + ' / ' + DB.settings.reviews_ziel;
+  document.getElementById('reviews-fill').style.width = reviewsPct + '%';
+  
+  // Quellen
+  const quellen = {};
+  DB.auftraege.forEach(a => {
+    quellen[a.quelle] = (quellen[a.quelle] || 0) + 1;
+  });
+  
+  const quellenHTML = Object.entries(quellen)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([q, n]) => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);">
+        <span style="font-size:13px;">${q}</span><span style="font-size:14px;font-weight:500;">${n}</span>
+      </div>
+    `).join('');
+  
+  document.getElementById('dash-quellen').innerHTML = quellenHTML || '<div style="font-size:12px;color:var(--tx2);">Keine Daten</div>';
+  
+  // Pakete
+  const pakete = {};
+  DB.auftraege.forEach(a => {
+    pakete[a.paket] = (pakete[a.paket] || 0) + 1;
+  });
+  
+  const paketeHTML = Object.entries(pakete)
+    .sort((a, b) => b[1] - a[1])
+    .map(([p, n]) => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);">
+        <span style="font-size:13px;">${p}</span><span style="font-size:14px;font-weight:500;">${n}</span>
+      </div>
+    `).join('');
+  
+  document.getElementById('dash-pakete').innerHTML = paketeHTML || '<div style="font-size:12px;color:var(--tx2);">Keine Daten</div>';
+}
+
+// ========================================
+// KUNDEN
+// ========================================
+function renderKunden() {
+  const search = document.getElementById('kunden-search')?.value.toLowerCase() || '';
+  const list = document.getElementById('kunden-list');
+  
+  const filtered = DB.kunden.filter(k => 
+    k.vorname.toLowerCase().includes(search) || 
+    k.nachname.toLowerCase().includes(search) ||
+    k.telefon.includes(search)
+  );
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Keine Kunden</div></div>';
+    return;
+  }
+  
+  const html = filtered.map(k => {
+    const auftraege = DB.auftraege.filter(a => a.kundeId === k.id).length;
+    return `
+      <div class="list-item">
+        <div class="list-item-content">
+          <div class="list-item-title">${k.vorname} ${k.nachname}</div>
+          <div class="list-item-sub">${k.telefon} · ${auftraege} Aufträge</div>
+        </div>
+        <div class="list-item-arr">›</div>
+      </div>
+    `;
+  }).join('');
+  
+  list.innerHTML = html;
+  document.getElementById('home-kunden-count').textContent = DB.kunden.length;
+}
+
+function saveNeuerKunde() {
+  const kunde = {
+    id: Date.now().toString(),
+    vorname: document.getElementById('neu-kunde-vorname').value,
+    nachname: document.getElementById('neu-kunde-nachname').value,
+    telefon: document.getElementById('neu-kunde-telefon').value,
+    email: document.getElementById('neu-kunde-email').value || '',
+    erstellt: new Date().toISOString()
+  };
+  
+  if (!kunde.vorname || !kunde.nachname) {
+    alert('Bitte Vor- und Nachname eingeben');
+    return;
+  }
+  
+  DB.kunden.push(kunde);
+  saveDB();
+  closeModal('modal-kunde-neu');
+  renderKunden();
+  
+  document.getElementById('neu-kunde-vorname').value = '';
+  document.getElementById('neu-kunde-nachname').value = '';
+  document.getElementById('neu-kunde-telefon').value = '';
+  document.getElementById('neu-kunde-email').value = '';
+}
+
+// ========================================
+// FINANZEN
+// ========================================
+function renderFinanzen() {
+  const umsatz = DB.auftraege.reduce((sum, a) => sum + (a.preis || 0), 0);
+  const ausgaben = DB.ausgaben.reduce((sum, a) => sum + (a.betrag || 0), 0);
+  const gewinn = umsatz - ausgaben;
+  
+  document.getElementById('fin-umsatz').textContent = umsatz + ' €';
+  document.getElementById('fin-ausgaben').textContent = ausgaben + ' €';
+  document.getElementById('fin-gewinn').textContent = gewinn + ' €';
+  
+  const matKosten = DB.auftraege.reduce((sum, a) => sum + (a.materialkosten || 10), 0);
+  const matSchnitt = DB.auftraege.length > 0 ? Math.round(matKosten / DB.auftraege.length) : 0;
+  document.getElementById('fin-mat').textContent = matSchnitt + ' €';
+  
+  const gesamtStunden = DB.auftraege.reduce((sum, a) => sum + (a.dauer || 3.5), 0);
+  const stundensatz = gesamtStunden > 0 ? Math.round((umsatz - matKosten) / gesamtStunden) : 0;
+  document.getElementById('fin-stunden').textContent = stundensatz + ' €/h';
+  
+  // Monatliche Belastungen
+  const monthlyTotal = DB.versicherungen.reduce((sum, v) => sum + (v.beitrag || 0), 0);
+  document.getElementById('fin-monthly-total').textContent = Math.round(monthlyTotal) + ' €';
+  
+  const list = document.getElementById('ausgaben-list');
+  if (DB.ausgaben.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-ico">💸</div><div class="empty-txt">Keine Ausgaben</div></div>';
+    return;
+  }
+  
+  const html = DB.ausgaben.slice(-10).reverse().map(a => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <div class="list-item-title">${a.beschreibung}</div>
+        <div class="list-item-sub">${a.kategorie} · ${new Date(a.datum).toLocaleDateString('de-DE')}</div>
+      </div>
+      <div class="list-item-meta" style="color:var(--rd);">${a.betrag} €</div>
+    </div>
+  `).join('');
+  
+  list.innerHTML = html;
+}
+
+function saveAusgabe() {
+  const ausgabe = {
+    id: Date.now().toString(),
+    kategorie: document.getElementById('ausgabe-kategorie').value,
+    beschreibung: document.getElementById('ausgabe-beschreibung').value,
+    betrag: parseFloat(document.getElementById('ausgabe-betrag').value) || 0,
+    datum: document.getElementById('ausgabe-datum').value
+  };
+  
+  if (!ausgabe.beschreibung || ausgabe.betrag === 0) {
+    alert('Bitte alle Felder ausfüllen');
+    return;
+  }
+  
+  DB.ausgaben.push(ausgabe);
+  saveDB();
+  closeModal('modal-ausgabe');
+  renderFinanzen();
+  
+  document.getElementById('ausgabe-beschreibung').value = '';
+  document.getElementById('ausgabe-betrag').value = '';
+}
+
+// ========================================
+// EQUIPMENT
+// ========================================
+function renderEquipment() {
+  const maschinHTML = DB.equipment.maschinen.map(m => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <div class="list-item-title">${m.name}</div>
+        <div class="list-item-sub">${m.desc}</div>
+      </div>
+      <button class="btn-danger" style="padding:8px 12px;font-size:12px;min-height:36px;border-radius:8px;" onclick="deleteProdukt('maschinen','${m.id}')">×</button>
+    </div>
+  `).join('');
+  
+  const chemieHTML = DB.equipment.chemie.map(c => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <div class="list-item-title">${c.name}</div>
+        <div class="list-item-sub">${c.desc}</div>
+      </div>
+      <button class="btn-danger" style="padding:8px 12px;font-size:12px;min-height:36px;border-radius:8px;" onclick="deleteProdukt('chemie','${c.id}')">×</button>
+    </div>
+  `).join('');
+  
+  document.getElementById('equipment-maschinen').innerHTML = maschinHTML || '<div class="empty-txt">Keine Maschinen</div>';
+  document.getElementById('equipment-chemie').innerHTML = chemieHTML || '<div class="empty-txt">Keine Chemie</div>';
+}
+
+function saveNeuesProdukt() {
+  const typ = document.getElementById('neu-produkt-typ').value.toLowerCase();
+  const produkt = {
+    id: Date.now().toString(),
+    name: document.getElementById('neu-produkt-name').value,
+    desc: document.getElementById('neu-produkt-desc').value,
+    preis: 0
+  };
+  
+  if (!produkt.name) {
+    alert('Bitte Namen eingeben');
+    return;
+  }
+  
+  if (typ === 'maschine') {
+    DB.equipment.maschinen.push(produkt);
+  } else {
+    DB.equipment.chemie.push(produkt);
+  }
+  
+  saveDB();
+  closeModal('modal-produkt-neu');
+  renderEquipment();
+  
+  document.getElementById('neu-produkt-name').value = '';
+  document.getElementById('neu-produkt-desc').value = '';
+}
+
+function deleteProdukt(typ, id) {
+  if (!confirm('Produkt löschen?')) return;
+  
+  if (typ === 'maschinen') {
+    DB.equipment.maschinen = DB.equipment.maschinen.filter(m => m.id !== id);
+  } else {
+    DB.equipment.chemie = DB.equipment.chemie.filter(c => c.id !== id);
+  }
+  
+  saveDB();
+  renderEquipment();
+}
+
+function resetEquipment() {
+  if (!confirm('Equipment auf Standard zurücksetzen?')) return;
+  
+  DB.equipment = {
+    maschinen: [
+      {id:'m1',name:'Parkside PHDP 180 D',desc:'Hochdruckreiniger',preis:190.98},
+      {id:'m2',name:'Kärcher WD 6 P S V-30',desc:'Nass-Trockensauger',preis:136.33},
+      {id:'m3',name:'Kärcher SC 3 EasyFix',desc:'Dampfreiniger',preis:138.98},
+      {id:'m4',name:'Tornador Black Z-020',desc:'Druckluft Innenraum',preis:129.24},
+      {id:'m5',name:'Einhell Akkuschrauber',desc:'Mit Drill Brush',preis:64.98}
+    ],
+    chemie: [
+      {id:'c1',name:'KC Gentle Snow Foam',desc:'Vorwäsche',preis:12},
+      {id:'c2',name:'KC Green Star GS',desc:'Aktivschaum',preis:12},
+      {id:'c3',name:'Sonax FelgenBeast',desc:'Felgenreiniger',preis:15},
+      {id:'c4',name:'KC Glas Star GS',desc:'Glasreiniger',preis:12},
+      {id:'c5',name:'Gyeon Q²M WetCoat',desc:'Nassversiegelung',preis:35}
+    ]
+  };
+  
+  saveDB();
+  renderEquipment();
+}
+
+// ========================================
+// PROZESSE
+// ========================================
+let currentProzessPaket = 'frisch';
+
+function selectProzessPaket(paket) {
+  currentProzessPaket = paket;
+  document.querySelectorAll('#prozess-paket-chips .chip').forEach(c => c.classList.remove('on'));
+  event.target.classList.add('on');
+  renderProzesse();
+}
+
+function renderProzesse() {
+  const schritte = DB.prozesse[currentProzessPaket] || [];
+  
+  const html = schritte.map((s, i) => `
+    <div class="list-item">
+      <div class="list-item-content">
+        <div class="list-item-title">${s.name}</div>
+        <div class="list-item-sub">${s.zeit} min · ${s.tool}</div>
+      </div>
+      <button class="btn-danger" style="padding:8px 12px;font-size:12px;min-height:36px;border-radius:8px;" onclick="deleteSchritt(${i})">×</button>
+    </div>
+  `).join('');
+  
+  document.getElementById('prozess-schritte').innerHTML = html || '<div class="empty-txt">Keine Schritte</div>';
+}
+
+function saveNeuerSchritt() {
+  const paket = document.getElementById('neu-schritt-paket').value;
+  const schritt = {
+    name: document.getElementById('neu-schritt-name').value,
+    zeit: parseInt(document.getElementById('neu-schritt-zeit').value) || 0,
+    tool: document.getElementById('neu-schritt-tool').value,
+    hint: document.getElementById('neu-schritt-hint').value
+  };
+  
+  if (!schritt.name) {
+    alert('Bitte Namen eingeben');
+    return;
+  }
+  
+  if (!DB.prozesse[paket]) DB.prozesse[paket] = [];
+  DB.prozesse[paket].push(schritt);
+  
+  saveDB();
+  closeModal('modal-schritt-neu');
+  if (currentProzessPaket === paket) renderProzesse();
+  
+  document.getElementById('neu-schritt-name').value = '';
+  document.getElementById('neu-schritt-zeit').value = '';
+  document.getElementById('neu-schritt-tool').value = '';
+  document.getElementById('neu-schritt-hint').value = '';
+}
+
+function deleteSchritt(idx) {
+  if (!confirm('Schritt löschen?')) return;
+  
+  DB.prozesse[currentProzessPaket].splice(idx, 1);
+  saveDB();
+  renderProzesse();
+}
+
+function resetProzesse() {
+  if (!confirm('Prozesse auf Standard zurücksetzen?')) return;
+  
+  DB.prozesse = {
+    frisch: [
+      {name:'Fahrzeugannahme',zeit:10,tool:'Smartphone, App',hint:'Fotos + Schadensprotokoll'},
+      {name:'Vorwäsche',zeit:15,tool:'HDR, Schaumlanze, Green Star',hint:'Groben Schmutz lösen'},
+      {name:'Hauptwäsche',zeit:20,tool:'HDR, Waschhandschuh, Gentle Snow Foam',hint:'Zwei-Eimer-Methode'},
+      {name:'Felgenreinigung',zeit:15,tool:'FelgenBeast, Felgenbürsten',hint:'Alle Speichen erreichen'},
+      {name:'Trocknung',zeit:10,tool:'Dry Me A River XL',hint:'Dichtungen und Fugen'},
+      {name:'Innenraum Vorbereitung',zeit:15,tool:'Müllsack, Handstaubsauger',hint:'Groben Müll entfernen'},
+      {name:'Saugen',zeit:25,tool:'Kärcher WD 6, Düsenset',hint:'Alle Ritzen, unter Sitzen',team:true},
+      {name:'Innenraumreinigung',zeit:30,tool:'APC, Mikrofaser, Tornador',hint:'Dashboard, Türen, Mittelkonsole',team:true},
+      {name:'Scheiben innen',zeit:15,tool:'Glas Star, Waffeltücher',hint:'Streifenfrei'},
+      {name:'Scheibenversiegelung',zeit:10,tool:'Gyeon Q2 View',hint:'Außen auftragen'},
+      {name:'Reifenpflege',zeit:10,tool:'Gyeon Tire, Applikator',hint:'Gleichmäßig verteilen'},
+      {name:'Endkontrolle',zeit:10,tool:'Detailing-Lampe',hint:'Checkliste durchgehen'},
+      {name:'Fotodokumentation',zeit:5,tool:'Smartphone',hint:'Nachher-Fotos'}
+    ],
+    makellos: [
+      {name:'Alle Schritte aus Frisch',zeit:210,tool:'Siehe Frisch',hint:'Kompletter Basis-Flow'},
+      {name:'Lackdekontamination',zeit:20,tool:'IPA 70%, Clay Bar',hint:'Vor Politur zwingend'},
+      {name:'Maschinenpolitur',zeit:60,tool:'Rupes LHR 15, Menzerna 2500',hint:'Swirls entfernen',team:true},
+      {name:'Finishing',zeit:30,tool:'Menzerna 3800, weißes Pad',hint:'Hochglanz erzeugen'},
+      {name:'Sealant Auftrag',zeit:20,tool:'WetCoat, Applikator',hint:'Gleichmäßig verteilen'},
+      {name:'Felgenversiegelung',zeit:25,tool:'Gyeon Q2 Rim',hint:'Pro Felge 5 min'}
+    ],
+    perfektion: [
+      {name:'Alle Schritte aus Makellos',zeit:360,tool:'Siehe Makellos',hint:'Kompletter Flow'},
+      {name:'Lackdickenmessung',zeit:30,tool:'Lackdickenmessgerät',hint:'Vor Keramik dokumentieren'},
+      {name:'Keramik-Vorbereitung',zeit:45,tool:'IPA 100%, Panel Wipe',hint:'Absolut fettfrei'},
+      {name:'Keramik-Coating',zeit:90,tool:'Keramikversiegelung, Applikatoren',hint:'Sektion für Sektion',team:true},
+      {name:'Aushärtezeit',zeit:60,tool:'Keine',hint:'Fahrzeug nicht bewegen'}
+    ]
+  };
+  
+  saveDB();
+  renderProzesse();
+}
+
+// ========================================
+// STAMMDATEN
+// ========================================
+function saveStammdaten() {
+  DB.settings.name = document.getElementById('set-name').value;
+  DB.settings.firma = document.getElementById('set-firma').value;
+  DB.settings.adresse = document.getElementById('set-adresse').value;
+  DB.settings.telefon = document.getElementById('set-telefon').value;
+  DB.settings.email = document.getElementById('set-email').value;
+  DB.settings.steuerid = document.getElementById('set-steuerid').value;
+  DB.settings.steuernummer = document.getElementById('set-steuernummer').value;
+  DB.settings.ust_status = document.getElementById('set-ust').value;
+  
+  saveDB();
+  alert('✅ Stammdaten gespeichert');
+}
+
+// ========================================
+// VERSICHERUNGEN
+// ========================================
+function renderVersicherungen() {
+  const list = document.getElementById('versicherungen-list');
+  
+  if (DB.versicherungen.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Keine Verträge erfasst</div></div>';
+    document.getElementById('vers-total').textContent = '0 €';
+    return;
+  }
+  
+  const total = DB.versicherungen.reduce((sum, v) => sum + (v.beitrag || 0), 0);
+  document.getElementById('vers-total').textContent = Math.round(total) + ' €';
+  
+  const html = DB.versicherungen.map(v => `
+    <div class="card" style="position:relative;">
+      <button class="btn-danger" style="position:absolute;top:12px;right:12px;padding:6px 10px;font-size:11px;min-height:28px;border-radius:6px;" onclick="deleteVersicherung('${v.id}')">×</button>
+      <div style="margin-bottom:8px;">
+        <div style="font-size:15px;font-weight:500;margin-bottom:4px;">${v.gesellschaft}</div>
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:2px;">${v.art}</div>
+        <div style="font-size:12px;color:var(--tx2);margin-bottom:8px;">${v.leistung}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--bo);">
+          <div style="font-size:12px;color:var(--tx2);">${v.person}</div>
+          <div style="font-size:16px;font-weight:500;color:var(--gd);">${v.beitrag} €/Monat</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  
+  list.innerHTML = html;
+}
+
+function saveVersicherung() {
+  const vers = {
+    id: Date.now().toString(),
+    gesellschaft: document.getElementById('neu-vers-gesellschaft').value,
+    art: document.getElementById('neu-vers-art').value,
+    leistung: document.getElementById('neu-vers-leistung').value,
+    beitrag: parseFloat(document.getElementById('neu-vers-beitrag').value) || 0,
+    person: document.getElementById('neu-vers-person').value
+  };
+  
+  if (!vers.gesellschaft || !vers.art || vers.beitrag === 0) {
+    alert('Bitte alle Felder ausfüllen');
+    return;
+  }
+  
+  DB.versicherungen.push(vers);
+  saveDB();
+  closeModal('modal-versicherung');
+  renderVersicherungen();
+  renderFinanzen();
+  
+  document.getElementById('neu-vers-gesellschaft').value = '';
+  document.getElementById('neu-vers-art').value = '';
+  document.getElementById('neu-vers-leistung').value = '';
+  document.getElementById('neu-vers-beitrag').value = '';
+  document.getElementById('neu-vers-person').value = '';
+}
+
+function deleteVersicherung(id) {
+  if (!confirm('Vertrag löschen?')) return;
+  
+  DB.versicherungen = DB.versicherungen.filter(v => v.id !== id);
+  saveDB();
+  renderVersicherungen();
+  renderFinanzen();
+}
+
+// ========================================
+// BACKUP
+// ========================================
+function createBackup() {
+  const dataStr = JSON.stringify(DB, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `glanzkoch-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('✅ Backup erstellt');
+}
+
+function restoreBackup() {
+  const input = document.getElementById('file-input');
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const restored = JSON.parse(event.target.result);
+        if (confirm('⚠️ Alle Daten überschreiben?')) {
+          Object.assign(DB, restored);
+          saveDB();
+          alert('✅ Wiederhergestellt');
+          location.reload();
+        }
+      } catch (err) {
+        alert('❌ Fehler: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ========================================
+// AUFTRAG FLOW
+// ========================================
+function startAuftrag() {
+  // Reset
+  AUFTRAG = {
+    anrede:'Herr',vname:'',nname:'',tel:'',email:'',
+    kz:'',modell:'',farbe:'',quelle:'Instagram',schmutz:'Normal',
+    paket:'frisch',vehKlasse:'klein',team:1,addons:{},anfahrt:0,
+    photos:{vor:[],nach:[]},sig1:null,sig2:null,checked:{}
+  };
+  
+  goTo('s-kunde');
+  initChips('anrede-chips');
+  initChips('quelle-chips');
+  initChips('schmutz-chips');
+}
+
+function nextStep(screen) {
+  // Validierung
+  if (screen === 's-paket') {
+    AUFTRAG.vname = document.getElementById('k-vname').value;
+    AUFTRAG.nname = document.getElementById('k-nname').value;
+    AUFTRAG.tel = document.getElementById('k-tel').value;
+    AUFTRAG.email = document.getElementById('k-email').value;
+    AUFTRAG.kz = document.getElementById('f-kz').value;
+    AUFTRAG.modell = document.getElementById('f-modell').value;
+    AUFTRAG.farbe = document.getElementById('f-farbe').value;
+    
+    if (!AUFTRAG.vname || !AUFTRAG.nname || !AUFTRAG.kz) {
+      alert('Bitte Pflichtfelder ausfüllen');
+      return;
+    }
+    
+    goTo(screen);
+    initChips('veh-chips');
+    initChips('team-chips');
+    renderAddons();
+    updatePaketPreise();
+    return;
+  }
+  
+  if (screen === 's-vorher') {
+    goTo(screen);
+    renderPhotos('vor');
+    return;
+  }
+  
+  if (screen === 's-sig1') {
+    goTo(screen);
+    document.getElementById('sig1-name').textContent = `${AUFTRAG.anrede} ${AUFTRAG.vname} ${AUFTRAG.nname}`;
+    setupCanvas('sigCanvas1');
+    return;
+  }
+  
+  if (screen === 's-checkliste') {
+    if (!AUFTRAG.sig1) {
+      alert('Bitte Unterschrift einholen');
+      return;
+    }
+    goTo(screen);
+    buildCheckliste();
+    return;
+  }
+  
+  if (screen === 's-nachher') {
+    goTo(screen);
+    renderPhotos('nach');
+    return;
+  }
+  
+  if (screen === 's-sig2') {
+    goTo(screen);
+    document.getElementById('sig2-name').textContent = `${AUFTRAG.anrede} ${AUFTRAG.vname} ${AUFTRAG.nname}`;
+    renderLeistungen();
+    setupCanvas('sigCanvas2');
+    return;
+  }
+  
+  goTo(screen);
+}
+
+function backStep(screen) {
+  goTo(screen);
+}
+
+function abortAuftrag() {
+  if (confirm('Auftrag wirklich abbrechen?')) {
+    goTo('home');
+  }
+}
+
+function selectPaket(paket) {
+  AUFTRAG.paket = paket;
+  document.querySelectorAll('.pkg').forEach(p => p.classList.remove('sel'));
+  document.getElementById('pkg-' + paket).classList.add('sel');
+  calcTotal();
+}
+
+function updatePaketPreise() {
+  const preise = {
+    klein: { frisch: 89, makellos: 189, perfektion: 349 },
+    mittel: { frisch: 119, makellos: 219, perfektion: 379 },
+    suv: { frisch: 149, makellos: 249, perfektion: 409 },
+    van: { frisch: 179, makellos: 279, perfektion: 439 }
+  };
+  
+  const klasse = AUFTRAG.vehKlasse;
+  document.getElementById('pp-frisch').textContent = preise[klasse].frisch + ' €';
+  document.getElementById('pp-makellos').textContent = preise[klasse].makellos + ' €';
+  document.getElementById('pp-perfektion').textContent = preise[klasse].perfektion + ' €';
+  
+  calcTotal();
+}
+
+function renderAddons() {
+  const html = DB.addons.map(a => `
+    <div class="addon" onclick="toggleAddon('${a.id}')">
+      <div class="addon-l">
+        <div class="addon-cb ${AUFTRAG.addons[a.id] ? 'on' : ''}" id="addon-${a.id}">
+          ${AUFTRAG.addons[a.id] ? '✓' : ''}
+        </div>
+        <div class="addon-name">${a.name}</div>
+      </div>
+      <div class="addon-p">+${a.preis} €</div>
+    </div>
+  `).join('');
+  
+  document.getElementById('addons-wrap').innerHTML = html;
+}
+
+function toggleAddon(id) {
+  AUFTRAG.addons[id] = !AUFTRAG.addons[id];
+  renderAddons();
+  calcTotal();
+}
+
+function calcTotal() {
+  const preise = {
+    klein: { frisch: 89, makellos: 189, perfektion: 349 },
+    mittel: { frisch: 119, makellos: 219, perfektion: 379 },
+    suv: { frisch: 149, makellos: 249, perfektion: 409 },
+    van: { frisch: 179, makellos: 279, perfektion: 439 }
+  };
+  
+  let total = preise[AUFTRAG.vehKlasse][AUFTRAG.paket];
+  
+  DB.addons.forEach(a => {
+    if (AUFTRAG.addons[a.id]) total += a.preis;
+  });
+  
+  const km = parseInt(document.getElementById('km-inp')?.value) || 0;
+  if (km <= 30) AUFTRAG.anfahrt = 0;
+  else if (km <= 80) AUFTRAG.anfahrt = 25;
+  else if (km <= 150) AUFTRAG.anfahrt = 45;
+  else AUFTRAG.anfahrt = 0;
+  
+  total += AUFTRAG.anfahrt;
+  
+  document.getElementById('total-amt').textContent = total + ' €';
+}
+
+// ========================================
+// FOTOS
+// ========================================
+const FOTO_LABELS = {
+  vor: ['Front', 'Heck', 'Links', 'Rechts', 'Innen vorne', 'Innen hinten'],
+  nach: ['Front', 'Heck', 'Links', 'Rechts', 'Innen vorne', 'Innen hinten']
+};
+
+let photoTarget = null;
+
+function renderPhotos(typ) {
+  const container = document.getElementById('photos-' + typ);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (!AUFTRAG.photos[typ]) AUFTRAG.photos[typ] = [];
+  
+  FOTO_LABELS[typ].forEach((label, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot' + (AUFTRAG.photos[typ][i] ? ' filled' : '');
+    
+    if (AUFTRAG.photos[typ][i]) {
+      const img = document.createElement('img');
+      img.src = AUFTRAG.photos[typ][i];
+      slot.appendChild(img);
+      
+      const del = document.createElement('button');
+      del.className = 'photo-del';
+      del.textContent = '×';
+      del.onclick = (e) => {
+        e.stopPropagation();
+        AUFTRAG.photos[typ][i] = null;
+        renderPhotos(typ);
+      };
+      slot.appendChild(del);
+    } else {
+      slot.innerHTML = `<span class="photo-add">+</span><span class="photo-lbl">${label}</span>`;
+    }
+    
+    slot.onclick = () => {
+      photoTarget = { typ, idx: i };
+      document.getElementById('photo-input').click();
+    };
+    
+    container.appendChild(slot);
+  });
+}
+
+document.getElementById('photo-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file || !photoTarget) return;
+  
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    if (!AUFTRAG.photos[photoTarget.typ]) AUFTRAG.photos[photoTarget.typ] = [];
+    AUFTRAG.photos[photoTarget.typ][photoTarget.idx] = ev.target.result;
+    renderPhotos(photoTarget.typ);
+    e.target.value = '';
+    photoTarget = null;
+  };
+  reader.readAsDataURL(file);
+});
+
+// ========================================
+// SIGNATUREN
+// ========================================
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas || canvas._init) return;
+  canvas._init = true;
+  
+  canvas.width = canvas.offsetWidth || 300;
+  canvas.height = 160;
+  
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#f0efe8';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  
+  let drawing = false;
+  
+  const getPos = (e) => {
+    const t = e.touches ? e.touches[0] : e;
+    const r = canvas.getBoundingClientRect();
+    return [t.clientX - r.left, t.clientY - r.top];
+  };
+  
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    drawing = true;
+    const [x, y] = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  }, { passive: false });
+  
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }, { passive: false });
+  
+  canvas.addEventListener('touchend', () => {
+    drawing = false;
+    if (id === 'sigCanvas1') AUFTRAG.sig1 = canvas.toDataURL();
+    if (id === 'sigCanvas2') AUFTRAG.sig2 = canvas.toDataURL();
+  });
+  
+  canvas.addEventListener('mousedown', (e) => {
+    drawing = true;
+    const [x, y] = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  });
+  
+  canvas.addEventListener('mousemove', (e) => {
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  });
+  
+  canvas.addEventListener('mouseup', () => {
+    drawing = false;
+    if (id === 'sigCanvas1') AUFTRAG.sig1 = canvas.toDataURL();
+    if (id === 'sigCanvas2') AUFTRAG.sig2 = canvas.toDataURL();
+  });
+}
+
+function clearSig(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (id === 'sigCanvas1') AUFTRAG.sig1 = null;
+  if (id === 'sigCanvas2') AUFTRAG.sig2 = null;
+}
+
+// ========================================
+// CHECKLISTE
+// ========================================
+function buildCheckliste() {
+  const schritte = DB.prozesse[AUFTRAG.paket] || [];
+  
+  // Filtere nach Team-Abhängigkeit
+  const filtered = schritte.filter(s => {
+    if (s.team && AUFTRAG.team === 1) return false; // Team-Schritt, aber Solo
+    return true;
+  });
+  
+  // Füge Addon-abhängige Schritte hinzu
+  const addonsSchritte = [];
+  if (AUFTRAG.addons['dampf']) {
+    addonsSchritte.push({name:'Dampfreinigung Polster',zeit:40,tool:'Dampfreiniger',hint:'Extra gebucht'});
+  }
+  if (AUFTRAG.addons['leder']) {
+    addonsSchritte.push({name:'Lederreinigung',zeit:40,tool:'Leather Cleaner',hint:'Extra gebucht'});
+  }
+  if (AUFTRAG.addons['ozon']) {
+    addonsSchritte.push({name:'Ozon-Behandlung',zeit:35,tool:'Ozon-Generator',hint:'Extra gebucht'});
+  }
+  
+  const alle = [...filtered, ...addonsSchritte];
+  
+  const html = alle.map((s, i) => {
+    const key = 'step_' + i;
+    const done = AUFTRAG.checked[key];
+    
+    return `
+      <div class="chk ${done ? 'done' : ''}" onclick="toggleCheck('${key}')">
+        <div class="chk-box"><span class="chk-v">✓</span></div>
+        <div class="chk-content">
+          <div class="chk-name">${s.name}</div>
+          <div class="chk-hint">${s.zeit} min · ${s.tool}</div>
+          ${s.hint ? `<div class="chk-hint">${s.hint}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('phases-wrap').innerHTML = `<div class="card">${html}</div>`;
+  updateCheckProg();
+}
+
+function toggleCheck(key) {
+  AUFTRAG.checked[key] = !AUFTRAG.checked[key];
+  buildCheckliste();
+}
+
+function updateCheckProg() {
+  const total = Object.keys(AUFTRAG.checked).length;
+  const done = Object.values(AUFTRAG.checked).filter(Boolean).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  
+  document.getElementById('chk-lbl').textContent = done + ' / ' + total;
+  document.getElementById('chk-pct').textContent = pct + '%';
+  document.getElementById('chk-fill').style.width = pct + '%';
+}
+
+// ========================================
+// LEISTUNGEN ÜBERGABE
+// ========================================
+function renderLeistungen() {
+  const leist = [AUFTRAG.paket.toUpperCase() + '-Paket'];
+  
+  DB.addons.forEach(a => {
+    if (AUFTRAG.addons[a.id]) leist.push(a.name);
+  });
+  
+  const preise = {
+    klein: { frisch: 89, makellos: 189, perfektion: 349 },
+    mittel: { frisch: 119, makellos: 219, perfektion: 379 },
+    suv: { frisch: 149, makellos: 249, perfektion: 409 },
+    van: { frisch: 179, makellos: 279, perfektion: 439 }
+  };
+  
+  let total = preise[AUFTRAG.vehKlasse][AUFTRAG.paket];
+  
+  DB.addons.forEach(a => {
+    if (AUFTRAG.addons[a.id]) total += a.preis;
+  });
+  
+  total += AUFTRAG.anfahrt;
+  
+  const html = leist.map(l => `
+    <div style="padding:8px 0;border-bottom:1px solid var(--bo);font-size:13px;">• ${l}</div>
+  `).join('') + `
+    <div style="display:flex;justify-content:space-between;padding:10px 0;margin-top:8px;border-top:1px solid var(--bo2);font-size:14px;font-weight:500;">
+      <span>Gesamt</span><span style="color:var(--gd);">${total} €</span>
+    </div>
+  `;
+  
+  document.getElementById('sig2-leistungen').innerHTML = html;
+}
+
+// ========================================
+// AUFTRAG ABSCHLIESSEN
+// ========================================
+function finishAuftrag() {
+  if (!AUFTRAG.sig2) {
+    alert('Bitte Übergabe-Unterschrift einholen');
+    return;
+  }
+  
+  // Berechne Gesamtpreis
+  const preise = {
+    klein: { frisch: 89, makellos: 189, perfektion: 349 },
+    mittel: { frisch: 119, makellos: 219, perfektion: 379 },
+    suv: { frisch: 149, makellos: 249, perfektion: 409 },
+    van: { frisch: 179, makellos: 279, perfektion: 439 }
+  };
+  
+  let preis = preise[AUFTRAG.vehKlasse][AUFTRAG.paket];
+  
+  DB.addons.forEach(a => {
+    if (AUFTRAG.addons[a.id]) preis += a.preis;
+  });
+  
+  preis += AUFTRAG.anfahrt;
+  
+  // Speichere Auftrag
+  const auftrag = {
+    id: Date.now().toString(),
+    datum: new Date().toISOString(),
+    anrede: AUFTRAG.anrede,
+    vorname: AUFTRAG.vname,
+    nachname: AUFTRAG.nname,
+    telefon: AUFTRAG.tel,
+    email: AUFTRAG.email,
+    kennzeichen: AUFTRAG.kz,
+    modell: AUFTRAG.modell,
+    farbe: AUFTRAG.farbe,
+    quelle: AUFTRAG.quelle,
+    schmutz: AUFTRAG.schmutz,
+    paket: AUFTRAG.paket,
+    vehKlasse: AUFTRAG.vehKlasse,
+    team: AUFTRAG.team,
+    addons: AUFTRAG.addons,
+    anfahrt: AUFTRAG.anfahrt,
+    preis: preis,
+    materialkosten: 10,
+    dauer: AUFTRAG.paket === 'frisch' ? 3.5 : AUFTRAG.paket === 'makellos' ? 5.5 : 8.5,
+    photos: AUFTRAG.photos,
+    sig1: AUFTRAG.sig1,
+    sig2: AUFTRAG.sig2
+  };
+  
+  DB.auftraege.push(auftrag);
+  
+  // Prüfe ob Kunde existiert
+  let kunde = DB.kunden.find(k => 
+    k.vorname === AUFTRAG.vname && 
+    k.nachname === AUFTRAG.nname && 
+    k.telefon === AUFTRAG.tel
+  );
+  
+  if (!kunde) {
+    kunde = {
+      id: Date.now().toString(),
+      vorname: AUFTRAG.vname,
+      nachname: AUFTRAG.nname,
+      telefon: AUFTRAG.tel,
+      email: AUFTRAG.email,
+      erstellt: new Date().toISOString()
+    };
+    DB.kunden.push(kunde);
+  }
+  
+  saveDB();
+  
+  alert('✅ Auftrag erfolgreich abgeschlossen!\n\nPreis: ' + preis + ' €');
+  
+  goTo('home');
+}
+
+// ========================================
+// INIT
+// ========================================
+loadDB();
+renderDashboard();
+renderKunden();
+
+document.getElementById('ausgabe-datum').value = new Date().toISOString().split('T')[0];
+
+console.log('✅ Glanzkoch Pro geladen');
+console.log('📊 DB:', DB.kunden.length, 'Kunden,', DB.auftraege.length, 'Aufträge');
+</script>
+
+</body>
+</html>
