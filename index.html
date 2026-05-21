@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Lux Detailing v2.8 Final Ops Slim Plus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#ffffff;--card:#ffffff;--card2:#f8fafc;--ink:#050505;--txt:#101828;--txt2:#667085;--muted:#98a2b3;--brd:#e5e7eb;--brd2:#d0d5dd;--blue:#2447ff;--blue2:#eef3ff;--green:#16745c;--greenbg:#ecfdf3;--red:#b42318;--redbg:#fff3f0;--gold:#2447ff;--goldbg:#eef3ff;--cream:#ffffff;--copper:#2447ff;--sage:#2447ff;--signature:#2447ff;--signature2:#102a9c;--shadow:0 18px 54px rgba(16,24,40,.08)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'DM Sans',Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+html{background:#fff}
+body{background:#fff;color:var(--txt);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 48px;min-height:100vh}
+.screen{display:none}.screen.active{display:block}
+.hdr{margin-bottom:26px;padding-top:8px;text-align:left}.hdr h1{font-size:34px;font-weight:900;letter-spacing:-1.6px;color:var(--ink)}.hdr p{font-size:12px;color:var(--txt2);font-weight:800;text-transform:uppercase;letter-spacing:1.7px;margin-top:4px}
+.card{background:var(--card);border-radius:24px;border:1px solid var(--brd);padding:22px;margin-bottom:12px;cursor:pointer;position:relative;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card:active{transform:scale(.992)}.card.sel{border-color:var(--signature);background:#fff;box-shadow:0 0 0 2px var(--signature) inset}.card.locked{opacity:.48;filter:grayscale(.25);cursor:not-allowed}.card h3{font-size:17px;margin-bottom:7px;color:#050505;letter-spacing:-.2px}.card p{font-size:13px;color:var(--txt2)}
+.btn{width:100%;min-height:54px;border-radius:999px;font-size:15px;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-bottom:10px;padding:0 18px;letter-spacing:-.1px}.btn-g{background:var(--sage);color:#fff;box-shadow:0 10px 28px rgba(36,71,255,.18)}.btn-o{background:#fff;color:#050505;border:1px solid var(--brd2)}.btn:disabled{opacity:.35;pointer-events:none;box-shadow:none}
+input,select,textarea{width:100%;padding:15px 16px;border-radius:16px;border:1px solid var(--brd);background:#fff;color:var(--txt);font-size:15px;margin-bottom:12px;outline:none;box-shadow:0 1px 2px rgba(16,24,40,.03)}input:focus,select:focus,textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(36,71,255,.12)}input[type=checkbox]{width:20px;height:20px;margin:0;box-shadow:none}.lbl{font-size:12px;color:#344054;font-weight:800;margin:14px 0 7px;display:block;text-transform:uppercase;letter-spacing:.7px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.chip{padding:10px 15px;border-radius:999px;border:1px solid var(--brd);background:#fff;font-size:12px;font-weight:800;cursor:pointer;color:#344054}.chip.on{background:var(--sage);color:#fff;border-color:var(--sage)}.chip.disabled{opacity:.35;pointer-events:none;text-decoration:line-through}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}.pitem{background:#fff;aspect-ratio:1;border-radius:18px;border:1px solid var(--brd);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;color:var(--txt2);cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.04)}.pitem img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.pitem span{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(5,5,5,.78);color:#fff;padding:5px 7px;border-radius:999px;font-size:8px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.chk{display:flex;align-items:flex-start;gap:14px;padding:18px;border-bottom:1px solid var(--brd);cursor:pointer;transition:opacity .2s;background:#fff}.chk.is-done{opacity:.5}.chk.is-p1{border-left:4px solid var(--blue);background:#fbfcff}.chk.is-p2{border-left:4px solid var(--green);background:#fcfffd}.chk-box{width:24px;height:24px;border-radius:8px;border:2px solid var(--sage);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}.chk-box.done{background:var(--sage)}.chk-box.done::after{content:'✓';color:#fff;font-weight:900;font-size:14px}.chk-p1,.chk-p2{font-size:9px;color:#fff;padding:3px 7px;border-radius:999px;margin-right:7px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.chk-p1{background:var(--blue)}.chk-p2{background:var(--green)}.chk-title{font-size:13px;font-weight:800;color:#101828;display:inline}.chk-detail{font-size:11px;color:#667085;line-height:1.55;margin-top:5px}.chk-tag{font-size:9px;color:#344054;text-transform:uppercase;font-weight:900;display:block;margin-top:6px;letter-spacing:.8px}.chk-warn{font-size:10px;color:var(--red);font-weight:800;display:block;margin-top:4px}.doc{background:#f2f4f7;color:#101828;padding:28px 0;min-height:100vh;font-family:'DM Sans',Inter,system-ui,sans-serif}.doc .page{width:210mm;height:297mm;min-height:297mm;margin:0 auto 18px;background:#fff;box-shadow:0 18px 70px rgba(16,24,40,.18);break-after:page;page-break-after:always;overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact}.doc .page:last-child{page-break-after:auto}.sigbox{background:#fff;border:1px solid var(--brd);border-radius:18px;padding:10px;margin:12px 0}.sigbox canvas{width:100%;height:160px;background:#fff;border-radius:12px;display:block;touch-action:none}.hint{font-size:11px;color:var(--txt2);line-height:1.55}.timer-card{background:linear-gradient(135deg,var(--ink),#2447ff);color:#fff;border-radius:28px;padding:20px;margin-bottom:16px;text-align:center;box-shadow:var(--shadow)}.timer-display{font-size:38px;font-weight:900;color:#fff;letter-spacing:1px}.mini-row{display:flex;gap:8px}.mini-row .btn{height:42px;min-height:42px;font-size:12px;margin-bottom:0}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid var(--brd);border-radius:20px;padding:16px;margin-bottom:12px}.toggle-row strong{font-size:14px;color:#101828}.toggle-row span{font-size:11px;color:#667085;line-height:1.4}.switch{position:relative;width:54px;height:31px;flex:none}.switch input{display:none}.slider{position:absolute;cursor:pointer;inset:0;background:#d0d5dd;border-radius:999px;transition:.2s}.slider:before{content:'';position:absolute;height:25px;width:25px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.2)}.switch input:checked+.slider{background:var(--sage)}.switch input:checked+.slider:before{transform:translateX(23px)}
+
+.phase-card{background:linear-gradient(135deg,#fff 0%,#f8fafc 100%);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);padding:18px 18px 16px;cursor:default}.phase-card strong{display:block;font-size:14px;color:var(--ink);letter-spacing:-.2px}.phase-card span{display:block;font-size:11px;color:var(--txt2);line-height:1.55;margin-top:5px}.phase-card em{display:block;font-style:normal;font-size:10px;color:var(--sage);font-weight:900;text-transform:uppercase;letter-spacing:1.2px;margin-top:8px}.workflow-panel{background:#fff;border:1px solid var(--brd);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}.workflow-panel h3{font-size:14px;color:var(--ink);margin-bottom:7px;letter-spacing:-.2px}.workflow-panel p,.workflow-panel li{font-size:11px;color:var(--txt2);line-height:1.55}.workflow-panel ul{padding-left:18px;margin-top:7px}.chk-meta{display:grid;grid-template-columns:1fr;gap:5px;margin-top:8px}.chk-meta div{font-size:10px;color:#667085;line-height:1.45;background:#f8fafc;border:1px solid #eadfce;border-radius:10px;padding:7px}.chk-qc{font-size:10px;color:var(--sage);font-weight:800;display:block;margin-top:7px}.chk-beginner{font-size:10px;color:#667085;display:block;margin-top:6px;line-height:1.45}.chk-p1,.chk-p2{font-size:9px;color:#fff;padding:3px 7px;border-radius:999px;margin-right:7px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.chk-p1{background:var(--sage)}.chk-p2{background:var(--copper)}
+
+
+.v27-panel{background:#fff;border:1px solid var(--brd);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.v27-panel h3{font-size:15px;color:var(--ink);letter-spacing:-.25px;margin-bottom:6px}.v27-panel p,.v27-panel li{font-size:11px;color:var(--txt2);line-height:1.55}.v27-panel ul{padding-left:18px;margin-top:7px}.v27-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.v27-mini select,.v27-mini input{margin-bottom:0}.v27-badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.8px;border:1px solid var(--brd);background:#fff;color:#344054}.v27-badge.blue{background:var(--blue2);color:var(--blue);border-color:#d7defe}.v27-badge.green{background:var(--greenbg);color:var(--green);border-color:#bbf7d0}.v27-badge.red{background:var(--redbg);color:var(--red);border-color:#fecaca}.v27-safe{border-left:4px solid var(--signature);background:#fbfcff}.v27-danger{border-left:4px solid var(--red);background:#fff8f6}.v27-sticky{position:sticky;bottom:10px;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--brd);border-radius:24px;padding:10px;box-shadow:0 14px 45px rgba(16,24,40,.14)}.v27-sticky .btn{margin-bottom:0}.photo-status{font-size:10px;color:var(--txt2);margin:-6px 0 12px;line-height:1.45}.photo-status strong{color:var(--signature)}.mobile-note{font-size:10px;color:var(--txt2);line-height:1.5;margin-top:8px}.crm-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.crm-summary div{border:1px solid var(--brd);border-radius:16px;padding:11px;background:#fff}.crm-summary span{display:block;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--txt2)}.crm-summary strong{display:block;font-size:16px;color:var(--ink);margin-top:3px}.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.dash-card{background:#fff;border:1px solid var(--brd);border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(16,24,40,.04)}.dash-card span{display:block;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:5px}.dash-card strong{display:block;font-size:22px;letter-spacing:-.7px;color:#050505}.dash-card small{display:block;font-size:10px;color:var(--txt2);line-height:1.45;margin-top:4px}.special-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0}.special-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--brd);border-radius:16px;padding:12px;background:#fff;cursor:pointer}.special-item input{flex:0 0 20px;margin-top:2px}.special-item strong{display:block;font-size:12px;color:#101828}.special-item span{display:block;font-size:10px;color:#667085;line-height:1.45;margin-top:2px}.file-hint{font-size:10px;color:#344054;background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:10px;line-height:1.45}.prod-check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--brd)}.prod-check:last-child{border-bottom:none}.prod-check input{flex:0 0 20px;margin-top:1px}.prod-check span{font-size:11px;color:#667085;line-height:1.45}.chart-tabs{display:flex;gap:8px;overflow-x:auto;margin:10px 0 14px;padding-bottom:2px}.chart-tab{border:1px solid var(--brd);background:#fff;color:#344054;border-radius:999px;padding:10px 13px;font-size:11px;font-weight:900;white-space:nowrap;cursor:pointer}.chart-tab.active{background:var(--signature);border-color:var(--signature);color:#fff}.dash-bars{display:grid;gap:8px;margin-top:10px}.dash-bar{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;font-size:11px}.dash-bar-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#344054;font-weight:800}.dash-bar-track{height:10px;border-radius:999px;background:#eef2f7;overflow:hidden}.dash-bar-fill{height:100%;border-radius:999px;background:var(--signature)}.dash-note{font-size:11px;color:var(--txt2);line-height:1.55;margin-top:8px}.prod-check strong{display:block;font-size:12px;color:#101828}@media(max-width:520px){.dash-grid{grid-template-columns:1fr}.doc .page{transform-origin:top left}}@media(max-width:520px){.wrap{padding:20px 14px 42px}.hdr h1{font-size:30px}.card{border-radius:22px;padding:19px}.btn{min-height:58px;font-size:15px}.mini-row{display:grid;grid-template-columns:1fr;gap:8px}.v27-mini{grid-template-columns:1fr}.pgrid{gap:10px}.sigbox canvas{height:190px}.doc .page{transform-origin:top left}}
+
+@page{size:A4;margin:0}@media print{.doc *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.noprint{display:none!important}html,body{background:#fff!important;margin:0!important;padding:0!important}.doc{padding:0!important;background:#fff!important}.doc .page{width:210mm!important;height:297mm!important;min-height:297mm!important;margin:0!important;box-shadow:none!important;border-radius:0!important;break-after:page!important;page-break-after:always!important;overflow:hidden!important}#s-doc{position:static!important;overflow:visible!important;display:block!important;background:#fff!important}.wrap{display:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<!-- LOCK -->
+<div class="screen" id="s-lock">
+<div class="hdr"><h1>App gesperrt</h1><p>Lokaler Komfort-PIN</p></div>
+<div class="v27-panel v27-safe"><h3>Lux Detailing</h3><p>Bitte PIN eingeben, um die lokale Kundenkartei auf diesem Gerät zu öffnen.</p></div>
+<input id="unlock-pin" type="password" inputmode="numeric" placeholder="PIN">
+<button class="btn btn-g" onclick="unlockApp()">Entsperren</button>
+<p class="hint">Wenn der PIN vergessen wurde, kann er nur durch Zurücksetzen der lokalen Browserdaten entfernt werden.</p>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="s-home">
+<div class="hdr"><h1>Lux Detailing</h1><p>Mobile Fahrzeugaufbereitung</p></div>
+<div class="card quick-card" data-target="s-customer" onclick="startNew()"><h3>Neuer Auftrag</h3><p>Kunde erfassen & Workflow starten</p></div>
+<div class="card quick-card" data-target="s-crm" onclick="openCRM()"><h3>Kunden-Datenbank</h3><p>Alle Aufträge & Dokumente</p></div>
+<div class="card quick-card" data-target="s-dashboard" onclick="openDashboard()"><h3>Dashboard</h3><p>Monatsumsatz, Aufträge, Durchschnittsbon & Top-Pakete</p></div>
+<div class="card quick-card" data-target="s-calc" onclick="go('s-calc')"><h3>Kalkulation</h3><p>Schnelle Preisberechnung</p></div>
+<div class="card quick-card" data-target="s-settings" onclick="go('s-settings')"><h3>Einstellungen</h3><p>Stammdaten, Sicherheit & Konfiguration</p></div>
+<div class="v27-panel v27-safe"><h3>v2.8 Final Ops Slim Plus</h3><p>Stabile v2.8-Basis mit gezielten Korrekturen: robuste Reiter/Karten, kompakteres Dashboard mit logischen Ansichten und sichere Extras-Verarbeitung in Preis, Zeit und Dokumenten.</p></div>
+<div style="display:flex;gap:10px;margin-top:20px">
+<button class="btn btn-o" onclick="exportBackup()" style="flex:1;height:44px;font-size:12px">Backup speichern</button>
+<label class="btn btn-o" style="flex:1;height:44px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center"><input type="file" accept=".json" style="display:none" onchange="importBackup(this)">Backup laden</label>
+</div>
+<p style="text-align:center;font-size:10px;color:var(--txt2);margin-top:40px">Lux Detailing App v2.8 Slim Plus</p>
+</div>
+
+<!-- CRM -->
+<div class="screen" id="s-crm">
+<div class="hdr"><h1>Kundenkartei</h1><p>Suchen, öffnen & löschen</p></div>
+<input type="search" id="crm-q" oninput="renderCRM()" placeholder="Suchen nach Name, Kennzeichen, Fahrzeug, Telefon, E-Mail, Paket, Datum oder Rechnungsnummer...">
+<div class="v27-mini">
+<select id="crm-paket" onchange="renderCRM()"><option value="">Alle Pakete</option><option>Frisch</option><option>Makellos</option><option>Perfektion</option></select>
+<select id="crm-status" onchange="renderCRM()"><option value="">Alle Kunden & Aufträge</option><option value="closed">Abgeschlossen</option><option value="open">Offen / ohne Abschlussdatum</option><option value="stamm">Stammkunden</option><option value="neu">Neukunden</option><option value="polisher">Maschinenleistung</option></select>
+<input type="date" id="crm-from" onchange="renderCRM()" placeholder="Von">
+<input type="date" id="crm-to" onchange="renderCRM()" placeholder="Bis">
+<select id="crm-sort" onchange="renderCRM()"><option value="new">Neueste zuerst</option><option value="old">Älteste zuerst</option><option value="revenue">Umsatz absteigend</option><option value="name">Name A–Z</option></select>
+<select id="crm-range" onchange="quickRange(this.value)"><option value="">Zeitraum wählen</option><option value="30">Letzte 30 Tage</option><option value="90">Letzte 90 Tage</option><option value="year">Dieses Jahr</option><option value="all">Alle</option></select>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<button class="btn btn-o" onclick="resetCRMFilters()" style="height:42px;min-height:42px;font-size:12px;margin:0;flex:1">Filter löschen</button>
+<button class="btn btn-o" onclick="renderCRM()" style="height:42px;min-height:42px;font-size:12px;margin:0;flex:1">Aktualisieren</button>
+</div>
+<div id="crm-summary" class="crm-summary"></div>
+<div id="crm-count" class="hint" style="margin:0 0 12px 2px"></div>
+<div id="crm-list"></div>
+<button class="btn btn-o" onclick="go('s-home')">Zurück</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="s-dashboard">
+<div class="hdr"><h1>Dashboard</h1><p>Umsatz, Aufträge & Wiedervorlagen</p></div>
+<div class="v27-mini">
+<select id="dash-range" onchange="renderDashboard()"><option value="month">Aktueller Monat</option><option value="last30">Letzte 30 Tage</option><option value="year">Dieses Jahr</option><option value="all">Gesamt</option></select>
+<select id="dash-status" onchange="renderDashboard()"><option value="closed">Nur abgeschlossene Aufträge</option><option value="all">Alle gespeicherten Aufträge</option></select>
+</div>
+<div id="dash-kpis" class="dash-grid"></div>
+<div class="chart-tabs" id="dash-tabs">
+<button class="chart-tab active" data-chart="trend" onclick="setDashboardView('trend')">Trend</button>
+<button class="chart-tab" data-chart="packages" onclick="setDashboardView('packages')">Pakete</button>
+<button class="chart-tab" data-chart="payments" onclick="setDashboardView('payments')">Zahlung</button>
+<button class="chart-tab" data-chart="ops" onclick="setDashboardView('ops')">Zeit/Kosten</button>
+<button class="chart-tab" data-chart="todos" onclick="setDashboardView('todos')">To-dos</button>
+</div>
+<div id="dash-chart" class="v27-panel"></div>
+<div id="dash-followups" class="v27-panel v27-safe"></div>
+<button class="btn btn-o" onclick="go('s-home')">Zurück</button>
+</div>
+
+<!-- CUSTOMER -->
+<div class="screen" id="s-customer">
+<div class="hdr"><h1>Kundendaten</h1><p>Schritt 1</p></div>
+<span class="lbl">Anrede</span>
+<div class="chips" id="ch-anrede">
+<div class="chip on" onclick="chip(this,'anrede','Herr')">Herr</div>
+<div class="chip" onclick="chip(this,'anrede','Frau')">Frau</div>
+<div class="chip" onclick="chip(this,'anrede','Familie')">Familie</div>
+<div class="chip" onclick="chip(this,'anrede','Firma')">Firma</div>
+</div>
+<input id="f-vn" placeholder="Vorname">
+<input id="f-nn" placeholder="Nachname">
+<input id="f-tel" type="tel" placeholder="Telefon / WhatsApp">
+<input id="f-email" type="email" placeholder="E-Mail">
+<textarea id="f-caddr" placeholder="Kundenanschrift für Rechnung (Straße, PLZ Ort)" rows="2"></textarea>
+<input id="f-place" placeholder="Leistungsort (z. B. Chemnitz / Kundenadresse)">
+<input id="f-plate" placeholder="Kennzeichen" style="text-transform:uppercase">
+<input id="f-car" placeholder="Fahrzeug (Marke & Modell)">
+<input id="f-color" placeholder="Farbe">
+<input id="f-year" type="number" placeholder="Baujahr">
+<input id="f-km" type="number" placeholder="Kilometerstand">
+<input id="f-date" type="date">
+<span class="lbl">Dokumenttyp intern</span>
+<select id="f-doc-type"><option value="auftrag">Auftrag</option><option value="angebot">Angebot vor Auftrag</option></select>
+<span class="lbl">Verschmutzungsgrad</span>
+<div class="chips" id="ch-dirt">
+<div class="chip on" onclick="chip(this,'dirt','Normal')">Normal</div>
+<div class="chip" onclick="chip(this,'dirt','Stark')">Stark</div>
+<div class="chip" onclick="chip(this,'dirt','Raucher')">Raucher</div>
+<div class="chip" onclick="chip(this,'dirt','Tier')">Tier</div>
+</div>
+<input id="f-dist" type="number" placeholder="Entfernung zum Kunden (km)">
+<label style="display:flex;align-items:center;gap:10px;background:var(--card);padding:14px;border-radius:12px;margin-bottom:12px;cursor:pointer">
+<input type="checkbox" id="f-age"><span style="font-size:14px">Ich bestätige, volljährig zu sein (mind. 18 Jahre)</span>
+</label>
+<div class="v27-panel"><h3>Datensparsamkeit</h3><p>Für das Endkunden-Protokoll werden weiterhin keine private Telefonnummer und kein Privatname von Lux Detailing ausgegeben. Kundenkontakt- und Rechnungsdaten bleiben lokal in dieser App gespeichert.</p></div>
+<button class="btn btn-g" onclick="saveCustomer()">Weiter zu Paket & Preis</button>
+<button class="btn btn-o" onclick="go('s-home')">Abbrechen</button>
+</div>
+
+<!-- PACKAGE -->
+<div class="screen" id="s-package">
+<div class="hdr"><h1>Konfiguration</h1><p>Schritt 2</p></div>
+<span class="lbl">Fahrzeugklasse</span>
+<select id="f-class" onchange="updatePkg()">
+<option value="Kleinwagen">Kleinwagen</option>
+<option value="Mittelklasse" selected>Mittelklasse</option>
+<option value="SUV+Kombi">SUV / Kombi</option>
+<option value="Van">Van</option>
+</select>
+<div class="card" id="c-Frisch" onclick="selPkg('Frisch')"><h3>Frisch <span id="pr-Frisch" style="float:right;color:var(--blue)"></span></h3><p>Innenreinigung komplett · Außenwäsche · Felgenreinigung · Scheibenversiegelung</p></div>
+<div class="card" id="c-Makellos" onclick="selPkg('Makellos')"><h3>Makellos <span id="pr-Makellos" style="float:right;color:var(--blue)"></span></h3><p>Alles aus Frisch · Maschinenpolitur · Sealant Lack · Felgenversiegelung · Reifenpflege</p><p id="lock-Makellos" class="hint" style="display:none;margin-top:8px;color:var(--red);font-weight:800">Gesperrt, bis Poliermaschine in Einstellungen aktiviert ist.</p></div>
+<div class="card" id="c-Perfektion" onclick="selPkg('Perfektion')"><h3>Perfektion <span id="pr-Perfektion" style="float:right;color:var(--blue)"></span></h3><p>Alles aus Makellos · Keramik-Coating · Lackdickenmessung · 12 Monate Schutz</p><p id="lock-Perfektion" class="hint" style="display:none;margin-top:8px;color:var(--red);font-weight:800">Gesperrt, bis Poliermaschine in Einstellungen aktiviert ist.</p></div>
+<span class="lbl" style="margin-top:16px">Zusatzleistungen</span>
+<div class="chips" id="extra-chips"></div>
+<label style="display:flex;align-items:center;gap:10px;background:var(--card);padding:14px;border-radius:12px;margin-bottom:12px;cursor:pointer">
+<input type="checkbox" id="f-stamm" onchange="calcPrice()"><span style="font-size:14px">Stammkunde (20% Rabatt)</span>
+</label>
+<div id="stamm-info" class="card" style="display:none;font-size:12px;cursor:default;background:rgba(74,158,106,.08);border-color:var(--green);color:var(--txt)"></div>
+<div class="card" style="background:var(--gold);color:#000;text-align:center;cursor:default">
+<p style="font-size:11px;font-weight:700;margin-bottom:4px">GESAMTPREIS</p>
+<h2 id="total" style="font-size:32px">0,00 €</h2>
+</div>
+<div class="card" style="text-align:center;cursor:default">
+<p style="font-size:11px;color:var(--txt2);font-weight:700;margin-bottom:4px">ZEITSCHÄTZUNG</p>
+<h3 id="time-est" style="color:var(--gold);font-size:20px">–</h3>
+<p id="time-est-note" class="hint">Abhängig von Paket, Fahrzeugklasse, Extras und Verschmutzung.</p>
+</div>
+<div class="card" style="font-size:11px;cursor:default;color:var(--txt2);line-height:1.7">
+<p>Mit dem Fortfahren erteilen Sie Lux Detailing (Oskar Koch) einen verbindlichen Auftrag zur Fahrzeugaufbereitung gemäß gewähltem Paket, Extras und angegebenem Gesamtpreis. Die Leistung wird als Werkleistung dokumentiert; gesetzliche Rechte des Kunden, insbesondere bei Mängeln, bleiben unberührt. Rechnungen werden als Kleinunternehmerrechnung gemäß § 19 UStG ohne gesonderten Umsatzsteuerausweis erstellt. Bei Verbrauchern beginnt die Ausführung erst nach ausdrücklicher Auftragserteilung; ein etwaiges Widerrufsrecht kann bei vollständiger Leistungserbringung unter den gesetzlichen Voraussetzungen erlöschen.</p>
+</div>
+<label style="display:flex;align-items:center;gap:10px;margin:12px 0;cursor:pointer">
+<input type="checkbox" id="f-auftrag" onchange="document.getElementById('btn-pkg').disabled=!this.checked"><span style="font-size:14px">Ich erteile den Auftrag verbindlich und habe die Preise zur Kenntnis genommen.</span>
+</label>
+<button class="btn btn-o" onclick="showDoc('offer')">Angebot / Auftragsübersicht ansehen</button>
+<button class="btn btn-g" id="btn-pkg" disabled onclick="go('s-dsgvo')">Weiter zur DSGVO</button>
+<button class="btn btn-o" onclick="go('s-customer')">Zurück</button>
+</div>
+
+<!-- DSGVO -->
+<div class="screen" id="s-dsgvo">
+<div class="hdr"><h1>Datenschutz</h1><p>Schritt 3</p></div>
+<div class="card" style="font-size:11px;max-height:320px;overflow:auto;cursor:default;line-height:1.8">
+<p><strong>Datenschutzinformation gemäß Art. 13 DSGVO</strong></p><br>
+<p><strong>Verantwortlicher:</strong> Oskar Koch · Lux Detailing · Heinrich-Beck-Straße 9 · 09112 Chemnitz · skrkoch@gmail.com · 015772948189</p><br>
+<p><strong>Zweck und Rechtsgrundlage:</strong> Personenbezogene Daten, Kontaktdaten, Fahrzeugdaten, Auftragsdaten und Fahrzeugfotos werden zur Angebotserstellung, Vertragserfüllung, Rechnungserstellung, Schaden- und Abnahmedokumentation verarbeitet. Rechtsgrundlagen sind insbesondere Art. 6 Abs. 1 lit. b DSGVO, Art. 6 Abs. 1 lit. c DSGVO und Art. 6 Abs. 1 lit. f DSGVO.</p><br>
+<p><strong>Empfänger und Veröffentlichung:</strong> Eine Weitergabe erfolgt nur, soweit dies zur Vertragserfüllung, Zahlungsabwicklung, steuerlichen Aufbewahrung oder aufgrund gesetzlicher Pflichten erforderlich ist. Eine werbliche Veröffentlichung von Fahrzeugfotos erfolgt nur nach gesonderter Freigabe.</p><br>
+<p><strong>Speicherdauer und Rechte:</strong> Rechnungs- und steuerrelevante Unterlagen werden nach gesetzlichen Aufbewahrungsfristen gespeichert. Sie haben Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch sowie Beschwerde bei der zuständigen Aufsichtsbehörde.</p>
+</div>
+<p style="font-size:11px;color:var(--txt2);margin:12px 0">Dieses Dokument wird dem Kunden mit den Abschlussunterlagen ausgehändigt.</p>
+<label style="display:flex;align-items:center;gap:10px;margin:16px 0;cursor:pointer">
+<input type="checkbox" id="f-dsgvo" onchange="dsgvoReady()"><span style="font-size:14px">Kunde hat Datenschutzinfo vollständig zur Kenntnis genommen</span>
+</label>
+<span class="lbl">Digitale Kundenunterschrift DSGVO</span>
+<div class="sigbox"><canvas id="dsgvo-canvas" width="900" height="300"></canvas></div>
+<div class="mini-row" style="margin-bottom:12px"><button class="btn btn-o" onclick="clearDSGVOSig()" type="button">Kundenunterschrift löschen</button></div>
+<span class="lbl">Digitale Dienstleisterunterschrift DSGVO</span>
+<div class="sigbox"><canvas id="dsgvo-provider-canvas" width="900" height="300"></canvas></div>
+<div class="mini-row" style="margin-bottom:12px"><button class="btn btn-o" onclick="clearDSGVOProviderSig()" type="button">Dienstleisterunterschrift löschen</button></div>
+<p class="hint" style="margin-bottom:12px">Kunde und Dienstleister unterschreiben hier die Datenschutzkenntnisnahme und Übergabe der Informationen. Gesetzliche Rechte bleiben unberührt.</p>
+<button class="btn btn-g" id="btn-dsgvo" disabled onclick="dsgvoAccepted()">Weiter zu Vorher-Fotos</button>
+<button class="btn btn-o" onclick="go('s-package')">Zurück</button>
+</div>
+
+<!-- PHOTOS BEFORE -->
+<div class="screen" id="s-photos">
+<div class="hdr"><h1>Vorher-Fotos</h1><p>Schritt 4 – Pflichtwinkel nach Paket</p></div>
+<div class="card" style="font-size:11px;cursor:default;color:var(--txt2);line-height:1.7;margin-bottom:16px">
+<p><strong>Wichtig:</strong> Dokumentiere alle sichtbaren Vorschäden (Kratzer, Dellen, Steinschläge). Nicht dokumentierte Schäden können nach der Aufbereitung nicht als Vorschäden nachgewiesen werden.</p>
+</div>
+<div id="before-status" class="photo-status"></div>
+<div class="pgrid" id="grid-before"></div>
+<input type="file" id="finput" accept="image/*" capture="environment" style="display:none" onchange="gotFile(this)">
+<textarea id="f-notes" placeholder="Notizen zum Zustand (Kratzer, Dellen, Vorschäden)..." rows="3"></textarea>
+<button class="btn btn-g" onclick="continueAfterBeforePhotos()">Weiter zum Schadensprotokoll</button>
+<button class="btn btn-o" onclick="go('s-dsgvo')">Zurück</button>
+</div>
+
+<!-- SCHADENSPROTOKOLL DRUCKEN -->
+<div class="screen" id="s-prot1">
+<div class="hdr"><h1>Schadensprotokoll</h1><p>Schritt 5 – Vor Arbeitsbeginn drucken!</p></div>
+<div class="card" style="text-align:center;padding:30px;cursor:default">
+<div style="font-size:36px;margin-bottom:12px">📋</div>
+<h3>Protokoll drucken & unterschreiben lassen</h3>
+<p style="font-size:12px;color:var(--txt2);margin-top:8px">Drucken Sie das Schadensprotokoll aus und lassen Sie es vom Kunden <strong>vor Arbeitsbeginn</strong> unterschreiben. Ohne Unterschrift hat das Protokoll eingeschränkte Rechtsgültigkeit.</p>
+</div>
+<button class="btn btn-g" onclick="showDoc('schadenprot')">Schadensprotokoll anzeigen & drucken</button>
+<button class="btn btn-g" onclick="showDoc('dsgvo')">DSGVO-Dokument anzeigen / drucken</button>
+<button class="btn btn-g" onclick="go('s-staff')" style="margin-top:20px;background:var(--green);color:#fff">Dokumente unterschrieben – Aufbereitung starten</button>
+<button class="btn btn-o" onclick="go('s-photos')">Zurück</button>
+</div>
+
+<!-- STAFF -->
+<div class="screen" id="s-staff">
+<div class="hdr"><h1>Team</h1><p>Schritt 6</p></div>
+<div class="card" onclick="setTeam('solo')"><h3>Ich alleine (Solo)</h3><p>Alle Schritte für eine Person</p></div>
+<div class="card" onclick="setTeam('duo')"><h3>Wir zu zweit (Duo)</h3><p>Person 1 und Person 2 arbeiten nach klarer Aufgabenverteilung. Die Zeitschätzung bleibt bewusst unverändert, damit sauber statt hektisch gearbeitet wird.</p></div>
+<button class="btn btn-o" onclick="go('s-prot1')">Zurück</button>
+</div>
+
+<!-- CHECKLIST -->
+<div class="screen" id="s-check">
+<div class="hdr"><h1>Arbeitsanweisung</h1><p id="check-sub">Schritt 7</p></div>
+<div class="timer-card">
+<div style="font-size:11px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:1px">Arbeitszeit-Timer (nur intern)</div>
+<div id="work-timer" class="timer-display">00:00:00</div>
+<div class="mini-row"><button class="btn btn-g" id="timer-start" onclick="startWorkTimer()">Start</button><button class="btn btn-o" onclick="pauseWorkTimer()">Pause</button><button class="btn btn-o" onclick="resetWorkTimer()">Reset</button></div>
+<p class="hint" style="margin-top:10px">Die gemessene Zeit wird nicht im Kundenprotokoll ausgegeben.</p>
+</div>
+<div class="toggle-row">
+  <div><strong>Anfänger-Hinweise anzeigen</strong><br><span>Zeigt Ziel, genaue Ausführung, Warnhinweise und Kontrollfragen ausführlicher an.</span></div>
+  <label class="switch"><input type="checkbox" id="f-beginner" checked onchange="buildChecklist()"><span class="slider"></span></label>
+</div>
+<div id="briefing-box" class="workflow-panel"></div>
+<div id="material-box" class="workflow-panel"></div>
+<div id="check-progress" style="background:var(--card);border-radius:12px;padding:14px;margin-bottom:16px;text-align:center;border:1px solid var(--brd)">
+<div style="font-size:11px;color:var(--txt2)">Fortschritt</div>
+<div id="check-bar" style="height:6px;background:var(--card2);border-radius:3px;margin-top:8px;overflow:hidden"><div id="check-fill" style="height:100%;background:var(--sage);width:0%;transition:width .3s"></div></div>
+<div id="check-count" style="font-size:12px;margin-top:6px;color:var(--sage);font-weight:800">0 / 0</div>
+</div>
+<div id="quality-box" class="workflow-panel"></div>
+<div id="check-list" style="background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--brd)"></div>
+<div class="v27-sticky"><button class="btn btn-g" onclick="completeChecklistAndGoAfter()">Aufbereitung abgeschlossen</button></div>
+<button class="btn btn-o" onclick="go('s-staff')">Zurück</button>
+</div>
+
+<!-- PHOTOS AFTER -->
+<div class="screen" id="s-after">
+<div class="hdr"><h1>Nachher-Fotos</h1><p>Schritt 8 – 9 Pflichtwinkel inkl. Aushängebild</p></div>
+<div id="after-status" class="photo-status"></div>
+<div class="pgrid" id="grid-after"></div>
+<button class="btn btn-g" onclick="continueAfterPhotos()">Weiter zur Abnahme</button>
+<button class="btn btn-o" onclick="go('s-check')">Zurück</button>
+</div>
+
+<!-- FINISH -->
+<div class="screen" id="s-finish">
+<div class="hdr"><h1>Abnahme</h1><p>Schritt 9</p></div>
+<div class="card" style="text-align:center;padding:30px;cursor:default">
+<div style="font-size:36px;margin-bottom:12px">🤝</div>
+<h3>Abnahme durch den Kunden</h3>
+<p style="font-size:12px;color:var(--txt2);margin-top:8px">Kunde prüft das Ergebnis. Abnahmeprotokoll drucken und unterschreiben lassen.</p>
+</div>
+<div class="v27-panel">
+<h3>Sonderfälle & Nacharbeit</h3>
+<p>Wähle reale Abweichungen aus. Die App formuliert daraus saubere interne Notizen und dokumentierbare Texte für Abnahme, Rechnungskontext und Kundenkommunikation.</p>
+<div id="special-case-list" class="special-grid"></div>
+<textarea id="f-special-note" oninput="saveSpecialCases()" rows="3" placeholder="Konkrete Details ergänzen, z. B. Uhrzeit, Wetter, fehlender Stromanschluss, entdeckter Schaden, vereinbarte Nacharbeit..."></textarea>
+<div id="special-preview" class="file-hint"></div>
+</div>
+<div id="followup-box" class="v27-panel v27-safe"></div>
+<div id="finish-gate" class="v27-panel v27-safe"></div>
+<button class="btn btn-g" onclick="showDoc('abnahme')">Abnahmeprotokoll drucken</button>
+<button class="btn btn-g" onclick="showDoc('prot')" style="background:var(--card2);color:var(--txt)">Vorher-Nachher Protokoll ansehen</button>
+<button class="btn btn-g" onclick="finishOrder()" style="margin-top:16px;background:var(--green);color:#fff">Auftrag abschließen</button>
+<button class="btn btn-o" onclick="go('s-after')">Zurück</button>
+</div>
+
+<!-- DONE -->
+<div class="screen" id="s-done">
+<div class="hdr"><h1>Abgeschlossen</h1><p>Auftrag archiviert</p></div>
+<div id="done-followup" class="v27-panel v27-safe"></div>
+<button class="btn btn-g" onclick="showDoc('prot')">Vorher-Nachher Protokoll</button>
+<button class="btn btn-g" onclick="showDoc('offer')" style="background:var(--card2);color:var(--txt)">Angebot / Auftragsübersicht</button>
+<button class="btn btn-g" onclick="showDoc('inv')">Rechnung</button>
+<button class="btn btn-g" onclick="showDoc('abnahme')">Abnahmeprotokoll</button>
+<button class="btn btn-g" onclick="showDoc('dsgvo')" style="background:var(--card2);color:var(--txt)">DSGVO Dokument</button>
+<button class="btn btn-o" onclick="go('s-home')" style="margin-top:24px">Zurück zum Hauptmenü</button>
+</div>
+
+<!-- CALC -->
+<div class="screen" id="s-calc">
+<div class="hdr"><h1>Kalkulation</h1><p>Anfahrtskosten</p></div>
+<input type="number" id="calc-km" oninput="doCalc()" placeholder="Entfernung in km">
+<div class="card" style="text-align:center;background:var(--goldbg);border-color:var(--gold);cursor:default">
+<p style="font-size:11px;color:var(--gold);font-weight:700">ANFAHRTSKOSTEN</p>
+<h2 id="calc-res" style="color:var(--gold);font-size:32px">0,00 €</h2>
+<p style="font-size:10px;color:var(--txt2);margin-top:4px">Erste 15 km frei, danach 0,50 €/km</p>
+</div>
+<button class="btn btn-o" onclick="go('s-home')">Zurück</button>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="s-settings">
+<div class="hdr"><h1>Einstellungen</h1></div>
+<span class="lbl">Firmenname</span><input id="s-name" placeholder="Name / Firma">
+<span class="lbl">Adresse</span><input id="s-addr" placeholder="Straße, PLZ Ort">
+<span class="lbl">Steuer-ID</span><input id="s-tax" placeholder="Steuer-ID">
+<span class="lbl">IBAN</span><input id="s-iban" placeholder="IBAN">
+<span class="lbl">Zahlungsziel</span><input id="s-paydays" type="number" min="0" max="60" placeholder="z. B. 14">
+<span class="lbl">Zahlungshinweis</span><textarea id="s-paynote" rows="2" placeholder="z. B. Zahlung bar, per Überweisung oder PayPal nach Vereinbarung"></textarea>
+<span class="lbl">Telefon</span><input id="s-tel" placeholder="Telefon">
+<span class="lbl">E-Mail</span><input id="s-email" placeholder="E-Mail">
+<span class="lbl">Google Bewertungs-Link</span><input id="s-google" placeholder="https://g.page/...">
+<span class="lbl">Ansprache im Endkunden-Protokoll</span>
+<select id="s-tone" onchange="saveSet(false)"><option value="du">Du-Form</option><option value="sie">Sie-Form</option></select>
+<span class="lbl">Komfort-PIN</span>
+<input id="s-pin" type="password" inputmode="numeric" placeholder="Optionaler App-PIN für lokale Zugriffssperre">
+<p class="hint" style="margin:-6px 0 12px">Hinweis: Die App bleibt offline und lokal. Der PIN ist ein Komfortschutz auf diesem Gerät und ersetzt keine verschlüsselte Unternehmensdatenbank.</p>
+<span class="lbl">Ausstattung</span>
+<div class="toggle-row">
+  <div><strong>Poliermaschine vorhanden</strong><br><span>Aktiviert maschinenpoliturpflichtige Pakete und Arbeitsschritte. Solange aus, bleiben nur diese Leistungen gesperrt.</span></div>
+  <label class="switch"><input type="checkbox" id="s-polisher" onchange="saveSet(false); updatePkg && updatePkg()"><span class="slider"></span></label>
+</div>
+<span class="lbl">Wiedervorlage</span>
+<select id="s-followup" onchange="saveSet(false)"><option value="6">Standard: 6 Monate</option><option value="9">Standard: 9 Monate</option><option value="12">Standard: 12 Monate</option></select>
+<span class="lbl">Produktivmodus-Checkliste</span>
+<div class="v27-panel" id="prod-checks">
+<label class="prod-check"><input type="checkbox" id="s-prod-data" onchange="saveSet(false)"><span><strong>Stammdaten geprüft</strong> Firmenname, Adresse, Telefon, E-Mail, Steuernummer und Zahlungshinweise sind final.</span></label>
+<label class="prod-check"><input type="checkbox" id="s-prod-prices" onchange="saveSet(false)"><span><strong>Preise geprüft</strong> Pakete, Extras, Rabatte und Anfahrt wurden produktiv bestätigt.</span></label>
+<label class="prod-check"><input type="checkbox" id="s-prod-legal" onchange="saveSet(false)"><span><strong>Rechtstexte geprüft</strong> DSGVO, Haftung, Abnahme, Kleinunternehmerhinweis und Fotodokumentation wurden fachlich geprüft.</span></label>
+<label class="prod-check"><input type="checkbox" id="s-prod-print" onchange="saveSet(false)"><span><strong>Druck getestet</strong> Rechnung, Protokoll, DSGVO, Schaden- und Abnahmeprotokoll wurden auf deinem Gerät als PDF/A4 geprüft.</span></label>
+</div>
+<div id="prod-status" class="file-hint"></div>
+<button class="btn btn-g" onclick="saveSet()">Speichern</button>
+<button class="btn btn-o" onclick="go('s-home')">Zurück</button>
+<span class="lbl" style="margin-top:32px">Backup & Datensicherung</span>
+<button class="btn btn-g" onclick="exportBackup()" style="background:var(--card2);color:var(--txt)">Backup herunterladen (JSON)</button>
+<label class="btn btn-g" style="background:var(--card2);color:var(--txt);cursor:pointer"><input type="file" accept=".json" style="display:none" onchange="importBackup(this)">Backup hochladen (JSON)</label>
+<button class="btn btn-o" onclick="exportBackup()" style="margin-top:18px;color:var(--signature)">Sicherheitsbackup vor Löschung erstellen</button>
+<button class="btn btn-o" onclick="purgeOldRecords()" style="color:var(--red)">Alte nicht steuerrelevante Foto-/Detaildaten bereinigen</button>
+<button class="btn btn-o" onclick="if(confirm('Alle Daten unwiderruflich löschen? Vorher Backup speichern.')){localStorage.clear();location.reload()}" style="margin-top:20px;color:var(--red)">Datenbank zurücksetzen</button>
+<p style="text-align:center;font-size:10px;color:var(--txt2);margin-top:20px">Lux Detailing App v2.8</p>
+</div>
+
+</div>
+
+<!-- DOC PREVIEW (außerhalb .wrap für sauberen Druck) -->
+<div id="s-doc" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;overflow:auto;background:#f2f4f7">
+<div id="doc-body" class="doc"></div>
+<div class="noprint" style="padding:14px 16px;background:#fff;border-top:1px solid #e5e7eb;position:sticky;bottom:0;box-shadow:0 -10px 30px rgba(16,24,40,.08)">
+<div id="doc-file-name" class="file-hint" style="margin-bottom:10px">Dateiname wird vorbereitet...</div>
+<div style="display:flex;gap:10px">
+<button class="btn btn-g" onclick="window.print()" style="margin:0;flex:2">Drucken / PDF</button>
+<button class="btn btn-o" onclick="copyDocFileName()" style="margin:0;flex:1;color:#000">Dateiname kopieren</button>
+<button class="btn btn-o" onclick="closeDoc()" style="margin:0;flex:1;color:#000">Zurück</button>
+</div>
+</div>
+</div>
+<script>
+// ===== STATE =====
+var DB_KEY='lux_db8',SET_KEY='lux_set8';
+var db=JSON.parse(localStorage.getItem(DB_KEY)||'[]');
+var settings=JSON.parse(localStorage.getItem(SET_KEY)||'{"name":"Oskar Koch","addr":"Heinrich-Beck-Straße 9, 09112 Chemnitz","tax":"42317296050","iban":"","tel":"015772948189","email":"skrkoch@gmail.com","google":"","protocolTone":"du","polisher":false,"appPin":"","retentionMonths":24,"paymentDays":14,"paymentNote":"Zahlung bar, per Überweisung oder nach Vereinbarung.","followupMonths":9,"prod":{"data":false,"prices":false,"legal":false,"print":false}}');
+if(typeof settings.protocolTone==='undefined') settings.protocolTone='du';
+if(typeof settings.polisher==='undefined') settings.polisher=false;
+if(typeof settings.appPin==='undefined') settings.appPin='';
+if(typeof settings.retentionMonths==='undefined') settings.retentionMonths=24;
+if(typeof settings.paymentDays==='undefined') settings.paymentDays=14;
+if(typeof settings.paymentNote==='undefined') settings.paymentNote='Zahlung bar, per Überweisung oder nach Vereinbarung.';
+if(typeof settings.followupMonths==='undefined') settings.followupMonths=9;
+if(typeof settings.prod==='undefined') settings.prod={data:false,prices:false,legal:false,print:false};
+var cur={photos:{},after:{},checks:{},extras:[],anrede:'Herr',dirt:'Normal',paket:null,class:'Mittelklasse',staff:'solo',stamm:false,isReturning:false,customerOrderCount:0,dsgvoSig:'',dsgvoProviderSig:'',timer:{elapsed:0,running:false,startMs:null},timestamps:{},docType:'auftrag',specialCases:[],specialNote:'',followupMonths:9,followupDate:''};
+var photoTarget='',photoMode='';
+
+// ===== PREISE =====
+var PKG={
+'Kleinwagen':{'Frisch':89,'Makellos':189,'Perfektion':349},
+'Mittelklasse':{'Frisch':119,'Makellos':219,'Perfektion':379},
+'SUV+Kombi':{'Frisch':149,'Makellos':249,'Perfektion':409},
+'Van':{'Frisch':179,'Makellos':279,'Perfektion':439}
+};
+var EXTRAS={
+'Kleinwagen':{'Zusätzl. Schmutz':40,'Lederpflege':50,'Motorwäsche':30,'Hochglanzpolitur':100,'Grundpflege':50,'Innenreinigung':30,'Außenwäsche':30,'Sitze shampoonieren':50,'Dachhimmel':100},
+'Mittelklasse':{'Zusätzl. Schmutz':50,'Lederpflege':50,'Motorwäsche':50,'Hochglanzpolitur':150,'Grundpflege':70,'Innenreinigung':50,'Außenwäsche':50,'Sitze shampoonieren':50,'Dachhimmel':150},
+'SUV+Kombi':{'Zusätzl. Schmutz':80,'Lederpflege':80,'Motorwäsche':70,'Hochglanzpolitur':180,'Grundpflege':100,'Innenreinigung':70,'Außenwäsche':70,'Sitze shampoonieren':50,'Dachhimmel':180},
+'Van':{'Zusätzl. Schmutz':80,'Lederpflege':80,'Motorwäsche':70,'Hochglanzpolitur':180,'Grundpflege':100,'Innenreinigung':70,'Außenwäsche':70,'Sitze shampoonieren':50,'Dachhimmel':180}
+};
+var ANGLES=['Front frontal','45° vorne links','45° vorne rechts','Heck frontal','Felge vorne links','Felge vorne rechts','Cockpit (Fahrer)','Innenraum gesamt'];
+var AFTER_HERO='Aushängebild – Gesamtfahrzeug 45° nach Reinigung';
+var ESTIMATE_BASE={'Frisch':150,'Makellos':270,'Perfektion':420};
+var ESTIMATE_CLASS={'Kleinwagen':0,'Mittelklasse':25,'SUV+Kombi':45,'Van':70};
+var ESTIMATE_EXTRA=25;
+var CLEANERS=['Valet Pro Classic Carpet Cleaner','KochChemie Green Star','Sonax Teer Entferner','KochChemie Gentle Foam','KochChemie Pol Star','Meguiar\'s Leather Cleaner','Meguiar\'s Leather Conditioner','Gyeon WetCoat','Gyeon Q² Tyre Ceramic Protectant','Gyeon Q² Rim EVO','Gyeon View EVO','70% Isopropanol','APS Ultimate Cleaner','KochChemie Fresh Up','Sonax ScheibenStar','Sonax FelgenBeast','Sonax InsektenStar','KochChemie Reactive Rust Remover'];
+
+// ===== NAVIGATION =====
+function go(id){
+var target=document.getElementById(id);
+if(!target){console.warn('Unbekannter Bereich:',id);return;}
+var screens=document.querySelectorAll('.screen');
+for(var i=0;i<screens.length;i++) screens[i].classList.remove('active');
+target.classList.add('active');
+if(id==='s-finish'){renderSpecialCases();renderFollowupBox();renderFinishGate();}
+if(id==='s-done')renderDoneFollowup();
+if(id==='s-photos')updatePhotoStatus('before');
+if(id==='s-after')updatePhotoStatus('after');
+window.scrollTo(0,0);
+}
+
+// ===== HOME =====
+function startNew(){
+cur={id:Date.now(),photos:{},after:{},checks:{},extras:[],anrede:'Herr',dirt:'Normal',paket:null,class:'Mittelklasse',staff:'solo',stamm:false,isReturning:false,customerOrderCount:0,dsgvoSig:'',dsgvoProviderSig:'',timer:{elapsed:0,running:false,startMs:null},timestamps:{},docType:'auftrag',specialCases:[],specialNote:'',followupMonths:9,followupDate:''};
+document.getElementById('f-vn').value='';
+document.getElementById('f-nn').value='';
+document.getElementById('f-tel').value='';
+document.getElementById('f-email').value='';
+document.getElementById('f-caddr').value='';
+document.getElementById('f-place').value='';
+document.getElementById('f-plate').value='';
+document.getElementById('f-car').value='';
+document.getElementById('f-color').value='';
+document.getElementById('f-year').value='';
+document.getElementById('f-km').value='';
+document.getElementById('f-dist').value='';
+document.getElementById('f-age').checked=false;
+document.getElementById('f-notes').value='';
+document.getElementById('f-dsgvo').checked=false;
+clearDSGVOSig(false);
+clearDSGVOProviderSig(false);
+document.getElementById('btn-dsgvo').disabled=true;
+document.getElementById('f-stamm').checked=false;
+document.getElementById('stamm-info').style.display='none';
+document.getElementById('f-auftrag').checked=false;
+document.getElementById('btn-pkg').disabled=true;
+try{document.getElementById('f-date').valueAsDate=new Date()}catch(e){document.getElementById('f-date').value=new Date().toISOString().split('T')[0]}
+var dt=document.getElementById('f-doc-type');if(dt)dt.value='auftrag';
+var sn=document.getElementById('f-special-note');if(sn)sn.value='';
+go('s-customer');
+}
+
+function openCRM(){
+renderCRM();
+go('s-crm');
+}
+function openDashboard(){
+renderDashboard();
+go('s-dashboard');
+}
+
+// ===== CHIPS =====
+function chip(el,key,val){
+cur[key]=val;
+var siblings=el.parentElement.querySelectorAll('.chip');
+for(var i=0;i<siblings.length;i++) siblings[i].classList.remove('on');
+el.classList.add('on');
+}
+
+// ===== CUSTOMER =====
+function saveCustomer(){
+var vn=document.getElementById('f-vn').value.trim();
+if(!vn){alert('Bitte Vorname eingeben');return;}
+if(!document.getElementById('f-age').checked){alert('Bitte Volljährigkeit bestätigen');return;}
+cur.vorname=vn;
+cur.nachname=document.getElementById('f-nn').value.trim();
+cur.tel=document.getElementById('f-tel').value;
+cur.email=document.getElementById('f-email').value;
+cur.caddr=document.getElementById('f-caddr').value.trim();
+cur.place=document.getElementById('f-place').value.trim()||'Chemnitz';
+cur.plate=document.getElementById('f-plate').value.toUpperCase();
+cur.car=document.getElementById('f-car').value;
+cur.color=document.getElementById('f-color').value;
+cur.year=document.getElementById('f-year').value;
+cur.km=document.getElementById('f-km').value;
+cur.dist=parseInt(document.getElementById('f-dist').value)||0;
+cur.date=document.getElementById('f-date').value||new Date().toISOString().split('T')[0];
+cur.docType=document.getElementById('f-doc-type')?document.getElementById('f-doc-type').value:'auftrag';
+detectReturningCustomer();
+updatePkg();
+go('s-package');
+}
+
+function detectReturningCustomer(){
+var tel=(cur.tel||'').replace(/\D/g,'');
+var email=(cur.email||'').toLowerCase().trim();
+var plate=(cur.plate||'').toUpperCase().replace(/\s/g,'');
+var matches=db.filter(function(a){var atel=(a.tel||'').replace(/\D/g,'');var aemail=(a.email||'').toLowerCase().trim();var aplate=(a.plate||'').toUpperCase().replace(/\s/g,'');return (plate&&aplate===plate)||(tel&&atel===tel)||(email&&aemail===email);});
+cur.customerOrderCount=matches.length;cur.isReturning=matches.length>0;
+var cb=document.getElementById('f-stamm');var info=document.getElementById('stamm-info');
+if(cur.isReturning){cb.checked=true;cur.stamm=true;info.style.display='block';info.innerHTML='<strong>Stammkunde erkannt</strong><br>'+matches.length+' früherer Auftrag/Eintrag gefunden. Rabatt wurde automatisch aktiviert.';}
+else{cb.checked=false;cur.stamm=false;info.style.display='none';info.innerHTML='';}
+}
+function fmtMins(min){var h=Math.floor(min/60),m=min%60;return h>0?h+' Std. '+m+' Min.':m+' Min.';}
+function extrasList(v){if(Array.isArray(v))return v.filter(Boolean);if(v&&typeof v==='object')return Object.keys(v).filter(function(k){return !!v[k];});return [];}
+function normalizeCurExtras(){cur.extras=extrasList(cur.extras);return cur.extras;}
+function hasExtra(name){return extrasList(cur.extras).indexOf(name)>=0;}
+function estimateMinutes(){var p=cur.paket||'Frisch';var min=(ESTIMATE_BASE[p]||150)+(ESTIMATE_CLASS[cur.class]||0)+(extrasList(cur.extras).length*ESTIMATE_EXTRA);if(cur.dirt==='Stark')min+=45;if(cur.dirt==='Raucher'||cur.dirt==='Tier')min+=60;return min;}
+function updateTimeEstimate(){cur.estimateMin=estimateMinutes();var el=document.getElementById('time-est');if(el)el.textContent=fmtMins(cur.estimateMin);}
+
+// ===== PACKAGE =====
+
+function hasPolisher(){return !!settings.polisher;}
+function needsPolisherName(name){return name==='Hochglanzpolitur'||name==='Makellos'||name==='Perfektion';}
+function enforcePolisherAvailability(){
+  if(!hasPolisher()){
+    if(cur.paket==='Makellos'||cur.paket==='Perfektion') cur.paket='Frisch';
+    cur.extras=extrasList(cur.extras).filter(function(x){return x!=='Hochglanzpolitur';});
+  }
+}
+
+
+function updatePkg(){
+var cls=document.getElementById('f-class').value;
+cur.class=cls;
+enforcePolisherAvailability();
+document.getElementById('pr-Frisch').textContent=PKG[cls]['Frisch']+'€';
+document.getElementById('pr-Makellos').textContent=PKG[cls]['Makellos']+'€';
+document.getElementById('pr-Perfektion').textContent=PKG[cls]['Perfektion']+'€';
+['Makellos','Perfektion'].forEach(function(p){var card=document.getElementById('c-'+p);var lock=document.getElementById('lock-'+p);if(card){card.classList.toggle('locked',!hasPolisher());} if(lock){lock.style.display=hasPolisher()?'none':'block';}});
+var ec=document.getElementById('extra-chips');
+ec.innerHTML='';
+var exObj=EXTRAS[cls];
+for(var name in exObj){
+var d=document.createElement('div');
+var locked=!hasPolisher()&&name==='Hochglanzpolitur';
+d.className='chip'+(hasExtra(name)?' on':'')+(locked?' disabled':'');
+d.textContent=name+' ('+exObj[name]+'€)'+(locked?' · gesperrt':'');
+d.setAttribute('data-name',name);
+d.onclick=function(){
+var n=this.getAttribute('data-name');
+if(!hasPolisher()&&n==='Hochglanzpolitur'){alert('Hochglanzpolitur ist gesperrt, bis die Poliermaschine in den Einstellungen aktiviert ist.');return;}
+normalizeCurExtras();
+var idx=cur.extras.indexOf(n);
+if(idx>=0) cur.extras.splice(idx,1); else cur.extras.push(n);
+this.classList.toggle('on');
+calcPrice();
+};
+ec.appendChild(d);
+}
+['Frisch','Makellos','Perfektion'].forEach(function(p){var c=document.getElementById('c-'+p);if(c)c.classList.toggle('sel',cur.paket===p);});
+updateTimeEstimate();
+calcPrice();
+}
+
+
+function selPkg(p){
+if(!hasPolisher()&&(p==='Makellos'||p==='Perfektion')){alert('Dieses Paket enthält maschinenpoliturpflichtige Arbeiten. Aktiviere die Poliermaschine in den Einstellungen, sobald sie vorhanden ist.');return;}
+cur.paket=p;
+var cards=document.querySelectorAll('#s-package .card');
+for(var i=0;i<cards.length;i++){
+if(cards[i].id&&cards[i].id.indexOf('c-')===0) cards[i].classList.remove('sel');
+}
+document.getElementById('c-'+p).classList.add('sel');
+updateTimeEstimate();
+calcPrice();
+}
+
+function calcPrice(){
+if(!cur.paket) cur.paket='Frisch';
+var t=PKG[cur.class][cur.paket];
+var selectedExtras=extrasList(cur.extras);
+for(var i=0;i<selectedExtras.length;i++){
+var ex=EXTRAS[cur.class][selectedExtras[i]];
+if(ex) t+=ex;
+}
+var anfahrt=0;
+if(cur.dist>15) anfahrt=(cur.dist-15)*0.5;
+t+=anfahrt;
+if(document.getElementById('f-stamm').checked){cur.stamm=true;t=t*0.8;}else{cur.stamm=false;}
+cur.total=t;
+cur.anfahrt=anfahrt;
+var info=cur.paket+' ('+cur.class+')';
+if(anfahrt>0) info+=' + Anfahrt '+anfahrt.toFixed(2)+'€';
+if(cur.stamm) info+=' - 20% Stammkunde';
+document.getElementById('total').textContent=t.toFixed(2).replace('.',',')+' €';
+updateTimeEstimate();
+}
+
+// ===== DSGVO =====
+function dsgvoReady(){document.getElementById('btn-dsgvo').disabled=!(document.getElementById('f-dsgvo').checked&&cur.dsgvoSig&&cur.dsgvoProviderSig);}
+function clearDSGVOSig(update){var c=document.getElementById('dsgvo-canvas');if(c){var x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);}cur.dsgvoSig='';if(update!==false)dsgvoReady();}
+function clearDSGVOProviderSig(update){var c=document.getElementById('dsgvo-provider-canvas');if(c){var x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);}cur.dsgvoProviderSig='';if(update!==false)dsgvoReady();}
+function dsgvoAccepted(){
+if(!document.getElementById('f-dsgvo').checked){alert('Bitte Datenschutzinfo bestätigen lassen.');return;}
+if(!cur.dsgvoSig){alert('Bitte DSGVO durch den Kunden unterschreiben lassen.');return;}
+if(!cur.dsgvoProviderSig){alert('Bitte DSGVO zusätzlich als Dienstleister unterschreiben.');return;}
+cur.timestamps.dsgvo=new Date().toLocaleString('de-DE');
+go('s-photos');
+}
+
+// ===== PHOTOS =====
+function buildGrid(gridId,mode){
+var g=document.getElementById(gridId);
+g.innerHTML='';
+var list=(mode==='after')?ANGLES.concat([AFTER_HERO]):ANGLES;
+for(var i=0;i<list.length;i++){
+var d=document.createElement('div');
+d.className='pitem';
+var angle=list[i];
+var src=(mode==='before')?cur.photos[angle]:cur.after[angle];
+if(src){
+d.innerHTML='<img src="'+src+'"><span>'+angle+'</span>';
+}else{
+d.innerHTML='📷<br>'+angle;
+}
+d.setAttribute('data-angle',angle);
+d.setAttribute('data-mode',mode);
+d.onclick=function(){
+photoTarget=this.getAttribute('data-angle');
+photoMode=this.getAttribute('data-mode');
+document.getElementById('finput').click();
+};
+g.appendChild(d);
+}
+updatePhotoStatus(mode);
+}
+
+function gotFile(input){
+var file=input.files[0];
+if(!file) return;
+var reader=new FileReader();
+reader.onload=function(e){
+var img=new Image();
+img.onload=function(){
+var canvas=document.createElement('canvas');
+var w=img.width,h=img.height;
+if(w>1200){h=h*(1200/w);w=1200;}
+canvas.width=w;canvas.height=h;
+canvas.getContext('2d').drawImage(img,0,0,w,h);
+var data=canvas.toDataURL('image/jpeg',0.8);
+if(photoMode==='before') cur.photos[photoTarget]=data;
+else cur.after[photoTarget]=data;
+buildGrid(photoMode==='before'?'grid-before':'grid-after',photoMode);
+updatePhotoStatus(photoMode);
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
+input.value='';
+}
+
+// ===== TIMER =====
+var timerInterval=null;
+function getElapsedMs(){if(!cur.timer)cur.timer={elapsed:0,running:false,startMs:null};return cur.timer.elapsed+(cur.timer.running&&cur.timer.startMs?(Date.now()-cur.timer.startMs):0);}
+function updateTimerDisplay(){var el=document.getElementById('work-timer');if(!el)return;var ms=getElapsedMs();var sec=Math.floor(ms/1000);var h=Math.floor(sec/3600);var m=Math.floor((sec%3600)/60);var ss=sec%60;el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');}
+function startWorkTimer(){if(!cur.timer)cur.timer={elapsed:0,running:false,startMs:null};if(cur.timer.running)return;cur.timer.running=true;cur.timer.startMs=Date.now();cur.timestamps.timerStart=cur.timestamps.timerStart||new Date().toLocaleString('de-DE');if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(updateTimerDisplay,1000);updateTimerDisplay();}
+function pauseWorkTimer(){if(!cur.timer)cur.timer={elapsed:0,running:false,startMs:null};if(cur.timer.running){cur.timer.elapsed=getElapsedMs();cur.timer.running=false;cur.timer.startMs=null;}if(timerInterval)clearInterval(timerInterval);updateTimerDisplay();}
+function resetWorkTimer(){if(confirm('Timer wirklich zurücksetzen?')){cur.timer={elapsed:0,running:false,startMs:null};if(timerInterval)clearInterval(timerInterval);updateTimerDisplay();}}
+
+// ===== TEAM & CHECKLIST =====
+function beginnerMode(){var el=document.getElementById('f-beginner');return !el||!!el.checked;}
+function setTeam(t){
+cur.staff=t;
+cur.timestamps.start=new Date().toLocaleString('de-DE');
+buildChecklist();
+go('s-check');
+updateTimerDisplay();
+}
+
+function buildChecklist(){
+var l=document.getElementById('check-list');
+l.innerHTML='';
+var steps=getSteps();
+var taskCount=0,done=0;
+var beginner=beginnerMode();
+for(var i=0;i<steps.length;i++){
+var s=steps[i];
+if(s.type==='phase'){
+var ph=document.createElement('div');
+ph.className='phase-card';
+ph.innerHTML='<strong>'+esc(s.t)+'</strong><span>'+esc(s.d||'')+'</span>'+(s.gate?'<em>Qualitäts-Gate: '+esc(s.gate)+'</em>':'');
+l.appendChild(ph);
+continue;
+}
+taskCount++;
+if(cur.checks[i]) done++;
+var d=document.createElement('div');
+var checked=cur.checks[i]?'done':'';
+var cls='chk';
+if(checked) cls+=' is-done';
+if(cur.staff==='duo'&&s.p==='P1') cls+=' is-p1';
+if(cur.staff==='duo'&&s.p==='P2') cls+=' is-p2';
+d.className=cls;
+d.setAttribute('data-i',i);
+var personTag='';
+if(cur.staff==='duo'&&s.p){personTag='<span class="chk-'+s.p.toLowerCase()+'">'+(s.p==='P1'?'Person 1':'Person 2')+'</span>';}
+var meta='';
+if(beginner){
+meta='<div class="chk-meta">'+
+(s.goal?'<div><strong>Ziel:</strong> '+esc(s.goal)+'</div>':'')+
+(s.product?'<div><strong>Produkt:</strong> '+esc(s.product)+'</div>':'')+
+(s.tool?'<div><strong>Werkzeug:</strong> '+esc(s.tool)+'</div>':'')+
+'</div>';
+}
+var warnHtml=s.warn?'<span class="chk-warn">Wichtig: '+esc(s.warn)+'</span>':'';
+var qcHtml=s.qc?'<span class="chk-qc">Kontrolle: '+esc(s.qc)+'</span>':'';
+var beginnerHtml=(beginner&&s.beginner)?'<span class="chk-beginner">Anfänger-Hinweis: '+esc(s.beginner)+'</span>':'';
+var detailHtml=s.d?'<div class="chk-detail">'+esc(s.d)+'</div>':'';
+d.innerHTML='<div class="chk-box '+checked+'"></div><div>'+personTag+'<span class="chk-title">'+esc(s.t)+'</span>'+detailHtml+meta+'<span class="chk-tag">'+esc(s.tag||'Arbeitsschritt')+'</span>'+warnHtml+qcHtml+beginnerHtml+'</div>';
+d.onclick=function(){var idx=parseInt(this.getAttribute('data-i'));cur.checks[idx]=!cur.checks[idx];buildChecklist();};
+l.appendChild(d);
+}
+document.getElementById('check-count').textContent=done+' / '+taskCount;
+document.getElementById('check-fill').style.width=taskCount?Math.round(done/taskCount*100)+'%':'0%';
+document.getElementById('check-sub').textContent='Paket: '+cur.paket+' | '+(cur.staff==='duo'?'Duo: Person 1 + Person 2':'Solo')+' | '+cur.dirt;
+renderBriefingBox(steps);
+renderMaterialBox(steps);
+renderQualityBox(steps,done,taskCount);
+}
+
+function renderMaterialBox(steps){
+var box=document.getElementById('material-box');if(!box)return;
+var products={},tools={};
+steps.forEach(function(s){if(s.type==='phase')return;(s.product||'').split(',').forEach(function(x){x=x.trim();if(x)products[x]=true;});(s.tool||'').split(',').forEach(function(x){x=x.trim();if(x)tools[x]=true;});});
+var ps=Object.keys(products).slice(0,18), ts=Object.keys(tools).slice(0,16);
+box.innerHTML='<h3>Materialcheck vor Start</h3><p>Lege diese Dinge sichtbar bereit, bevor der Timer startet. Das verhindert Unterbrechungen und hilft dir, sauber nach System zu arbeiten.</p><ul><li><strong>Reiniger:</strong> '+(ps.length?esc(ps.join(' · ')):'paketabhängig')+'</li><li><strong>Werkzeuge:</strong> '+(ts.length?esc(ts.join(' · ')):'paketabhängig')+'</li><li><strong>Trennung:</strong> Lacktücher, Glastücher, Felgentücher und Innenraumtücher strikt getrennt halten.</li></ul>';
+}
+function renderQualityBox(steps,done,total){
+var box=document.getElementById('quality-box');if(!box)return;
+var pct=total?Math.round(done/total*100):0;
+box.innerHTML='<h3>Qualitäts-Gates</h3><p>Arbeite jede Phase erst fertig, bevor du weiterspringst. Wenn etwas offen ist: nicht abhaken, sondern direkt nacharbeiten.</p><ul><li>Phase fertig bedeutet: sichtbar sauber, trocken genug, keine Chemiereste, keine Schlieren.</li><li>Bei Unsicherheit Foto machen und Notiz ergänzen.</li><li>Aktueller Stand: <strong>'+pct+'%</strong> erledigt.</li></ul>';
+}
+
+function role(simple){return cur.staff==='duo'&&simple?'P2':'P1';}
+function addPhase(list,title,detail,gate){list.push({type:'phase',t:title,d:detail,gate:gate||''});}
+function addTask(list,o){o.p=o.p||role(!!o.simple);list.push(o);}
+function addP1(list,o){o.p='P1';list.push(o);}
+function packageIncludes(level){var order={'Frisch':1,'Makellos':2,'Perfektion':3};return (order[cur.paket||'Frisch']||1)>=(order[level]||1);}
+function extra(name){return hasExtra(name);}
+function getSteps(){
+var s=[];var p=cur.paket||'Frisch';var dirt=cur.dirt;var heavy=(dirt==='Stark'||dirt==='Raucher'||dirt==='Tier'||extra('Zusätzl. Schmutz'));
+addPhase(s,'Phase 1 · Startklar machen','Auftrag, Umgebung, Material und Rollen klären. Nichts reinigen, bevor Dokumentation und Arbeitsplatz sauber vorbereitet sind.','Auftrag + DSGVO + Fotos vorbereitet');
+addP1(s,{t:'Auftrag mit Kundendaten abgleichen',tag:'Pflicht vor Start',goal:'Sicherstellen, dass Paket, Extras, Preis, Leistungsort und Fahrzeug eindeutig stimmen.',product:'keine Chemie',tool:'App, Kundengespräch',d:'Paket, Extras, Gesamtpreis, Kilometerstand, Kennzeichen, Fahrzeug, Leistungsort und besondere Kundenwünsche laut App laut vorlesen und bestätigen lassen.',warn:'Erst starten, wenn Auftrag und Datenschutz erledigt sind.',qc:'Keine offenen Pflichtfelder und keine unklaren Extras.',beginner:'Wenn du etwas nicht sicher verstanden hast, jetzt nachfragen. Während der Arbeit wird Korrigieren deutlich schwerer.'});
+addP1(s,{t:'Vorschäden und empfindliche Bereiche prüfen',tag:'Dokumentation',goal:'Spätere Diskussionen vermeiden und sensible Bereiche vor Chemie schützen.',product:'keine Chemie',tool:'Handy-Kamera, Licht, App-Notizen',d:'Kratzer, Dellen, Steinschläge, Felgenschäden, Lederabrieb, lose Verkleidungen, empfindliche Displays und Nachlackierungen suchen und dokumentieren.',warn:'Schäden nicht bewerten oder versprechen, nur sachlich festhalten.',qc:'Jeder auffällige Punkt ist fotografiert oder notiert.'});
+addTask(s,{t:'Arbeitsplatz und Wasserbereich vorbereiten',tag:'Setup',simple:true,goal:'Sauber, sicher und ohne Umweltproblem arbeiten.',product:'keine Chemie',tool:'Auffangmatte, Kabeltrommel, Trolley, Müllsack',d:'Matte korrekt auslegen, Kabel vollständig abrollen, Trolley aufstellen, Müllsack und Fundsachenbox bereitlegen. Laufwege frei halten.',warn:'Kein Schmutzwasser in Gully, Boden oder Grünfläche laufen lassen.',qc:'Arbeitsplatz sieht geordnet aus und nichts ist Stolperfalle.',beginner:'Ein ordentlicher Start spart später mehr Zeit als hektisches Loslegen.'});
+addTask(s,{t:'Tücher und Werkzeuge nach Bereichen trennen',tag:'Materialtrennung',simple:true,goal:'Kratzer und Schmierfilme durch falsche Tücher vermeiden.',product:'keine Chemie',tool:'Mikrofasertücher, Glastücher, Felgentücher, Innenraumtücher, Bürsten',d:'Vier Bereiche bilden: Lack, Glas, Felgen/Reifen, Innenraum. Felgentücher niemals später auf Lack oder Innenraum einsetzen.',warn:'Ein schmutziges Felgentuch kann Lack sofort zerkratzen.',qc:'Jeder Bereich hat eigene Tücher und Ablagefläche.'});
+
+addPhase(s,'Phase 2 · Innenraum zuerst','Innenraum von grob nach fein bearbeiten: erst Müll und lose Partikel, dann Textil/Leder, dann Kunststoffe, Glas und Abschlusskontrolle.','Innenraum sauber, trocken genug, persönliche Gegenstände geordnet');
+addTask(s,{t:'Lose Gegenstände und Müll sortieren',tag:'Innenraum Basis',simple:true,goal:'Innenraum freimachen, ohne Kundeneigentum zu verlieren.',product:'keine Chemie',tool:'Müllsack, Fundsachenbox, Handschuhe',d:'Müll entfernen. Fundsachen sichtbar sammeln. Persönliche Gegenstände nicht ungefragt entsorgen.',qc:'Alle Fächer, Taschen, Kofferraum und Türablagen geprüft.'});
+addTask(s,{t:'Fußmatten entnehmen und vorbereiten',tag:'Matten',simple:true,goal:'Matten separat reinigen, damit Feuchtigkeit und Schmutz nicht im Fahrzeug bleiben.',product:'Valet Pro Classic Carpet Cleaner bei Textilmatten',tool:'Bürste, Nass-/Trockensauger, Tuch',d:'Matten herausnehmen, grob ausklopfen, Textil und Gummi getrennt ablegen. Textilmatten nur sparsam anfeuchten und später gründlich absaugen.',warn:'Textilmatten nicht durchnässen.',qc:'Matten sind sauber und nur noch leicht feucht oder trocken.'});
+addTask(s,{t:'Kofferraum und Fußräume vorsaugen',tag:'Saugen Basis',simple:true,goal:'Lose Partikel entfernen, bevor fein gereinigt wird.',product:'keine Chemie',tool:'Staubsauger, breite Düse',d:'Groben Schmutz aus Kofferraum, Fußräumen und unter Matten langsam absaugen. Düse nicht über empfindliche Flächen ziehen.',qc:'Keine sichtbaren Krümel, Sandnester oder losen Steine mehr.'});
+addP1(s,{t:'Sitzschienen, Nähte und Mittelkonsole präzise saugen',tag:'Innenraum Detail',goal:'Die Bereiche reinigen, die Kunden später sofort sehen oder fühlen.',product:'APS Ultimate Cleaner nur bei Bedarf auf Tuch',tool:'schmale Düse, weicher Pinsel, Mikrofasertuch',d:'Sitzschienen, Nähte, Becherhalter, Tastenränder, Lenkradnähe und Konsolenfugen langsam bearbeiten. Schmutz mit Pinsel lösen und direkt absaugen.',warn:'Nicht mit harter Düse auf Klavierlack, Display oder Leder kratzen.',qc:'Mit Licht aus Fahrerposition prüfen: keine Krümel in Ritzen sichtbar.'});
+if(heavy){addP1(s,{t:'Starke Flecken und Gerüche gezielt vorbehandeln',tag:'Intensivreinigung',goal:'Problemstellen verbessern, ohne Material zu überfeuchten.',product:'KochChemie Pol Star, KochChemie Fresh Up',tool:'weiche Bürste, Mikrofasertuch, Nass-/Trockensauger',d:'Flecken von außen nach innen bearbeiten. Pol Star sparsam nutzen. Bei Rauchgeruch erst reinigen, dann Fresh Up zurückhaltend anwenden und lüften.',warn:'Nicht fluten. Feuchtigkeit muss wieder raus.',qc:'Fleck ist sichtbar reduziert und Fläche fühlt sich höchstens leicht feucht an.'});}
+if(extra('Sitze shampoonieren')){addP1(s,{t:'Sitze shampoonieren und Feuchte prüfen',tag:'Extra Sitze',goal:'Textilsitze gründlicher reinigen, ohne Schimmelrisiko zu erzeugen.',product:'KochChemie Pol Star',tool:'Polsterbürste, Nass-/Trockensauger, trockenes Tuch',d:'Sitzfläche abschnittsweise bearbeiten, sofort absaugen, danach mit trockenem Tuch nachnehmen. Nicht großflächig durchnässen.',warn:'Zu viel Wasser ist schlimmer als ein kleiner Restfleck.',qc:'Handrücken-Test: Sitz ist nicht nass, höchstens leicht kühl/feucht.'});}
+if(packageIncludes('Makellos')||extra('Lederpflege')){addP1(s,{t:'Leder reinigen und konditionieren',tag:'Lederpflege',goal:'Leder sauberer und geschmeidiger machen, ohne Glanzspeck oder Flecken.',product:"Meguiar's Leather Cleaner, Meguiar's Leather Conditioner",tool:'Applikator, weiche Bürste, Mikrofasertücher',d:'Cleaner auf Applikator oder Tuch geben. Kleine Bereiche sanft reinigen, Rückstände abnehmen. Conditioner dünn auftragen und Überschuss abwischen.',warn:'Kein Green Star und keine harte Bürste auf Leder.',qc:'Leder wirkt gleichmäßig, nicht nass, nicht schmierig.'});}
+if(extra('Dachhimmel')){addP1(s,{t:'Dachhimmel extrem vorsichtig bearbeiten',tag:'Extra Dachhimmel',goal:'Leichte Verschmutzungen verbessern, ohne Kleber oder Stoff zu lösen.',product:'APS Ultimate Cleaner nur sehr verdünnt/auf Tuch',tool:'weiches Mikrofasertuch',d:'Nur tupfen, nicht reiben. Nie direkt einsprühen. Bei Wellen, Ablösung oder Verfärbung sofort stoppen.',warn:'Dachhimmel ist ein Risikoteil.',qc:'Keine Wellen, keine Wasserflecken, keine gelösten Stellen.'});}
+addP1(s,{t:'Kunststoffe, Schalter und Displays reinigen',tag:'Innenraum Finish',goal:'Berührflächen sauber und matt hinterlassen.',product:'APS Ultimate Cleaner',tool:'Mikrofasertuch, Detailpinsel, trockenes Finish-Tuch',d:'Reiniger auf Tuch geben, nie direkt auf Display oder Schalter. Kleine Bereiche reinigen und sofort trocken nachnehmen.',warn:'Keine Flüssigkeit in Tasten, Lüftungen oder Elektronik laufen lassen.',qc:'Keine Schlieren, keine nassen Ränder, keine Reinigerreste.'});
+addP1(s,{t:'Innenscheiben streifenfrei reinigen',tag:'Glas innen',goal:'Klare Sicht ohne Schlieren bei Sonne oder Gegenlicht.',product:'Sonax ScheibenStar',tool:'zwei Glastücher',d:'Erstes Tuch leicht mit Reiniger, zweites Tuch trocken zum Nachpolieren. Scheibe aus zwei Blickwinkeln kontrollieren.',qc:'Gegen Licht sind keine Streifen oder Tuchspuren sichtbar.'});
+addTask(s,{t:'Innenraum für Übergabe ordnen',tag:'Innenraum Abschluss',simple:true,goal:'Der erste Eindruck beim Öffnen der Tür soll sauber und aufgeräumt sein.',product:'keine Chemie',tool:'saubere Hände/Tuch, Fundsachenbox',d:'Matten ordentlich einsetzen, Fundsachen bereitstellen, Sitzposition nicht unnötig verändern, Türfalze im Blick behalten.',qc:'Innenraum wirkt fertig, nicht nur gereinigt.'});
+
+addPhase(s,'Phase 3 · Außenwäsche und Dekontamination','Von chemischer Vorreinigung über Handwäsche bis Trocknung arbeiten. Lack und Felgen bleiben strikt getrennt.','Außen sauber, keine Chemiereste, keine Wasserläufer');
+if(extra('Motorwäsche')){addP1(s,{t:'Motorraum nur materialschonend reinigen',tag:'Extra Motorwäsche',goal:'Sichtbare Verschmutzung verbessern, ohne Elektronik zu riskieren.',product:'APS Ultimate Cleaner',tool:'Tuch, Pinsel, Dampf mit Abstand',d:'Nur kühler Motor. Elektronik, offene Stecker, Luftansaugung und heiße Bauteile meiden. Reiniger sparsam auf Tuch/Pinsel, nicht fluten.',warn:'Keine Hochdruckwäsche im Motorraum.',qc:'Keine stehende Nässe, keine gelösten Stecker, keine Chemiereste.'});}
+addP1(s,{t:'Felgen, Flugrost und Insekten vorbereiten',tag:'Außen Chemie',goal:'Schmutz lösen, bevor mechanisch gewaschen wird.',product:'Sonax FelgenBeast, KochChemie Reactive Rust Remover, Sonax InsektenStar',tool:'Felgenbürsten, Pinsel, Wasser',d:'Nur auf kühlen Flächen arbeiten. FelgenBeast auf Felgen, InsektenStar auf Front/Spiegel, Reactive Rust Remover nur bei Flugrost. Einwirken lassen, aber nicht antrocknen lassen.',warn:'Chemie nie in Sonne antrocknen lassen.',qc:'Chemie wurde vollständig abgespült.'});
+addTask(s,{t:'Foam-Vorwäsche auftragen',tag:'Vorwäsche',simple:false,goal:'Schmutz anlösen, damit die Handwäsche sicherer wird.',product:'KochChemie Gentle Foam',tool:'Foam Cannon, Hochdruckreiniger',d:'Fahrzeug einschäumen, Einwirkzeit beobachten, anschließend gründlich von oben nach unten abspülen.',warn:'Schaum nicht trocken werden lassen.',qc:'Grober Schmutz ist abgespült, Lack ist bereit für Kontaktwäsche.'});
+addTask(s,{t:'Felgenbett, Speichen und Reifenflanken reinigen',tag:'Felgenarbeit',simple:true,goal:'Bremsstaub und Straßenschmutz von robusten Radbereichen lösen.',product:'Sonax FelgenBeast',tool:'Wheel Woolies, Felgenpinsel, Reifenbürste',d:'Bürsten langsam führen, nicht gegen Lack stoßen. Reifenflanken separat bearbeiten. Danach sehr gründlich spülen.',warn:'Felgenwerkzeug bleibt Felgenwerkzeug.',qc:'Speichen, Bett und Reifenflanke sind sichtbar sauber.'});
+addP1(s,{t:'Lack per Zwei-Eimer-Methode waschen',tag:'Handwäsche',goal:'Kontaktwäsche ohne neue Waschkratzer.',product:'KochChemie Gentle Foam als Waschlösung',tool:'zwei Eimer, Grit Guards, Lack-Waschhandschuh',d:'Von oben nach unten, gerade Bahnen, wenig Druck. Handschuh häufig im Spüleimer reinigen. Untere Bereiche zuletzt.',warn:'Keine Kreisbewegungen und kein schmutziger Handschuh auf Lack.',qc:'Lack fühlt sich sauber an, keine Schmutzinseln an unteren Bereichen.'});
+if(cur.staff==='duo'){addTask(s,{t:'Untere Außenbereiche nach Freigabe waschen',tag:'Außen Unterstützung',simple:true,goal:'Zeit sparen, ohne empfindliche Lackbereiche doppelt zu belasten.',product:'KochChemie Gentle Foam',tool:'separater Waschhandschuh',d:'Nur Schweller, untere Stoßfänger und robuste untere Bereiche bearbeiten, nachdem Person 1 den Bereich freigegeben hat.',warn:'Nicht an empfindlichen Flächen oder bereits fertigen Bereichen nacharbeiten.',qc:'Person 1 prüft den Bereich kurz gegen.'});}
+addP1(s,{t:'Fahrzeug vollständig abspülen und Wasserläufer öffnen',tag:'Abspülen',goal:'Chemiereste und Schmutzwasser aus Spalten entfernen.',product:'Wasser',tool:'Hochdruckreiniger, ggf. sanfter Wasserstrahl',d:'Von oben nach unten spülen. Spiegel, Embleme, Kennzeichenhalter, Türgriffe, Tankdeckel und Spalten besonders beachten.',qc:'Keine sichtbaren Schaumnester oder Chemiereste.'});
+addTask(s,{t:'Türfalze, Einstiege und robuste Kanten trocknen',tag:'Trocknung',simple:true,goal:'Wasserläufer bei Übergabe vermeiden.',product:'keine Chemie',tool:'separates Falz-Tuch',d:'Türen/Klappen öffnen und Falze mit eigenem Tuch trocknen. Dieses Tuch nicht auf sichtbare Lackflächen legen.',warn:'Falztuch bleibt Falztuch.',qc:'Keine Tropfen in Einstiegen, Tankdeckel oder Kofferraumkante.'});
+addP1(s,{t:'Sichtbare Lackflächen schonend trocknen',tag:'Lackfinish',goal:'Sauberes Finish ohne Trocknungsspuren.',product:'keine Chemie',tool:'großes sauberes Trockentuch',d:'Tuch auflegen und gerade ziehen. Nicht mit Druck rubbeln. Bei Schmutz im Tuch sofort wechseln.',qc:'Keine Wasserflecken, keine Schlieren, keine neuen Wischspuren.'});
+addP1(s,{t:'Teerflecken punktuell entfernen',tag:'Spezialchemie',goal:'Störende Teerpunkte verbessern, ohne Kunststoff oder Lack unnötig zu belasten.',product:'Sonax Teer Entferner',tool:'weiches Tuch',d:'Nur punktuell anwenden. Kurz wirken lassen, abnehmen, Bereich nachreinigen und kontrollieren.',warn:'Nicht großflächig auf Kunststoff oder empfindlichen Bereichen einsetzen.',qc:'Stelle ist sauber und frei von öligen Rückständen.'});
+
+addPhase(s,'Phase 4 · Schutz, Glas und Finish','Jetzt wird aus sauber ein gepflegtes Ergebnis. Schutzprodukte dünn, kontrolliert und ohne Hektik anwenden.','Schutz gleichmäßig, Glas klar, Reifen/Felgen sauber abgeschlossen');
+addP1(s,{t:'Außenscheiben reinigen und Scheibenversiegelung auftragen',tag:'Glas außen',goal:'Klare Sicht und besseres Abperlverhalten.',product:'Sonax ScheibenStar, Gyeon View EVO',tool:'Glastücher, Applikator',d:'Scheibe reinigen und trocknen. View EVO dünn nach Produktlogik auftragen, Ablüftung beachten und klar auspolieren.',warn:'Nur auf sauberer, trockener Scheibe anwenden.',qc:'Keine Schlieren im Wischerbereich.'});
+if(packageIncludes('Makellos')){addP1(s,{t:'WetCoat als Lackschutz anwenden',tag:'Lackschutz',goal:'Schneller hydrophober Schutz ohne Maschinenpolitur.',product:'Gyeon WetCoat',tool:'Wasser, sauberes Tuch für Kontrolle',d:'Auf nassem Lack abschnittsweise sparsam anwenden und sofort sehr gründlich abspülen. Weniger Produkt ist besser.',warn:'Nicht antrocknen lassen.',qc:'Keine Schlieren, gleichmäßiges Abperlen.'});
+addP1(s,{t:'Felgenversiegelung und Reifenpflege abschließen',tag:'Radfinish',goal:'Felgen leichter pflegbar machen und Reifen optisch aufwerten.',product:'Gyeon Q² Rim EVO, Gyeon Q² Tyre Ceramic Protectant',tool:'Applikator, Felgentuch',d:'Rim EVO dünn auf trockene, saubere Felgen. Tyre Protectant nur auf Reifenflanken. Überschuss abnehmen.',warn:'Nie auf Bremse oder Reifenlauffläche.',qc:'Felge gleichmäßig, Reifenflanke satt aber nicht schmierig.'});}
+if((packageIncludes('Makellos')||extra('Hochglanzpolitur')) && hasPolisher()){addPhase(s,'Phase 5 · Maschinenpolitur','Nur aktiv, wenn die Poliermaschine in den Einstellungen vorhanden ist. Erst Testspot, dann langsam und kontrolliert arbeiten.','Testspot sicher, Lackbild kontrolliert');
+addP1(s,{t:'Polierarbeitsplatz und Testspot vorbereiten',tag:'Maschinenpolitur',goal:'Sicher feststellen, ob und wie der Lack reagiert.',product:'70% Isopropanol',tool:'Poliermaschine, passende Pads, Kopflampe, Abklebeband',d:'Schatten, handwarmer Lack, saubere Pads. Kanten/Kunststoffe abkleben. Erst kleinen Testspot an unauffälliger Stelle machen.',warn:'Wenn du unsicher bist, nicht großflächig weitermachen.',qc:'Testspot wirkt besser und sicher, keine Hologramme oder Überhitzung.'});
+addP1(s,{t:'Panelweise polieren und Ergebnis prüfen',tag:'Politur',goal:'Glanz und Defektminderung kontrolliert verbessern.',product:'passende Politur, 70% Isopropanol',tool:'Poliermaschine, Pads, Mikrofasertücher',d:'Kleine Bereiche, Maschine flach halten, kaum Druck, Kabel vom Lack fernhalten. Politurreste abnehmen und mit IPA kontrollieren.',warn:'Nie trockenes Pad, nie unnötiger Druck, nie auf Kanten stehen bleiben.',qc:'Lackbild gegen Licht prüfen, bevor der nächste Bereich startet.'});}
+if((packageIncludes('Makellos')||extra('Hochglanzpolitur')) && !hasPolisher()){addP1(s,{t:'Maschinenpolitur bewusst überspringen',tag:'Ausstattung fehlt',goal:'Keine Leistung versprechen, die ohne Maschine nicht sauber ausgeführt wird.',product:'keine Chemie',tool:'Einstellung Poliermaschine',d:'Dieser Arbeitsblock bleibt gesperrt. Innenraum, Außenwäsche, Glas, Felgen, Reifen und nicht maschinenpflichtiger Schutz bleiben möglich.',warn:'Nicht ersatzweise riskante Handpolitur versprechen.',qc:'Kunde bekommt nur Leistungen, die sauber durchgeführt werden können.'});}
+if(p==='Perfektion' && hasPolisher()){addP1(s,{t:'Keramikbedingungen prüfen und Coating auftragen',tag:'Keramik',goal:'Schutz nur unter geeigneten Bedingungen sauber applizieren.',product:'Keramik-Coating nach Paketlogik',tool:'Applikator, frische Tücher, Licht',d:'Nur trocken, sauber vorbereitet, ohne direkte Sonne und bei stabiler Umgebung. Dünn, kleine Bereiche, Überschuss vollständig abnehmen.',warn:'Bei ungeeigneten Bedingungen nicht auftragen und dokumentieren.',qc:'Keine Highspots, keine Schlieren, 24-Stunden-Hinweis geben.'});}
+
+addPhase(s,'Phase 6 · Endkontrolle und Übergabe','Jetzt entscheidet sich der Gesamteindruck. Mit Licht, Abstand und Kundensicht prüfen.','Fahrzeug präsentationsfertig, Fotos vollständig, Abnahme möglich');
+addP1(s,{t:'Finale Qualitätsrunde außen und innen',tag:'Endkontrolle',goal:'Fehler finden, bevor der Kunde sie findet.',product:'Sonax ScheibenStar bei Bedarf, trockenes Finish-Tuch',tool:'Licht, Glastuch, Mikrofasertuch',d:'Einmal komplett um das Fahrzeug und durch den Innenraum: Glas, Lack, Felgen, Reifenflanken, Türfalze, Sitze, Fußräume, Geruch, Haptik, persönliche Gegenstände.',qc:'Keine offensichtlichen Schlieren, Tropfen, Krümel, Chemiereste oder vergessenen Bereiche.'});
+addTask(s,{t:'Arbeitsplatz sauber zurückbauen',tag:'Abbau',simple:true,goal:'Beim Kunden professionell und ordentlich verschwinden.',product:'keine Chemie',tool:'Müllsack, Trolley, Tücherbox',d:'Werkzeuge reinigen/einpacken, Matte kontrolliert aufnehmen, Müll entsorgen, Fundsachen bereitlegen.',qc:'Arbeitsort ist mindestens so ordentlich wie vor Beginn.'});
+addP1(s,{t:'Nachherfotos und Aushängebild aufnehmen',tag:'Dokumentation',goal:'Das Ergebnis hochwertig und nachvollziehbar festhalten.',product:'keine Chemie',tool:'Handy-Kamera, gutes Licht',d:'Alle Pflichtwinkel aufnehmen. Das 45°-Gesamtbild sauber komponieren: ruhiger Hintergrund, Fahrzeug komplett im Bild, Räder gerade oder leicht eingelenkt.',qc:'Mindestens die Pflichtbilder sind scharf, hell und vollständig.'});
+addP1(s,{t:'Abnahme mit Kunde durchführen',tag:'Übergabe',goal:'Sauber abschließen und offene Punkte direkt klären.',product:'keine Chemie',tool:'Abnahmeprotokoll, Endkunden-Protokoll',d:'Kunden das Ergebnis ansehen lassen. Beanstandungen direkt notieren und wenn möglich sofort nacharbeiten. Danach Abschlussdokumente ausgeben.',warn:'Gesetzliche Rechte bleiben unberührt.',qc:'Abnahme ist dokumentiert, Rechnung/Protokoll sind verfügbar.'});
+return s;
+}
+
+
+
+// ===== v2.7 PROFESSIONAL OPS HELPERS =====
+function filledCount(obj,list){var n=0;for(var i=0;i<list.length;i++){if(obj&&obj[list[i]])n++;}return n;}
+function photoStatus(mode){var list=(mode==='after')?ANGLES.concat([AFTER_HERO]):ANGLES;var obj=(mode==='after')?cur.after:cur.photos;return {done:filledCount(obj,list),total:list.length,list:list};}
+function updatePhotoStatus(mode){var id=mode==='after'?'after-status':'before-status';var el=document.getElementById(id);if(!el)return;var ps=photoStatus(mode);el.innerHTML='<strong>'+ps.done+' / '+ps.total+'</strong> Pflichtbilder hinterlegt. Für ein starkes Protokoll möglichst alle Winkel fotografieren.';}
+function missingPhotos(mode){var ps=photoStatus(mode);var obj=(mode==='after')?cur.after:cur.photos;return ps.list.filter(function(x){return !obj[x];});}
+function continueAfterBeforePhotos(){cur.notes=document.getElementById('f-notes').value;var miss=missingPhotos('before');if(miss.length&& !confirm('Es fehlen noch Vorher-Pflichtbilder:\n\n'+miss.join('\n')+'\n\nTrotzdem fortfahren?'))return;go('s-prot1');}
+function continueAfterPhotos(){var miss=missingPhotos('after');if(miss.length&& !confirm('Es fehlen noch Nachher-Pflichtbilder:\n\n'+miss.join('\n')+'\n\nFür ein hochwertiges Protokoll sollten sie ergänzt werden. Trotzdem fortfahren?'))return;renderFinishGate();go('s-finish');}
+function checklistStats(){var steps=getSteps(),tasks=0,done=0;for(var i=0;i<steps.length;i++){if(steps[i].type==='phase')continue;tasks++;if(cur.checks&&cur.checks[i])done++;}return {tasks:tasks,done:done,pct:tasks?Math.round(done/tasks*100):0};}
+function completeChecklistAndGoAfter(){var st=checklistStats();if(st.pct<100){if(!confirm('Die Arbeitsanweisung ist erst zu '+st.pct+'% abgehakt.\n\nOffene Schritte können Qualität, Dokumentation oder Übergabe beeinträchtigen. Trotzdem zu Nachher-Fotos wechseln?'))return;}pauseWorkTimer();go('s-after');updatePhotoStatus('after');}
+function renderBriefingBox(steps){var box=document.getElementById('briefing-box');if(!box)return;var st=checklistStats();var risk=[];if(cur.dirt==='Raucher')risk.push('Geruch: Lüftung, Textilien und Fresh Up besonders kontrollieren.');if(cur.dirt==='Tier')risk.push('Tierhaare: Sitzschienen, Kofferraum und Textilflächen extra prüfen.');if(cur.dirt==='Stark'||extra('Zusätzl. Schmutz'))risk.push('Starke Verschmutzung: mehr Zeit für Vorbehandlung und Trocknung einplanen.');if(!hasPolisher())risk.push('Poliermaschine aus: maschinenpflichtige Schritte bleiben gesperrt.');if(!risk.length)risk.push('Keine besonderen Risikomarker erkannt. Trotzdem alle Qualitäts-Gates sauber prüfen.');box.innerHTML='<h3>Auftragsbriefing</h3><p><strong>'+esc(cur.paket||'Paket')+'</strong> · '+esc(cur.class||'')+' · '+esc(cur.dirt||'Normal')+' · Schätzung '+fmtMins(estimateMinutes())+'</p><ul>'+risk.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><p>Fortschritt aktuell: <strong>'+st.pct+'%</strong>. Erst abschließen, wenn Fotos, DSGVO, Abnahme und Qualitäts-Gates plausibel sind.</p>';}
+function mandatorySummary(){var before=photoStatus('before'),after=photoStatus('after'),st=checklistStats();var items=[];var prod=settings.prod||{};items.push({ok:!!cur.dsgvoSig&&!!cur.dsgvoProviderSig,label:'DSGVO beidseitig unterschrieben'});items.push({ok:before.done===before.total,label:'Vorher-Fotos vollständig ('+before.done+'/'+before.total+')'});items.push({ok:after.done===after.total,label:'Nachher-Fotos vollständig ('+after.done+'/'+after.total+')'});items.push({ok:st.pct===100,label:'Arbeitsanweisung vollständig ('+st.pct+'%)'});items.push({ok:!!cur.km,label:'Kilometerstand erfasst'});items.push({ok:!!settings.name&&!!settings.addr&&!!settings.tel&&!!settings.email&&!!settings.paymentNote,label:'Firmenstammdaten und Zahlungshinweise vollständig hinterlegt'});items.push({ok:!!prod.data&&!!prod.prices&&!!prod.legal&&!!prod.print,label:'Produktivmodus bestätigt: Stammdaten, Preise, Rechtstexte und Drucktest geprüft'});items.push({ok:!!cur.invoiceNr||true,label:'Rechnungsnummer wird beim Abschluss erzeugt'});return items;}
+function renderFinishGate(){var box=document.getElementById('finish-gate');if(!box)return;var items=mandatorySummary();var open=items.filter(function(x){return !x.ok;});box.className='v27-panel '+(open.length?'v27-danger':'v27-safe');box.innerHTML='<h3>Pflichtprüfung vor Abschluss</h3><p>'+ (open.length?'Bitte offene Punkte prüfen, bevor der Auftrag endgültig archiviert wird.':'Alle Kernprüfungen sind erfüllt. Der Auftrag kann sauber abgeschlossen werden.')+'</p><ul>'+items.map(function(x){return '<li><strong>'+(x.ok?'OK':'OFFEN')+':</strong> '+esc(x.label)+'</li>';}).join('')+'</ul>';}
+function canFinishStrict(){var open=mandatorySummary().filter(function(x){return !x.ok;});if(open.length){alert('Abschluss blockiert. Bitte zuerst diese Pflichtpunkte erledigen:\n\n'+open.map(function(x){return '- '+x.label;}).join('\n'));return false;}return true;}
+function simpleHash(v){v=String(v||'');var h=0;for(var i=0;i<v.length;i++){h=((h<<5)-h)+v.charCodeAt(i);h|=0;}return String(h);}
+function unlockApp(){var pin=document.getElementById('unlock-pin').value||'';if(simpleHash(pin)===settings.appPin){sessionStorage.setItem('lux_unlocked','1');go('s-home');}else alert('PIN falsch.');}
+function enforceLockOnLoad(){if(settings.appPin&&!sessionStorage.getItem('lux_unlocked')){var screens=document.querySelectorAll('.screen');for(var i=0;i<screens.length;i++)screens[i].classList.remove('active');document.getElementById('s-lock').classList.add('active');}}
+function resetCRMFilters(){['crm-q','crm-paket','crm-status','crm-from','crm-to','crm-sort','crm-range'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=(id==='crm-sort'?'new':'');});renderCRM();}
+function quickRange(v){var f=document.getElementById('crm-from'),t=document.getElementById('crm-to');var now=new Date();function iso(d){return d.toISOString().split('T')[0];}if(!f||!t)return;if(v==='all'||!v){f.value='';t.value='';}else if(v==='year'){f.value=now.getFullYear()+'-01-01';t.value=iso(now);}else{var d=new Date();d.setDate(d.getDate()-parseInt(v));f.value=iso(d);t.value=iso(now);}renderCRM();}
+function purgeOldRecords(){var months=parseInt(settings.retentionMonths||24);if(!confirm('Diese Funktion entfernt bei älteren lokalen Aufträgen Foto-Daten und Detailnotizen, lässt Rechnungs-/Auftragskerndaten aber bestehen. Vorher Backup speichern. Fortfahren?'))return;var cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-months);var changed=0;db.forEach(function(a){var d=new Date(a.date||a.finishDate||0);if(d&&d<cutoff){if(a.photos||a.after||a.notes){a.photos={};a.after={};a.notes='';a.dataReduced=true;changed++;}}});localStorage.setItem(DB_KEY,JSON.stringify(db));alert(changed+' ältere Einträge wurden datensparsamer gemacht.');renderCRM&&renderCRM();}
+
+
+// ===== v2.8 FINAL OPS HELPERS =====
+var SPECIAL_CASES=[
+ {id:'kunde_nicht_da',title:'Kunde nicht da',text:'Kunde war zum vereinbarten Termin nicht erreichbar oder nicht vor Ort. Wartezeit, Kontaktversuche und neue Terminabsprache bitte konkret notieren.',doc:'Kunde war zum vereinbarten Zeitpunkt nicht vor Ort oder nicht erreichbar. Terminverzögerung und weitere Abstimmung wurden dokumentiert.'},
+ {id:'wetter_schlecht',title:'Wetter schlecht',text:'Wetterbedingungen haben Ablauf, Trocknung, Außenwäsche oder Übergabe beeinflusst. Besonders Regen, Frost, direkte Sonne oder Wind notieren.',doc:'Witterungsbedingungen haben die Durchführung beziehungsweise Übergabe beeinflusst. Die Leistung wurde unter Berücksichtigung der äußeren Bedingungen angepasst.'},
+ {id:'wasser_strom_fehlt',title:'Wasser/Strom fehlt',text:'Benötigter Wasser- oder Stromanschluss war nicht verfügbar. Notiere, ob improvisiert, verschoben oder Leistung reduziert wurde.',doc:'Erforderliche Wasser- oder Stromversorgung war nicht wie vereinbart verfügbar. Der Ablauf wurde entsprechend angepasst oder neu abgestimmt.'},
+ {id:'schaden_entdeckt',title:'Schaden entdeckt',text:'Neuer oder bisher nicht sichtbarer Schaden wurde während der Arbeit festgestellt. Foto, Position, Zeitpunkt und Kundeninformation ergänzen.',doc:'Während der Bearbeitung wurde ein Schaden oder Auffälligkeit festgestellt und dokumentiert. Gesetzliche Rechte und die gesonderte Klärung bleiben unberührt.'},
+ {id:'leistung_abgebrochen',title:'Leistung abgebrochen',text:'Leistung wurde abgebrochen oder reduziert. Grund, bereits erledigte Arbeiten, offene Punkte und weitere Vereinbarung festhalten.',doc:'Die Leistung wurde aus dokumentiertem Grund abgebrochen, reduziert oder verschoben. Bereits ausgeführte und offene Punkte sind gesondert zu bewerten.'},
+ {id:'nacharbeit_noetig',title:'Nacharbeit nötig',text:'Nacharbeit wurde vereinbart oder empfohlen. Bereich, Frist, Verantwortlichkeit und Terminwunsch ergänzen.',doc:'Eine Nacharbeit oder ergänzende Kontrolle wurde empfohlen beziehungsweise vereinbart. Umfang und Termin werden separat abgestimmt.'}
+];
+function getSpecialCase(id){for(var i=0;i<SPECIAL_CASES.length;i++){if(SPECIAL_CASES[i].id===id)return SPECIAL_CASES[i];}return null;}
+function ensureSpecialState(){if(!cur.specialCases)cur.specialCases=[];if(typeof cur.specialNote==='undefined')cur.specialNote='';}
+function renderSpecialCases(){ensureSpecialState();var list=document.getElementById('special-case-list');var note=document.getElementById('f-special-note');var prev=document.getElementById('special-preview');if(!list)return;list.innerHTML='';for(var i=0;i<SPECIAL_CASES.length;i++){var sc=SPECIAL_CASES[i];var lab=document.createElement('label');lab.className='special-item';lab.innerHTML='<input type="checkbox" value="'+sc.id+'" '+(cur.specialCases.indexOf(sc.id)>=0?'checked':'')+' onchange="saveSpecialCases()"><div><strong>'+esc(sc.title)+'</strong><span>'+esc(sc.text)+'</span></div>';list.appendChild(lab);}if(note)note.value=cur.specialNote||'';if(prev)prev.innerHTML=specialCaseSummaryHtml();}
+function saveSpecialCases(){ensureSpecialState();var boxes=document.querySelectorAll('#special-case-list input[type=checkbox]');cur.specialCases=[];for(var i=0;i<boxes.length;i++){if(boxes[i].checked)cur.specialCases.push(boxes[i].value);}var note=document.getElementById('f-special-note');cur.specialNote=note?note.value.trim():cur.specialNote;var prev=document.getElementById('special-preview');if(prev)prev.innerHTML=specialCaseSummaryHtml();renderFinishGate();}
+function specialCaseSummaryHtml(){ensureSpecialState();var selected=cur.specialCases.map(getSpecialCase).filter(Boolean);if(!selected.length && !cur.specialNote)return '<strong>Sonderfälle:</strong> keine ausgewählt. Bei sauberem Verlauf bleibt dieser Bereich intern leer.';var html='<strong>Dokumentation:</strong><br>';if(selected.length){html+=selected.map(function(x){return '• '+esc(x.title)+': '+esc(x.doc);}).join('<br>');}if(cur.specialNote){html+=(selected.length?'<br>':'')+'<strong>Detailnotiz:</strong> '+esc(cur.specialNote);}return html;}
+function specialCaseDocBlock(){ensureSpecialState();var selected=cur.specialCases.map(getSpecialCase).filter(Boolean);if(!selected.length && !cur.specialNote)return '';var rows=selected.map(function(x){return '<li><strong>'+esc(x.title)+':</strong> '+esc(x.doc)+'</li>';}).join('');var note=cur.specialNote?'<p style="font-size:10.5px;line-height:1.6;margin-top:8px"><strong>Detailnotiz:</strong> '+esc(cur.specialNote)+'</p>':'';return '<div style="margin:16px 0;padding:14px;border:1px solid #fecaca;background:#fff8f6;border-radius:14px"><div style="font-size:9px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#b42318;margin-bottom:7px">Sonderfall / Nacharbeit</div><ul style="font-size:10.5px;line-height:1.65;color:#344054;margin-left:16px">'+rows+'</ul>'+note+'</div>';}
+function addMonthsIso(dateStr,months){var d=dateStr?new Date(dateStr):new Date();if(isNaN(d.getTime()))d=new Date();d.setMonth(d.getMonth()+parseInt(months||9));return d.toISOString().split('T')[0];}
+function deDate(iso){if(!iso)return '';var d=new Date(iso);if(isNaN(d.getTime()))return iso;return d.toLocaleDateString('de-DE');}
+function followupRecommendationText(){var m=parseInt(cur.followupMonths||settings.followupMonths||9);var fd=cur.followupDate||addMonthsIso(cur.finishIso||cur.date,m);return 'Empfohlene Wiedervorlage: '+deDate(fd)+' · je nach Nutzung nach '+m+' Monaten. Bei Winterbetrieb, Laternenparken, Kindern, Haustieren oder viel Autobahnfahrt lieber früher einplanen.';}
+function renderFollowupBox(){var box=document.getElementById('followup-box');if(!box)return;cur.followupMonths=parseInt(cur.followupMonths||settings.followupMonths||9);cur.followupDate=cur.followupDate||addMonthsIso(cur.date,cur.followupMonths);box.innerHTML='<h3>Wiedervorlage</h3><p>'+esc(followupRecommendationText())+'</p><div class="v27-mini"><select id="f-followup-months" onchange="setFollowupMonths(this.value)"><option value="6">6 Monate</option><option value="9">9 Monate</option><option value="12">12 Monate</option></select><input type="date" id="f-followup-date" onchange="cur.followupDate=this.value;renderFollowupBox()"></div>';var m=document.getElementById('f-followup-months');var d=document.getElementById('f-followup-date');if(m)m.value=String(cur.followupMonths);if(d)d.value=cur.followupDate;}
+function setFollowupMonths(v){cur.followupMonths=parseInt(v||settings.followupMonths||9);cur.followupDate=addMonthsIso(cur.date,cur.followupMonths);renderFollowupBox();}
+function renderDoneFollowup(){var box=document.getElementById('done-followup');if(!box)return;box.innerHTML='<h3>Nächster sinnvoller Kontakt</h3><p>'+esc(followupRecommendationText())+'</p><p class="hint">Tipp: Diese Empfehlung im Kundengespräch nennen und bei Bedarf im Kalender oder CRM extern vormerken.</p>';}
+function safeNamePart(v,fallback){v=String(v||'').trim();if(!v)v=fallback||'Kunde';return v.replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'_').replace(/_+/g,'_');}
+function docTypeLabel(type){return ({prot:'Protokoll',inv:'Rechnung',offer:'Angebot',abnahme:'Abnahmeprotokoll',dsgvo:'DSGVO',schadenprot:'Schadensprotokoll'})[type]||'Dokument';}
+function suggestedDocFileName(type){return safeNamePart(cur.nachname,'Nachname')+'_'+safeNamePart(cur.vorname,'Vorname')+'_'+docTypeLabel(type)+'.pdf';}
+function updateDocFileHint(type){var name=suggestedDocFileName(type);document.title=name.replace(/\.pdf$/,'');var el=document.getElementById('doc-file-name');if(el)el.innerHTML='<strong>PDF-Dateiname:</strong> '+esc(name)+'<br><span>Beim Speichern im Druckdialog bitte genau diesen Namen verwenden. Chrome übernimmt häufig den Fenstertitel als Vorschlag.</span>';}
+function copyDocFileName(){var txt=(document.getElementById('doc-file-name')||{}).textContent||suggestedDocFileName('prot');var m=txt.match(/[A-Za-zÄÖÜäöüß0-9_\-]+\.pdf/);var name=m?m[0]:suggestedDocFileName('prot');if(navigator.clipboard){navigator.clipboard.writeText(name).then(function(){alert('Dateiname kopiert: '+name);},function(){prompt('Dateiname kopieren:',name);});}else prompt('Dateiname kopieren:',name);}
+function parseOrderDate(a){var raw=a.finishIso||a.date||a.finishDate||'';var d=new Date(raw);if(isNaN(d.getTime())&&/\d{2}\.\d{2}\.\d{4}/.test(raw)){var p=raw.split('.');d=new Date(p[2]+'-'+p[1]+'-'+p[0]);}return d;}
+function dashboardRangePredicate(range){var now=new Date();var start=null,end=new Date(now);if(range==='month')start=new Date(now.getFullYear(),now.getMonth(),1);else if(range==='last30'){start=new Date(now);start.setDate(start.getDate()-30);}else if(range==='year')start=new Date(now.getFullYear(),0,1);return function(a){if(range==='all')return true;var d=parseOrderDate(a);if(isNaN(d.getTime()))return false;return d>=start&&d<=end;};}
+var dashView='trend';
+function setDashboardView(v){dashView=v||'trend';var tabs=document.querySelectorAll('#dash-tabs .chart-tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle('active',tabs[i].getAttribute('data-chart')===dashView);renderDashboard();}
+function dashBars(rows,formatter){if(!rows.length)return '<p class="dash-note">Noch keine Daten für diese Ansicht.</p>';var max=Math.max.apply(null,rows.map(function(r){return r.v;}))||1;return '<div class="dash-bars">'+rows.map(function(r){var w=Math.max(4,Math.round((r.v/max)*100));return '<div class="dash-bar"><div class="dash-bar-label">'+esc(r.label)+'</div><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+w+'%"></div></div><div style="font-weight:900;color:#050505">'+formatter(r.v,r)+'</div></div>';}).join('')+'</div>';}
+function renderDashboard(){var k=document.getElementById('dash-kpis'),chart=document.getElementById('dash-chart'),fu=document.getElementById('dash-followups');if(!k)return;var range=(document.getElementById('dash-range')||{}).value||'month';var status=(document.getElementById('dash-status')||{}).value||'closed';var filtered=db.filter(dashboardRangePredicate(range)).filter(function(a){return status==='all'||!!a.finishDate;});var revenue=filtered.reduce(function(s,a){return s+parseFloat(a.total||0);},0);var count=filtered.length;var avg=count?revenue/count:0;var pkg={},pay={},months={},minutes=0,cost=0;filtered.forEach(function(a){var total=parseFloat(a.total||0)||0;var p=a.paket||'ohne Paket';if(!pkg[p])pkg[p]={n:0,rev:0};pkg[p].n++;pkg[p].rev+=total;var ps=a.paymentStatus||'nicht gesetzt';pay[ps]=(pay[ps]||0)+total;var d=parseOrderDate(a);var mk=isNaN(d.getTime())?'ohne Datum':(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));months[mk]=(months[mk]||0)+total;minutes+=parseFloat(a.actualMinutes||a.estimateMin||0)||0;cost+=parseFloat(a.actualCost||0)||0;});var topPkgs=Object.keys(pkg).sort(function(a,b){return pkg[b].n-pkg[a].n||pkg[b].rev-pkg[a].rev;});var best=topPkgs[0]||'keine Daten';var margin=revenue-cost;k.innerHTML='<div class="dash-card"><span>Umsatz</span><strong>'+money(revenue)+'</strong><small>Im gewählten Zeitraum</small></div><div class="dash-card"><span>Aufträge</span><strong>'+count+'</strong><small>'+(status==='closed'?'abgeschlossen':'gespeichert')+'</small></div><div class="dash-card"><span>Durchschnittsbon</span><strong>'+money(avg)+'</strong><small>Umsatz pro Auftrag</small></div><div class="dash-card"><span>Top-Paket</span><strong>'+esc(best)+'</strong><small>Nach Anzahl der Aufträge</small></div>';
+if(chart){if(dashView==='packages'){chart.innerHTML='<h3>Paketmix</h3><p class="dash-note">Zeigt, welche Pakete Umsatz und Auslastung tragen.</p>'+dashBars(topPkgs.map(function(p){return {label:p,v:pkg[p].rev,n:pkg[p].n};}),function(v,r){return money(v)+' · '+r.n+'x';});}else if(dashView==='payments'){var rows=Object.keys(pay).sort(function(a,b){return pay[b]-pay[a];}).map(function(x){return {label:x,v:pay[x]};});chart.innerHTML='<h3>Zahlungsstatus</h3><p class="dash-note">Hilft, offene Beträge und Rechnungskontrolle schnell zu sehen.</p>'+dashBars(rows,function(v){return money(v);});}else if(dashView==='ops'){chart.innerHTML='<h3>Zeit, Kosten und Deckungsbeitrag</h3><p class="dash-note">Vergleicht Umsatz mit erfassten Ist-Kosten und Zeitwerten.</p><div class="dash-grid" style="margin-top:10px"><div class="dash-card"><span>Erfasste Zeit</span><strong>'+fmtMins(Math.round(minutes))+'</strong><small>Ist- oder Schätzwert</small></div><div class="dash-card"><span>Kosten</span><strong>'+money(cost)+'</strong><small>Material / Aufwand</small></div><div class="dash-card"><span>Deckungsbeitrag</span><strong>'+money(margin)+'</strong><small>Umsatz minus Kosten</small></div><div class="dash-card"><span>Ø Zeit/Auftrag</span><strong>'+fmtMins(count?Math.round(minutes/count):0)+'</strong><small>Operative Planung</small></div></div>';}else if(dashView==='todos'){var today=new Date();var due=db.filter(function(a){if(!a.followupDate)return false;var d=new Date(a.followupDate);return !isNaN(d.getTime())&&d<=today;});var openPay=db.filter(function(a){return a.paymentStatus&&a.paymentStatus!=='bezahlt';});chart.innerHTML='<h3>To-dos und Risiken</h3><p class="dash-note">Schneller Blick auf Dinge, die im Alltag nicht untergehen sollten.</p><div class="dash-grid" style="margin-top:10px"><div class="dash-card"><span>Wiedervorlagen</span><strong>'+due.length+'</strong><small>fällig oder überfällig</small></div><div class="dash-card"><span>Zahlung offen</span><strong>'+openPay.length+'</strong><small>nicht als bezahlt markiert</small></div></div>';}else{var rows=Object.keys(months).sort().slice(-12).map(function(m){return {label:m,v:months[m]};});chart.innerHTML='<h3>Umsatztrend</h3><p class="dash-note">Zeigt die Entwicklung nach Monaten, ohne das Dashboard zu überladen.</p>'+dashBars(rows,function(v){return money(v);});}}
+var today=new Date();var due=db.filter(function(a){if(!a.followupDate)return false;var d=new Date(a.followupDate);return !isNaN(d.getTime())&&d<=today;}).slice(0,8);if(fu)fu.innerHTML='<h3>Wiedervorlagen fällig</h3>'+(due.length?'<ul>'+due.map(function(a){return '<li>'+esc((a.nachname||'')+', '+(a.vorname||''))+' · '+esc(a.car||'Fahrzeug')+' · '+deDate(a.followupDate)+'</li>';}).join('')+'</ul>':'<p>Aktuell keine fälligen Wiedervorlagen in der lokalen Kartei.</p>');}
+function renderProductiveStatus(){var el=document.getElementById('prod-status');if(!el)return;var p=settings.prod||{};var ok=['data','prices','legal','print'].filter(function(k){return !!p[k];}).length;el.innerHTML='<strong>Produktivstatus:</strong> '+ok+' / 4 Punkte bestätigt. '+(ok===4?'Die lokale App ist organisatorisch produktiv vorbereitet.':'Vor dem echten Einsatz sollten alle Punkte bewusst bestätigt werden.');}
+// ===== FINISH ORDER =====
+function finishOrder(){
+renderFinishGate();
+if(!canFinishStrict())return;
+pauseWorkTimer();
+saveSpecialCases();
+cur.timestamps.finish=new Date().toLocaleString('de-DE');
+cur.finishDate=new Date().toLocaleDateString('de-DE');
+cur.finishIso=new Date().toISOString().split('T')[0];
+cur.followupMonths=parseInt(cur.followupMonths||settings.followupMonths||9);
+cur.followupDate=cur.followupDate||addMonthsIso(cur.finishIso,cur.followupMonths);
+if(!cur.invoiceNr){cur.invoiceNr=nextInvoiceNr();}
+db.push(JSON.parse(JSON.stringify(cur)));
+localStorage.setItem(DB_KEY,JSON.stringify(db));
+go('s-done');
+}
+
+function nextInvoiceNr(){
+var yr=new Date().getFullYear();var stored=parseInt(localStorage.getItem('lux_inv_count')||'0');var max=stored;
+for(var i=0;i<db.length;i++){var m=(db[i].invoiceNr||'').match(/LUX-\d{4}-(\d+)/);if(m)max=Math.max(max,parseInt(m[1]));}
+var n=max+1;localStorage.setItem('lux_inv_count',String(n));return 'LUX-'+yr+'-'+String(n).padStart(3,'0');
+}
+
+// ===== DOCUMENTS =====
+function showDoc(type){
+var d=document.getElementById('doc-body');
+if(type==='offer') d.innerHTML=genOffer();
+else if(type==='inv') d.innerHTML=genInvoice();
+else if(type==='dsgvo') d.innerHTML=genDSGVO();
+else if(type==='schadenprot') d.innerHTML=genSchadenprotokoll();
+else if(type==='abnahme') d.innerHTML=genAbnahme();
+else d.innerHTML=genProtocol();
+updateDocFileHint(type);
+document.getElementById('s-doc').style.display='block';
+}
+function closeDoc(){
+document.getElementById('s-doc').style.display='none';
+document.title='Lux Detailing v2.8 Final Ops';
+}
+
+
+// ===== PROTOKOLL (Clean Premium, druckstabil, 2 Vorher + 2 Nachher pro Seite) =====
+function esc(v){return String(v||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
+function money(v){return (parseFloat(v||0)).toFixed(2).replace('.',',')+' €';}
+function page(inner,klass){return '<section class="page '+(klass||'')+'">'+inner+'</section>';}
+function docTop(kicker,title,right){return '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px"><div><div style="font-size:10px;font-weight:900;letter-spacing:2.8px;text-transform:uppercase;color:#2447ff;margin-bottom:8px">'+kicker+'</div><h1 style="font-size:34px;letter-spacing:-1.4px;line-height:1.05;color:#050505">'+title+'</h1></div><div style="font-size:10px;color:#667085;text-align:right;line-height:1.55">'+(right||'')+'</div></div>';}
+function metric(label,value,note){return '<div style="border:1px solid #e5e7eb;border-radius:18px;padding:16px;background:#fff"><div style="font-size:9px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#667085;margin-bottom:6px">'+label+'</div><div style="font-size:19px;font-weight:900;letter-spacing:-.4px;color:#050505">'+value+'</div><div style="font-size:10px;color:#667085;margin-top:4px;line-height:1.35">'+(note||'')+'</div></div>';}
+function protocolImg(src,label,tone){
+if(src) return '<div style="break-inside:avoid;page-break-inside:avoid"><div style="font-size:7.8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:'+tone+';margin-bottom:4px">'+label+'</div><img src="'+src+'" style="width:100%;height:82mm;object-fit:cover;border-radius:16px;display:block;border:1px solid #e5e7eb;background:#f8fafc"></div>';
+return '<div style="break-inside:avoid;page-break-inside:avoid"><div style="font-size:7.8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:'+tone+';margin-bottom:4px">'+label+'</div><div style="width:100%;height:82mm;background:#f8fafc;border:1px dashed #d0d5dd;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#98a2b3;font-size:10px">Kein Foto hinterlegt</div></div>';
+}
+
+function pc(){
+var du=(settings.protocolTone||'du')!=='sie';
+return {
+  du:du,
+  you:du?'du':'Sie',
+  youCap:du?'Du':'Sie',
+  your:du?'dein':'Ihr',
+  yourCap:du?'Dein':'Ihr',
+  vehicle:du?'dein Fahrzeug':'Ihr Fahrzeug',
+  vehicleCap:du?'Dein Fahrzeug':'Ihr Fahrzeug',
+  thanks:du?'Danke für dein Vertrauen.':'Danke für Ihr Vertrauen.',
+  ifHappy:du?'Wenn du zufrieden bist':'Wenn Sie zufrieden sind',
+  prepared:du?'Für dich vorbereitet':'Für Sie vorbereitet',
+  keep:du?'So bleibt dein Ergebnis länger stark':'So bleibt Ihr Ergebnis länger stark'
+};
+}
+function genProtocol(){
+var c=pc();
+var h='';
+var totalPages=Math.ceil(ANGLES.length/2)+4;
+var right='Auftrag '+esc(cur.invoiceNr||'noch nicht archiviert')+'<br>'+esc(cur.date||'')+'<br>'+esc(cur.plate||'');
+var hero=cur.after[AFTER_HERO];
+var serviceAddress=esc(settings.addr||'Heinrich-Beck-Straße 9 · 09112 Chemnitz');
+var accent='#2447ff', accent2='#102a9c', ink='#050505', muted='#667085', line='#e5e7eb', soft='#f5f7ff';
+var intro=c.du?'Dieses Protokoll fasst dein aufbereitetes Fahrzeug sachlich, hochwertig und nachvollziehbar zusammen: Fahrzeugdaten, gebuchte Leistungen, dokumentierte Bildvergleiche und konkrete Pflegehinweise für den Alltag.':'Dieses Protokoll fasst Ihr aufbereitetes Fahrzeug sachlich, hochwertig und nachvollziehbar zusammen: Fahrzeugdaten, gebuchte Leistungen, dokumentierte Bildvergleiche und konkrete Pflegehinweise für den Alltag.';
+var careIntro=c.du?'Diese Hinweise helfen dir, das Ergebnis im Alltag länger zu halten. Es geht nicht um komplizierte Pflege, sondern um wenige Gewohnheiten, die wirklich etwas bringen.':'Diese Hinweise helfen Ihnen, das Ergebnis im Alltag länger zu halten. Es geht nicht um komplizierte Pflege, sondern um wenige Gewohnheiten, die wirklich etwas bringen.';
+var nextStep=followupRecommendationText();
+
+function top(kicker,title,side){return '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10mm;border-bottom:1px solid '+line+';padding-bottom:6mm"><div><div style="font-size:8.5px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;color:'+accent+';margin-bottom:4px">'+kicker+'</div><h1 style="font-size:26px;letter-spacing:-1.1px;line-height:1.05;color:'+ink+'">'+title+'</h1></div><div style="font-size:9px;color:'+muted+';text-align:right;line-height:1.45">'+(side||'')+'</div></div>';}
+function metric(label,value,note){return '<div style="border:1px solid '+line+';border-radius:16px;padding:11px;background:#fff;break-inside:avoid"><div style="font-size:7.8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:'+muted+';margin-bottom:4px">'+label+'</div><div style="font-size:15px;font-weight:900;letter-spacing:-.25px;color:'+ink+';line-height:1.15">'+value+'</div><div style="font-size:9px;color:'+muted+';margin-top:4px;line-height:1.35">'+(note||'')+'</div></div>';}
+function valueCard(n,title,text){return '<div style="border:1px solid '+line+';border-radius:18px;padding:13px;background:#fff;break-inside:avoid"><div style="width:30px;height:30px;border-radius:999px;background:'+soft+';color:'+accent+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;margin-bottom:8px">'+n+'</div><div style="font-size:12px;font-weight:900;color:'+ink+';margin-bottom:4px">'+title+'</div><p style="font-size:9.8px;color:'+muted+';line-height:1.55">'+text+'</p></div>';}
+function bullet(txt){return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px"><span style="width:18px;height:18px;border-radius:999px;background:'+soft+';color:'+accent+';display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex:0 0 18px">✓</span><span style="font-size:10.5px;line-height:1.55;color:'+muted+'">'+txt+'</span></div>';}
+
+h+=page('<div style="height:297mm;padding:18mm;display:flex;flex-direction:column;background:#fff">'+
+'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9mm"><div style="font-size:12px;font-weight:900;letter-spacing:2.6px;text-transform:uppercase;color:'+ink+'">Lux Detailing</div><div style="font-size:9px;color:'+muted+';text-align:right;line-height:1.45">Endkunden-Protokoll<br>'+c.prepared+'</div></div>'+
+'<div style="border:1px solid '+line+';border-radius:30px;padding:16mm;background:#fff;box-shadow:0 18px 55px rgba(16,24,40,.10)">'+
+'<div style="display:inline-block;border:1px solid #d7defe;background:'+soft+';border-radius:999px;padding:6px 11px;font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:8mm">Aufbereitung abgeschlossen</div>'+ 
+'<h1 style="font-size:42px;line-height:.98;letter-spacing:-2.1px;color:'+ink+';margin-bottom:5mm">'+esc(cur.car||'Fahrzeug')+'</h1>'+ 
+'<div style="font-size:13px;color:'+muted+';font-weight:800;margin-bottom:8mm">'+esc(cur.paket||'Paket')+' · '+esc(cur.class||'')+' · '+esc(cur.plate||'')+'</div>'+ 
+(hero?'<img src="'+hero+'" style="width:100%;height:104mm;object-fit:cover;border-radius:24px;border:1px solid '+line+';display:block">':'<div style="width:100%;height:104mm;border-radius:24px;background:#f8fafc;border:1px dashed #d0d5dd;display:flex;align-items:center;justify-content:center;color:#98a2b3">Aushängebild nicht hinterlegt</div>')+
+'<div style="display:flex;justify-content:space-between;margin-top:7px;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:'+muted+'"><span>Gesamtfahrzeug 45° nach Reinigung</span><span>'+esc(cur.date||'')+'</span></div></div>'+ 
+'<div style="margin-top:auto;border-top:1px solid '+line+';padding-top:8px;font-size:9px;color:'+muted+';display:flex;justify-content:space-between"><span>'+serviceAddress+'</span><span>Ergebnis · Bildvergleich · Pflegehinweise</span></div></div>');
+
+h+=page('<div style="height:297mm;padding:16mm 17mm;background:#fff">'+top('Auf einen Blick',c.vehicleCap+' nach der Aufbereitung',right)+
+'<p style="font-size:11.5px;line-height:1.65;color:'+muted+';margin:-3mm 0 7mm;max-width:164mm">'+intro+'</p>'+ 
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8mm">'+
+metric('Kunde',esc(cur.anrede+' '+(cur.vorname||'')+' '+(cur.nachname||'')),'')+
+metric('Fahrzeug',esc(cur.car||''),esc(cur.color||'')+' · '+esc(cur.km||'k.A.')+' km')+
+metric('Leistung',esc(cur.paket||'')+' · '+esc(cur.class||''),'Extras: '+(extrasList(cur.extras).length?esc(extrasList(cur.extras).join(', ')):'keine'))+
+metric('Dokumentation','Bildvergleich + Pflegeplan','Vorher, Nachher und Empfehlungen')+
+'</div>'+ 
+'<div style="border-radius:22px;background:#fff;border:1px solid '+line+';padding:13px;margin-bottom:8mm"><div style="font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:7px">Das Ergebnis in der Übersicht</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+valueCard('1','Sauber dokumentiert','Die wichtigsten Bereiche sind als Vorher-/Nachher-Vergleich festgehalten, damit das Ergebnis klar nachvollziehbar bleibt.')+
+valueCard('2','Pflege verständlich','Die Hinweise konzentrieren sich auf einfache Gewohnheiten, die Innenraum, Glas, Lack und Felgen im Alltag schonen.')+
+valueCard('3','Leistung transparent','Paket, Extras, Kilometerstand und Fahrzeugdaten stehen gesammelt an einem Ort – ohne unnötige Fachsprache.')+
+valueCard('4','Nächster Termin planbar','Beim nächsten Termin ist klar, was zuletzt gemacht wurde und welche Auffrischung sinnvoll sein kann.')+
+'</div></div>'+ 
+'<div style="display:grid;grid-template-columns:1.1fr .9fr;gap:9mm;align-items:start"><div><div style="font-size:8.5px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+ink+';margin-bottom:7px">Leistungsumfang</div>'+
+bullet('Paket '+esc(cur.paket)+' für '+esc(cur.class)+' durchgeführt')+(extrasList(cur.extras).map(function(x){return bullet(esc(x));}).join(''))+(cur.stamm?bullet('Stammkundenvorteil berücksichtigt'):'')+bullet('Kilometerstand dokumentiert')+bullet('Abschlusskontrolle durchgeführt')+'</div>'+ 
+'<div style="border-radius:20px;border:1px solid #d7defe;background:'+soft+';padding:13px"><div style="font-size:8.5px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:7px">Nächster sinnvoller Schritt</div><p style="font-size:10.5px;line-height:1.6;color:'+muted+'">'+nextStep+'</p></div></div>'+ 
+(cur.notes?'<div style="margin-top:7mm;padding:11px;border-left:4px solid '+accent+';background:#f8fafc;border-radius:12px"><div style="font-size:8px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:'+accent+';margin-bottom:4px">Dokumentierte Ausgangspunkte</div><div style="font-size:10px;line-height:1.5;color:'+muted+'">'+esc(cur.notes)+'</div></div>':'')+
+'</div>');
+
+h+=page('<div style="height:297mm;padding:16mm 17mm;background:#fff">'+top('Pflege',c.keep,'Seite 3 von '+totalPages)+
+'<p style="font-size:11.5px;line-height:1.65;color:'+muted+';margin:-3mm 0 8mm;max-width:164mm">'+careIntro+'</p>'+ 
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9mm">'+
+valueCard('01','Innenraum frisch halten','Nasse Textilien, stehende Feuchte und stark parfümierte Sprays vermeiden. Saubere Mikrofasertücher reichen oft für leichte Alltagsspuren.')+
+valueCard('02','Glas streifenfrei halten','Für Scheiben immer frische Glastücher nutzen. Bei versiegelten Scheiben groben Schmutz vorher lösen und nicht trocken reiben.')+
+valueCard('03','Lack schonend waschen','Kontaktarme oder sanfte Wäsche bevorzugen. Aggressive Reiniger und harte Bürsten belasten Schutzschichten unnötig.')+
+valueCard('04','Felgen nicht einbrennen lassen','Bremsstaub regelmäßig entfernen. Felgenreiniger nicht auf heißen Felgen antrocknen lassen.')+
+'</div>'+ 
+'<div style="border:1px solid '+line+';border-radius:24px;padding:14px;background:#fff;margin-bottom:9mm"><div style="font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:8px">Kurz gesagt</div>'+
+bullet(c.du?'Wenn du lange Freude am Ergebnis willst: lieber regelmäßig sanft reinigen als selten und aggressiv.':'Wenn Sie lange Freude am Ergebnis haben möchten: besser regelmäßig sanft reinigen als selten und aggressiv.')+
+bullet(c.du?'Bei Flecken im Innenraum nicht lange warten. Frische Flecken lassen sich meist deutlich besser lösen.':'Bei Flecken im Innenraum nicht lange warten. Frische Flecken lassen sich meist deutlich besser lösen.')+
+bullet(c.du?'Wenn etwas unklar ist, melde dich lieber vorher, bevor du ein starkes Mittel ausprobierst.':'Wenn etwas unklar ist, melden Sie sich besser vorher, bevor Sie ein starkes Mittel ausprobieren.')+
+'</div>'+ 
+'<div style="border-radius:22px;background:'+soft+';border:1px solid #d7defe;padding:15px"><div style="font-size:8.5px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:7px">Empfehlung</div><p style="font-size:11px;line-height:1.65;color:'+muted+'">'+nextStep+'</p></div>'+ 
+'</div>');
+
+for(var i=0;i<ANGLES.length;i+=2){
+var a1=ANGLES[i], a2=ANGLES[i+1];
+h+=page('<div style="height:297mm;padding:12mm 13mm;background:#fff;overflow:hidden">'+
+'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7mm;border-bottom:1px solid '+line+';padding-bottom:5mm"><div><div style="font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+'">Vorher / Nachher</div><h2 style="font-size:22px;letter-spacing:-.8px;color:'+ink+';margin-top:3px">Bildvergleich</h2></div><div style="font-size:9px;color:'+muted+';text-align:right;line-height:1.45">Seite '+(Math.floor(i/2)+4)+' von '+totalPages+'<br>Lux Detailing</div></div>'+ 
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7mm;margin-bottom:6mm">'+protocolImg(cur.photos[a1], 'Vorher · '+esc(a1), muted)+protocolImg(cur.after[a1], 'Nachher · '+esc(a1), accent)+'</div>'+ 
+(a2?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7mm">'+protocolImg(cur.photos[a2], 'Vorher · '+esc(a2), muted)+protocolImg(cur.after[a2], 'Nachher · '+esc(a2), accent)+'</div>':'')+
+'<div style="margin-top:5mm;text-align:center;font-size:7.5px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#98a2b3">2 Vorher- und 2 Nachherbilder pro Seite</div></div>');
+}
+
+h+=page('<div style="height:297mm;padding:17mm;background:#fff;display:flex;flex-direction:column">'+top('Übergabe',c.keep,'Letzte Seite')+
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9mm">'+
+metric('Erste 24 Stunden','Schonend behandeln','Wenn Schutz oder Versiegelung aufgetragen wurde: möglichst trocken halten und keine aggressiven Reiniger nutzen.')+
+metric('Waschen','Sanft bevorzugen','Handwäsche oder kontaktarme Wäsche erhält das Finish besser als harte Bürstenanlagen.')+
+metric('Innenraum','Feuchte vermeiden','Nasse Textilien und stehende Feuchtigkeit möglichst vermeiden.')+
+metric('Glas & Sicht','Frische Tücher nutzen','Saubere Glastücher vermeiden Schlieren und halten versiegelte Scheiben klar.')+
+'</div>'+ 
+'<div style="border-radius:24px;background:'+soft+';border:1px solid #d7defe;padding:15px;margin-bottom:9mm"><div style="font-size:8.5px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:'+accent+';margin-bottom:7px">Empfehlung</div><p style="font-size:11px;line-height:1.65;color:'+muted+'">'+nextStep+'</p></div>'+ 
+(settings.google?'<div style="border:1px solid '+line+';border-radius:20px;padding:14px;text-align:center;margin-bottom:8mm"><div style="font-size:10.5px;font-weight:900;margin-bottom:5px;color:'+ink+'">'+c.ifHappy+'</div><div style="font-size:9px;color:'+accent+';word-break:break-all">'+esc(settings.google)+'</div></div>':'')+
+'<div style="margin-top:auto;border-top:1px solid '+line+';padding-top:11mm;text-align:center"><div style="font-size:26px;font-weight:900;letter-spacing:-1px;color:'+ink+';margin-bottom:7px">'+c.thanks+'</div><div style="font-size:9px;color:'+muted+';line-height:1.55">Lux Detailing · '+serviceAddress+'</div></div></div>');
+return h;
+}
+
+// ===== SCHADENSPROTOKOLL =====
+function genSchadenprotokoll(){
+var h='<div style="padding:40px;font-family:DM Sans,system-ui,sans-serif">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px"><span style="font-size:14px;font-weight:500;letter-spacing:1px">LUX DETAILING</span><span style="font-size:12px;color:#666">Schadensprotokoll</span></div>';
+h+='<h1 style="font-family:Playfair Display,Georgia,serif;font-size:24px;margin-bottom:16px;border-bottom:2px solid #000;padding-bottom:8px">Schadensprotokoll und Auftragsbestätigung</h1>';
+h+='<table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:12px"><tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Auftraggeber:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+cur.anrede+' '+cur.vorname+' '+cur.nachname+'</td></tr>';
+h+='<tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Fahrzeug:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+cur.car+' · '+cur.plate+'</td></tr>';
+h+='<tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Kilometerstand:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+(cur.km||'k.A.')+' km</td></tr>';
+h+='<tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Datum / Leistungsort:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+cur.date+' · '+(cur.place||'Chemnitz')+'</td></tr>';
+h+='<tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Auftrag:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+cur.paket+' – '+(cur.total||0).toFixed(2)+' €</td></tr>';
+h+='<tr><td style="padding:6px 0;border-bottom:1px solid #eee"><strong>Durchgeführt von:</strong></td><td style="padding:6px 0;border-bottom:1px solid #eee">'+(cur.staff==='duo'?'Oskar Koch + eine weitere Person':'Oskar Koch')+'</td></tr></table>';
+h+='<div style="margin:20px 0;font-size:11px;line-height:1.8">';
+h+='<p><strong>§1 Vorschäden:</strong> Die in diesem Protokoll dokumentierten Schäden waren bei Übergabe des Fahrzeugs an Lux Detailing bereits vorhanden. Der Auftraggeber bestätigt die Richtigkeit der Dokumentation.</p><br>';
+h+='<p><strong>§2 Auftragserteilung:</strong> Der Auftraggeber erteilt Lux Detailing (Oskar Koch, Heinrich-Beck-Straße 9, 09112 Chemnitz) den verbindlichen Auftrag zur Fahrzeugaufbereitung gemäß gewähltem Paket zum vereinbarten Preis.</p><br>';
+h+='<p><strong>§3 Haftung und Vorschäden:</strong> Bereits dokumentierte Vorschäden, altersbedingte Materialschwächen, Steinschläge, Nachlackierungen, gelöste Klarlackstellen, spröde Kunststoffe oder empfindliche Altmaterialien werden als Ausgangszustand festgehalten. Für nachweislich durch Lux Detailing verursachte Schäden gelten die gesetzlichen Haftungsregeln; gesetzliche Kundenrechte werden nicht ausgeschlossen.</p><br>';
+h+='<p><strong>§4 Datenschutz und gesetzlicher Rahmen:</strong> Der Auftraggeber bestätigt, die Datenschutzinformation zur Kenntnis genommen zu haben. Es gelten die gesetzlichen Regelungen des BGB, insbesondere §§631 ff. (Werkvertrag), §823 (Haftung) und §640 (Abnahme), ohne Ausschluss gesetzlicher Kundenrechte.</p><br>';
+h+='<p><strong>§5 Verbraucherhinweis:</strong> Soweit ein Widerrufsrecht besteht, gelten die gesetzlichen Vorschriften. Der Kunde beauftragt die Ausführung der Leistung zum vereinbarten Termin. Gesetzliche Mängelrechte bleiben unberührt.</p><br><p><strong>§6 Rechnung:</strong> Die Abrechnung erfolgt als Kleinunternehmerrechnung gemäß § 19 UStG ohne gesonderten Umsatzsteuerausweis.</p>';
+h+='</div>';
+if(cur.notes) h+='<div style="margin:16px 0;padding:12px;background:#f9f8f5;border-radius:6px"><p style="font-size:10px;font-weight:700;margin-bottom:4px">Dokumentierte Vorschäden:</p><p style="font-size:11px">'+cur.notes+'</p></div>';
+h+=specialCaseDocBlock();
+h+='<p style="font-size:10px;color:#666;margin-top:16px">Ort: '+(cur.place||'Chemnitz')+' · Datum: '+cur.date+' · Uhrzeit: '+new Date().toLocaleTimeString('de-DE')+'</p>';
+h+='<div style="margin-top:40px;display:flex;gap:40px"><div style="flex:1;border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Auftraggeber</div><div style="flex:1;border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Lux Detailing<br><span style="color:#666">Oskar Koch</span></div></div>';
+h+='</div>';
+return h;
+}
+
+// ===== ABNAHMEPROTOKOLL =====
+function genAbnahme(){
+var h='<div style="padding:40px;font-family:DM Sans,system-ui,sans-serif;background:#fff;color:#111">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;padding-bottom:12px;border-bottom:1px solid #e8e1d2"><span style="font-size:14px;font-weight:800;letter-spacing:2px;color:#8a6432">LUX DETAILING</span><span style="font-size:12px;color:#666">Abnahmeprotokoll</span></div>';
+h+='<h1 style="font-family:Playfair Display,Georgia,serif;font-size:28px;margin-bottom:12px">Abnahme und Übergabebestätigung</h1>';
+h+='<p style="font-size:11px;color:#666;line-height:1.7;margin-bottom:18px">Dieses Protokoll dokumentiert die Übergabe des gereinigten Fahrzeugs, die Sichtprüfung durch den Auftraggeber und etwaige Beanstandungen. Gesetzliche Rechte bleiben unberührt.</p>';
+h+='<table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:12px"><tr><td style="padding:7px 0;border-bottom:1px solid #eee"><strong>Auftraggeber:</strong></td><td style="padding:7px 0;border-bottom:1px solid #eee">'+cur.anrede+' '+cur.vorname+' '+cur.nachname+'</td></tr>';
+h+='<tr><td style="padding:7px 0;border-bottom:1px solid #eee"><strong>Fahrzeug:</strong></td><td style="padding:7px 0;border-bottom:1px solid #eee">'+cur.car+' · '+cur.plate+' · '+(cur.km||'k.A.')+' km</td></tr>';
+h+='<tr><td style="padding:7px 0;border-bottom:1px solid #eee"><strong>Leistung:</strong></td><td style="padding:7px 0;border-bottom:1px solid #eee">'+cur.paket+' ('+cur.class+') · '+(cur.total||0).toFixed(2)+' €</td></tr>';
+h+='<tr><td style="padding:7px 0;border-bottom:1px solid #eee"><strong>Datum / Ort:</strong></td><td style="padding:7px 0;border-bottom:1px solid #eee">'+cur.date+' · '+(cur.place||'Chemnitz')+'</td></tr></table>';
+h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0">';
+h+='<div style="padding:14px;border:1px solid #ddd;border-radius:10px"><p style="font-size:12px;font-weight:800;margin-bottom:8px">☐ Abnahme ohne Beanstandung</p><p style="font-size:10px;color:#666;line-height:1.6">Der Auftraggeber hat das Fahrzeug besichtigt und übernimmt es ohne erkennbare Beanstandungen.</p></div>';
+h+='<div style="padding:14px;border:1px solid #ddd;border-radius:10px"><p style="font-size:12px;font-weight:800;margin-bottom:8px">☐ Abnahme mit Beanstandung</p><p style="font-size:10px;color:#666;line-height:1.6">Beanstandungen werden unten konkret notiert und können nachgebessert oder separat vereinbart werden.</p></div>';
+h+='</div>';
+h+='<div style="margin:16px 0;padding:14px;border:1px solid #ddd;border-radius:10px;min-height:90px"><p style="font-size:10px;font-weight:800;color:#8a6432;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Beanstandungen / Hinweise bei Übergabe</p><p style="font-size:11px;color:#999">____________________________________________________________________________________</p><p style="font-size:11px;color:#999;margin-top:12px">____________________________________________________________________________________</p></div>';
+h+=specialCaseDocBlock();
+h+='<div style="font-size:11px;line-height:1.8;margin-top:18px"><p><strong>Leistungsbestätigung:</strong> Paket '+cur.paket+' ('+cur.class+') wurde gemäß Auftrag durchgeführt. Sichtbare Beanstandungen sollen nach Möglichkeit direkt bei Übergabe dokumentiert werden. Gesetzliche Mängelrechte, insbesondere Nacherfüllung, Minderung oder Schadensersatz bei Vorliegen der gesetzlichen Voraussetzungen, bleiben unberührt.</p><br><p><strong>Wiedervorlage:</strong> '+esc(followupRecommendationText())+'</p><br><p><strong>Zahlung:</strong> Der vereinbarte Endbetrag ist gemäß Rechnung fällig. Als Kleinunternehmer wird keine Umsatzsteuer gesondert ausgewiesen (§ 19 UStG).</p></div>';
+h+='<p style="font-size:10px;color:#666;margin-top:20px">Ort: '+(cur.place||'Chemnitz')+' · Datum: '+cur.date+' · Uhrzeit: '+new Date().toLocaleTimeString('de-DE')+'</p>';
+h+='<div style="margin-top:46px;display:flex;gap:40px"><div style="flex:1;border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Auftraggeber</div><div style="flex:1;border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Lux Detailing<br><span style="color:#666">Oskar Koch</span></div></div>';
+h+='</div>';
+return h;
+}
+
+// ===== RECHNUNG =====
+
+function genOffer(){
+var offerExtras=extrasList(cur.extras);
+var h='<div style="padding:42px;font-family:DM Sans,system-ui,sans-serif;color:#050505">';
+h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px"><div><div style="font-size:10px;font-weight:900;letter-spacing:2px;color:#2447ff;text-transform:uppercase">Lux Detailing</div><h1 style="font-size:30px;letter-spacing:-1px;margin-top:6px">Angebot / Auftragsübersicht</h1></div><div style="font-size:11px;color:#667085;text-align:right">'+esc(cur.date||'')+'<br>'+esc(cur.plate||'')+'</div></div>';
+h+='<p style="font-size:12px;line-height:1.7;color:#667085;margin-bottom:18px">Dieses Dokument trennt die geschäftliche Übersicht klar vom Endkunden-Protokoll. Es fasst Kundendaten, Fahrzeug, Paket, Extras, Preislogik und den Status der Auftragserteilung zusammen. Die Rechnung bleibt ein eigenes Dokument.</p>';
+h+='<table style="width:100%;border-collapse:collapse;font-size:12px;margin:18px 0"><tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Kunde</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb">'+esc((cur.anrede||'')+' '+(cur.vorname||'')+' '+(cur.nachname||''))+'</td></tr>';
+h+='<tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Fahrzeug</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb">'+esc(cur.car||'')+' · '+esc(cur.plate||'')+' · '+esc(cur.km||'k.A.')+' km</td></tr>';
+h+='<tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Paket</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb">'+esc(cur.paket||'')+' · '+esc(cur.class||'')+'</td></tr>';
+h+='<tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Extras</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb">'+(offerExtras.length?esc(offerExtras.join(', ')):'keine')+'</td></tr>';
+h+='<tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Zeitschätzung</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb">'+fmtMins(estimateMinutes())+'</td></tr>';
+h+='<tr><td style="padding:9px;border-bottom:1px solid #e5e7eb"><strong>Gesamtpreis</strong></td><td style="padding:9px;border-bottom:1px solid #e5e7eb;font-size:18px;font-weight:900;color:#2447ff">'+money(cur.total||0)+'</td></tr></table>';
+h+=specialCaseDocBlock();
+h+='<div style="border:1px solid #d7defe;background:#f5f7ff;border-radius:20px;padding:16px;font-size:11px;line-height:1.65;color:#344054"><strong>Hinweis:</strong> Rechnungsstellung erfolgt als Kleinunternehmerrechnung gemäß § 19 UStG ohne gesonderten Umsatzsteuerausweis. Gesetzliche Kundenrechte bleiben unberührt. Dieses Dokument ersetzt keine Rechnung.<br><strong>Wiedervorlage:</strong> '+esc(followupRecommendationText())+'</div>';
+h+='<div style="margin-top:38px;display:grid;grid-template-columns:1fr 1fr;gap:34px"><div style="border-top:1px solid #050505;padding-top:8px;font-size:10px">Auftraggeber / Kunde</div><div style="border-top:1px solid #050505;padding-top:8px;font-size:10px">Lux Detailing</div></div>';
+h+='</div>';return h;
+}
+
+function genInvoice(){
+var h='<div style="padding:40px;font-family:DM Sans,system-ui,sans-serif">';
+h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px">';
+h+='<div><p style="font-size:14px;font-weight:700;letter-spacing:1px">LUX DETAILING</p><p style="font-size:11px;color:#666;margin-top:4px">'+settings.name+'<br>'+settings.addr+'<br>'+settings.tel+'<br>'+settings.email+'</p></div>';
+h+='<div style="text-align:right"><h1 style="font-family:Playfair Display,Georgia,serif;font-size:28px">Rechnung</h1></div></div>';
+h+='<div style="margin-bottom:24px;padding:16px;background:#f9f8f5;border-radius:8px;font-size:12px"><p><strong>Rechnungsnr.:</strong> '+(cur.invoiceNr||'LUX-2026-001')+'</p><p><strong>Datum:</strong> '+(cur.finishDate||cur.date)+'</p><p><strong>Leistungsdatum:</strong> '+cur.date+'</p><p><strong>Steuer-ID:</strong> '+settings.tax+'</p></div>';
+h+='<div style="margin-bottom:24px;font-size:12px"><p style="font-size:9px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Rechnungsempfänger</p><p><strong>'+cur.anrede+' '+cur.vorname+' '+cur.nachname+'</strong><br>'+((cur.caddr||'').replace(/\n/g,'<br>')||'Anschrift nicht hinterlegt')+'</p></div>';
+h+='<table style="width:100%;border-collapse:collapse;margin:16px 0"><tr style="border-bottom:2px solid #000"><th style="text-align:left;padding:8px 0;font-size:11px">Leistung</th><th style="text-align:right;padding:8px 0;font-size:11px">Betrag</th></tr>';
+var basePrice=(PKG[cur.class]&&PKG[cur.class][cur.paket])?PKG[cur.class][cur.paket]:parseFloat(cur.basePrice||cur.total||0)||0;
+h+='<tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-size:12px">Paket: '+esc(cur.paket||'Leistung')+' ('+esc(cur.class||'Fahrzeugklasse')+')</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid #eee;font-size:12px">'+basePrice.toFixed(2)+' €</td></tr>';
+var invoiceExtras=extrasList(cur.extras);
+for(var i=0;i<invoiceExtras.length;i++){
+var ex=invoiceExtras[i];
+var exPrice=(EXTRAS[cur.class]&&EXTRAS[cur.class][ex])?EXTRAS[cur.class][ex]:0;
+h+='<tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-size:12px">'+esc(ex)+'</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid #eee;font-size:12px">'+exPrice.toFixed(2)+' €</td></tr>';
+}
+var curDist=parseFloat(cur.dist||0)||0;
+var dist=curDist>15?(curDist-15)*0.5:0;
+if(dist>0) h+='<tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-size:12px">Anfahrt ('+(curDist-15)+' km × 0,50 €)</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid #eee;font-size:12px">'+dist.toFixed(2)+' €</td></tr>';
+if(cur.stamm) h+='<tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-size:12px">Stammkunden-Rabatt</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid #eee;font-size:12px;color:#4a9e6a">-20%</td></tr>';
+var invoiceTotal=parseFloat(cur.total||0)||0;
+h+='<tr style="border-top:2px solid #000"><td style="padding:12px 0;font-weight:700;font-size:14px">GESAMT</td><td style="text-align:right;padding:12px 0;font-weight:700;font-size:20px">'+invoiceTotal.toFixed(2)+' €</td></tr></table>';
+h+='<div style="margin-top:24px;font-size:11px;line-height:1.8;color:#333">';
+h+='<p>Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen (Kleinunternehmerregelung).</p>';
+h+='<p style="margin-top:8px">Zahlbar sofort bei Übergabe oder innerhalb von '+esc(settings.paymentDays||14)+' Tagen ohne Abzug.</p>';
+if(settings.paymentNote) h+='<p style="margin-top:8px"><strong>Zahlungshinweis:</strong> '+esc(settings.paymentNote)+'</p>';
+if(settings.iban) h+='<p style="margin-top:8px"><strong>IBAN:</strong> '+esc(settings.iban)+'</p>';
+h+=specialCaseDocBlock();
+h+='</div>';
+h+='<div style="margin-top:40px;text-align:center;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:16px">'+settings.name+' · '+settings.addr+' · '+settings.tel+'</div>';
+h+='</div>';
+return h;
+}
+
+// ===== DSGVO DOKUMENT =====
+function genDSGVO(){
+var h='<div style="padding:40px;font-family:DM Sans,system-ui,sans-serif">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px"><span style="font-size:14px;font-weight:700;letter-spacing:1px">LUX DETAILING</span><span style="font-size:12px;color:#666">Datenschutz</span></div>';
+h+='<h1 style="font-family:Playfair Display,Georgia,serif;font-size:24px;margin-bottom:16px;border-bottom:2px solid #000;padding-bottom:8px">Datenschutzinformation gemäß Art. 13 DSGVO</h1>';
+h+='<p style="font-size:12px;margin-bottom:16px"><strong>Kunde:</strong> '+cur.anrede+' '+cur.vorname+' '+cur.nachname+' · <strong>Fahrzeug:</strong> '+(cur.car||'')+' · '+(cur.plate||'')+'</p>';
+h+='<div style="font-size:11px;line-height:1.8">';
+h+='<p><strong>Verantwortlicher:</strong> Oskar Koch · Lux Detailing · Heinrich-Beck-Straße 9 · 09112 Chemnitz · skrkoch@gmail.com · 015772948189</p><br>';
+h+='<p><strong>Zweck und Rechtsgrundlage:</strong> Personenbezogene Daten, Kontaktdaten, Fahrzeugdaten, Auftragsdaten und Fahrzeugfotos werden zur Angebotserstellung, Vertragserfüllung, Rechnungserstellung, Schaden- und Abnahmedokumentation verarbeitet. Rechtsgrundlagen sind insbesondere Art. 6 Abs. 1 lit. b DSGVO (Vertrag/Anbahnung), Art. 6 Abs. 1 lit. c DSGVO (gesetzliche Aufbewahrungspflichten) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Beweis- und Qualitätsdokumentation).</p><br>';
+h+='<p><strong>Empfänger:</strong> Eine Weitergabe erfolgt nur, soweit dies zur Vertragserfüllung, Zahlungsabwicklung, steuerlichen Aufbewahrung oder aufgrund gesetzlicher Pflichten erforderlich ist. Eine werbliche Veröffentlichung von Fahrzeugfotos erfolgt nur nach gesonderter Freigabe.</p><br>';
+h+='<p><strong>Speicherdauer:</strong> Rechnungs- und steuerrelevante Unterlagen werden gemäß gesetzlichen Aufbewahrungsfristen gespeichert. Schadens- und Auftragsdokumentationen werden nur so lange gespeichert, wie sie für Nachweis-, Gewährleistungs- oder Verteidigungszwecke erforderlich sind.</p><br>';
+h+='<p><strong>Rechte:</strong> Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch sowie Beschwerde bei der zuständigen Datenschutzaufsichtsbehörde. Die Ausübung gesetzlicher Rechte bleibt unberührt.</p>';
+h+='</div>';
+h+='<p style="font-size:10px;color:#666;margin-top:24px">Datum der Kenntnisnahme und Übergabe: '+(cur.timestamps.dsgvo||cur.date)+'</p>';
+h+='<div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:end">';
+if(cur.dsgvoSig) h+='<div style="text-align:center"><img src="'+cur.dsgvoSig+'" style="max-width:100%;height:82px;object-fit:contain;display:block;margin:0 auto 4px"><div style="border-top:1px solid #000;padding-top:8px;font-size:10px;text-align:left">Digitale Unterschrift Kunde</div></div>'; else h+='<div style="border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Kunde</div>';
+if(cur.dsgvoProviderSig) h+='<div style="text-align:center"><img src="'+cur.dsgvoProviderSig+'" style="max-width:100%;height:82px;object-fit:contain;display:block;margin:0 auto 4px"><div style="border-top:1px solid #000;padding-top:8px;font-size:10px;text-align:left">Digitale Unterschrift Lux Detailing / Oskar Koch</div></div>'; else h+='<div style="border-top:1px solid #000;padding-top:8px;font-size:10px">Unterschrift Lux Detailing / Oskar Koch</div>';
+h+='</div></div>';
+return h;
+}
+
+
+// ===== CRM =====
+function crmSearchText(a){
+return [a.vorname,a.nachname,a.plate,a.car,a.color,a.tel,a.email,a.caddr,a.place,a.paket,a.class,a.date,a.invoiceNr,(a.total||''),(a.specialCases||[]).join(' '),a.specialNote,a.followupDate].join(' ').toLowerCase();
+}
+function deleteCRMEntry(idx,mode){
+var a=db[idx];
+if(!a){return;}
+var label=(a.vorname||'')+' '+(a.nachname||'')+' · '+(a.plate||'')+' · '+(a.car||'');
+if(mode==='customer'){
+var tel=(a.tel||'').replace(/\D/g,'');
+var email=(a.email||'').toLowerCase().trim();
+var plate=(a.plate||'').toUpperCase().replace(/\s/g,'');
+var same=db.filter(function(x){
+var xtel=(x.tel||'').replace(/\D/g,'');
+var xemail=(x.email||'').toLowerCase().trim();
+var xplate=(x.plate||'').toUpperCase().replace(/\s/g,'');
+return (tel&&xtel===tel)||(email&&xemail===email)||(plate&&xplate===plate);
+});
+if(!confirm('Kundenakte wirklich löschen?\n\n'+label+'\n\nEs werden '+same.length+' passende Eintrag/Einträge aus dieser lokalen Kartei gelöscht. Vorher am besten Backup speichern.')) return;
+db=db.filter(function(x){return same.indexOf(x)<0;});
+}else{
+if(!confirm('Diesen Auftrag wirklich aus der lokalen Kundenkartei löschen?\n\n'+label+'\n\nVorher am besten Backup speichern.')) return;
+db.splice(idx,1);
+}
+localStorage.setItem(DB_KEY,JSON.stringify(db));
+renderCRM();
+}
+function renderCRM(){
+var list=document.getElementById('crm-list');
+var count=document.getElementById('crm-count');
+var summary=document.getElementById('crm-summary');
+var q=(document.getElementById('crm-q')?document.getElementById('crm-q').value:'').toLowerCase().trim();
+var paket=document.getElementById('crm-paket')?document.getElementById('crm-paket').value:'';
+var status=document.getElementById('crm-status')?document.getElementById('crm-status').value:'';
+var from=document.getElementById('crm-from')?document.getElementById('crm-from').value:'';
+var to=document.getElementById('crm-to')?document.getElementById('crm-to').value:'';
+var sort=document.getElementById('crm-sort')?document.getElementById('crm-sort').value:'new';
+list.innerHTML='';
+var filtered=db.filter(function(a){
+ if(q && crmSearchText(a).indexOf(q)<0)return false;
+ if(paket && a.paket!==paket)return false;
+	 if(status==='closed' && !a.finishDate)return false;
+	 if(status==='open' && a.finishDate)return false;
+	 if(status==='stamm' && !a.stamm)return false;
+	 if(status==='neu' && a.stamm)return false;
+	 if(status==='polisher' && !(a.paket==='Makellos'||a.paket==='Perfektion'||extrasList(a.extras).indexOf('Hochglanzpolitur')>=0))return false;
+ if(from && String(a.date||'')<from)return false;
+ if(to && String(a.date||'')>to)return false;
+ return true;
+});
+filtered.sort(function(a,b){
+ if(sort==='old')return String(a.date||'').localeCompare(String(b.date||''));
+ if(sort==='revenue')return (parseFloat(b.total||0)-parseFloat(a.total||0));
+ if(sort==='name')return ((a.nachname||a.vorname||'').localeCompare(b.nachname||b.vorname||''));
+ return String(b.date||'').localeCompare(String(a.date||''));
+});
+var rev=filtered.reduce(function(sum,a){return sum+parseFloat(a.total||0);},0);
+var stamm=filtered.filter(function(a){return !!a.stamm;}).length;
+if(summary){summary.innerHTML='<div><span>Umsatz Auswahl</span><strong>'+money(rev)+'</strong></div><div><span>Stammkunden</span><strong>'+stamm+' / '+filtered.length+'</strong></div>';}
+if(count){count.textContent=filtered.length+' von '+db.length+' Eintrag/Einträgen angezeigt';}
+for(var i=0;i<filtered.length;i++){
+var a=filtered[i];
+var idx=db.indexOf(a);
+var d=document.createElement('div');
+d.className='card';
+d.style.cursor='default';
+var badges='<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"><span class="v27-badge blue">'+esc(a.paket||'Paket')+'</span>'+(a.stamm?'<span class="v27-badge green">Stammkunde</span>':'<span class="v27-badge">Neukunde</span>')+(a.dataReduced?'<span class="v27-badge red">Daten reduziert</span>':'')+'</div>';
+d.innerHTML='<h3>'+esc((a.vorname||'')+' '+(a.nachname||''))+'</h3>'+badges+
+'<p>'+esc(a.car||'Fahrzeug')+' ('+esc(a.plate||'ohne Kennzeichen')+') – '+money(a.total||0)+'</p>'+ 
+'<p style="font-size:10px;color:var(--txt2)">'+esc(a.date||'')+' · '+esc(a.class||'')+' · '+esc(a.invoiceNr||'ohne Rechnungsnr.')+(a.followupDate?' · Wiedervorlage '+esc(deDate(a.followupDate)):'')+'</p>'+ 
+'<div style="display:flex;gap:8px;margin-top:14px">'+
+'<button class="btn btn-g" data-action="open" data-idx="'+idx+'" style="height:42px;min-height:42px;font-size:12px;margin:0;flex:1">Öffnen</button>'+ 
+'<button class="btn btn-o" data-action="delete-one" data-idx="'+idx+'" style="height:42px;min-height:42px;font-size:12px;margin:0;flex:1;color:#d92d20;border-color:#fecaca">Auftrag löschen</button>'+ 
+'</div><button class="btn btn-o" data-action="delete-customer" data-idx="'+idx+'" style="height:38px;min-height:38px;font-size:11px;margin:8px 0 0;color:#d92d20;border-color:#fecaca">Kundenakte löschen</button>';
+d.onclick=function(e){var btn=e.target.closest('button');if(!btn)return;var idx=parseInt(btn.getAttribute('data-idx'));var action=btn.getAttribute('data-action');if(action==='open'){cur=JSON.parse(JSON.stringify(db[idx]));go('s-done');}else if(action==='delete-one'){deleteCRMEntry(idx,'one');}else if(action==='delete-customer'){deleteCRMEntry(idx,'customer');}};
+list.appendChild(d);
+}
+if(filtered.length===0) list.innerHTML='<p style="text-align:center;color:var(--txt2);padding:20px">Keine passenden Einträge gefunden</p>';
+}
+
+// ===== CALC =====
+function doCalc(){
+var km=parseInt(document.getElementById('calc-km').value)||0;
+var res=km>15?(km-15)*0.5:0;
+document.getElementById('calc-res').textContent=res.toFixed(2).replace('.',',')+' €';
+}
+
+// ===== SETTINGS =====
+function saveSet(showAlert){
+settings.name=document.getElementById('s-name').value;
+settings.addr=document.getElementById('s-addr').value;
+settings.tax=document.getElementById('s-tax').value;
+settings.iban=document.getElementById('s-iban').value;
+settings.paymentDays=parseInt(document.getElementById('s-paydays').value)||14;
+settings.paymentNote=document.getElementById('s-paynote').value;
+settings.tel=document.getElementById('s-tel').value;
+settings.email=document.getElementById('s-email').value;
+settings.google=document.getElementById('s-google').value;
+settings.protocolTone=document.getElementById('s-tone')?document.getElementById('s-tone').value:'du';
+settings.polisher=!!document.getElementById('s-polisher').checked;
+settings.followupMonths=parseInt(document.getElementById('s-followup').value)||9;
+settings.prod={data:!!document.getElementById('s-prod-data').checked,prices:!!document.getElementById('s-prod-prices').checked,legal:!!document.getElementById('s-prod-legal').checked,print:!!document.getElementById('s-prod-print').checked};
+var pinEl=document.getElementById('s-pin');if(pinEl&&pinEl.value){settings.appPin=simpleHash(pinEl.value);pinEl.value='';}
+localStorage.setItem(SET_KEY,JSON.stringify(settings));
+renderProductiveStatus();
+if(showAlert!==false){alert('Gespeichert!');go('s-home');}
+}
+
+// ===== BACKUP =====
+function exportBackup(){
+var data={version:'2.8',db:db,settings:settings,invCount:localStorage.getItem('lux_inv_count')||'0',exportedAt:new Date().toISOString()};
+var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+var a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='Lux_Detailing_Backup_'+new Date().toISOString().split('T')[0]+'.json';
+a.click();
+}
+function importBackup(input){
+var file=input.files[0];
+if(!file) return;
+var reader=new FileReader();
+reader.onload=function(e){
+try{
+var data=JSON.parse(e.target.result);
+if(data.db&&Array.isArray(data.db)){
+db=data.db;
+localStorage.setItem(DB_KEY,JSON.stringify(db));
+}
+if(data.settings){
+settings=data.settings;
+localStorage.setItem(SET_KEY,JSON.stringify(settings));
+}
+if(data.invCount){
+localStorage.setItem('lux_inv_count',data.invCount);
+}
+alert('Backup erfolgreich importiert! '+db.length+' Aufträge geladen.');
+location.reload();
+}catch(err){
+alert('Fehler beim Import: Datei ist keine gültige Backup-Datei.');
+}
+};
+reader.readAsText(file);
+input.value='';
+}
+
+function bindSignatureCanvas(canvasId,stateKey){
+var c=document.getElementById(canvasId);if(!c)return;var ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='#111';ctx.lineWidth=4;ctx.lineCap='round';ctx.lineJoin='round';var drawing=false,last=null;
+function pos(e){var r=c.getBoundingClientRect();var t=e.touches?e.touches[0]:e;return {x:(t.clientX-r.left)*(c.width/r.width),y:(t.clientY-r.top)*(c.height/r.height)};}
+function down(e){e.preventDefault();drawing=true;last=pos(e);}
+function move(e){if(!drawing)return;e.preventDefault();var pp=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(pp.x,pp.y);ctx.stroke();last=pp;cur[stateKey]=c.toDataURL('image/png');dsgvoReady();}
+function up(e){if(!drawing)return;drawing=false;cur[stateKey]=c.toDataURL('image/png');dsgvoReady();}
+c.addEventListener('mousedown',down);c.addEventListener('mousemove',move);window.addEventListener('mouseup',up);c.addEventListener('touchstart',down,{passive:false});c.addEventListener('touchmove',move,{passive:false});c.addEventListener('touchend',up);
+}
+function initDSGVOSignature(){bindSignatureCanvas('dsgvo-canvas','dsgvoSig');bindSignatureCanvas('dsgvo-provider-canvas','dsgvoProviderSig');}
+
+// ===== INIT =====
+window.onload=function(){
+document.getElementById('s-name').value=settings.name||'';
+document.getElementById('s-addr').value=settings.addr||'';
+document.getElementById('s-tax').value=settings.tax||'';
+document.getElementById('s-iban').value=settings.iban||'';
+document.getElementById('s-paydays').value=settings.paymentDays||14;
+document.getElementById('s-paynote').value=settings.paymentNote||'';
+document.getElementById('s-tel').value=settings.tel||'';
+document.getElementById('s-email').value=settings.email||'';
+document.getElementById('s-google').value=settings.google||'';
+if(document.getElementById('s-tone')) document.getElementById('s-tone').value=settings.protocolTone||'du';
+document.getElementById('s-polisher').checked=!!settings.polisher;
+if(document.getElementById('s-followup'))document.getElementById('s-followup').value=String(settings.followupMonths||9);
+if(document.getElementById('s-prod-data')){var p=settings.prod||{};document.getElementById('s-prod-data').checked=!!p.data;document.getElementById('s-prod-prices').checked=!!p.prices;document.getElementById('s-prod-legal').checked=!!p.legal;document.getElementById('s-prod-print').checked=!!p.print;}
+renderProductiveStatus();
+if(document.getElementById('s-pin')) document.getElementById('s-pin').value='';
+buildGrid('grid-before','before');
+buildGrid('grid-after','after');
+initDSGVOSignature();
+updateTimerDisplay();
+enforceLockOnLoad();
+};
+</script>
+</body>
+</html>
