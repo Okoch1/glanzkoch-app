@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2447ff">
+<title>Oskar Koch · Fahrzeugaufbereitung</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#f4f6fa;--card:#ffffff;--card2:#f7f9fc;
+--ink:#0a0e1a;--txt:#1a2232;--txt2:#6b7686;--muted:#9aa3b2;
+--brd:#e7eaf0;--brd2:#d4d9e3;
+--blue:#2447ff;--blue2:#eef2ff;--blue3:#1733c2;
+--green:#16745c;--greenbg:#e9f9f1;--red:#c0362c;--redbg:#fdeeec;
+--r-sm:14px;--r:18px;--r-lg:22px;--r-pill:999px;
+--shadow:0 12px 40px rgba(16,24,40,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--txt);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding:18px 16px 120px;min-height:100vh}
+.screen{display:none}.screen.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.topbar{display:flex;align-items:center;gap:12px;margin:2px 0 18px;min-height:40px}
+.topbar .back{width:40px;height:40px;border-radius:var(--r-pill);border:1px solid var(--brd);background:#fff;font-size:18px;font-weight:800;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 40px}
+.topbar h2{font-size:18px;font-weight:900;letter-spacing:-.4px;color:var(--ink)}
+.topbar .sub{font-size:11px;color:var(--txt2);font-weight:700}
+
+.brand{margin:6px 0 22px}
+.brand .word{font-size:34px;font-weight:900;letter-spacing:-1.6px;color:var(--ink)}
+.brand .word b{color:var(--blue);font-weight:900}
+.brand .tag{font-size:10px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;color:var(--txt2);margin-top:2px}
+
+.card{background:var(--card);border:1px solid var(--brd);border-radius:var(--r-lg);padding:18px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card.tap{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.card.tap:active{transform:scale(.99)}
+.card h3{font-size:16px;color:var(--ink);letter-spacing:-.2px;margin-bottom:3px}
+.card p{font-size:12.5px;color:var(--txt2)}
+.card .arrow{position:absolute}
+.row{display:flex;gap:10px}.row>*{flex:1}
+
+.btn{width:100%;min-height:54px;border-radius:var(--r-pill);font-size:15px;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;letter-spacing:-.1px}
+.btn:active{transform:scale(.99)}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 10px 26px rgba(36,71,255,.22)}
+.btn-o{background:#fff;color:var(--ink);border:1px solid var(--brd2)}
+.btn-d{background:#fff;color:var(--red);border:1px solid #f3c9c4}
+.btn:disabled{opacity:.4;pointer-events:none;box-shadow:none}
+.btn-sm{min-height:42px;font-size:13px}
+
+label.lbl{font-size:11px;color:#344054;font-weight:800;margin:12px 0 6px;display:block;text-transform:uppercase;letter-spacing:.6px}
+input,select,textarea{width:100%;padding:14px 15px;border-radius:var(--r);border:1px solid var(--brd);background:#fff;color:var(--txt);font-size:15px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,71,255,.12)}
+textarea{resize:vertical;min-height:90px;line-height:1.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.chip{padding:11px 16px;border-radius:var(--r-pill);border:1px solid var(--brd);background:#fff;font-size:13px;font-weight:800;cursor:pointer;color:#344054}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+.pkg{border:1px solid var(--brd);border-radius:var(--r-lg);padding:16px;margin-bottom:10px;cursor:pointer;background:#fff;position:relative}
+.pkg.on{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue) inset}
+.pkg .h{display:flex;justify-content:space-between;align-items:baseline}
+.pkg h3{font-size:17px;color:var(--ink)}
+.pkg .price{font-size:18px;font-weight:900;color:var(--blue);letter-spacing:-.4px}
+.pkg p{font-size:12px;color:var(--txt2);margin-top:5px;line-height:1.45}
+
+.total{background:linear-gradient(135deg,var(--ink),var(--blue));color:#fff;border-radius:var(--r-lg);padding:18px;text-align:center;margin:14px 0}
+.total .n{font-size:34px;font-weight:900;letter-spacing:-1px}
+.total .l{font-size:11px;opacity:.85;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.pcell{aspect-ratio:4/3;border-radius:var(--r);border:1px solid var(--brd);background:var(--card2);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pcell img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.pcell .ph{font-size:22px;opacity:.5}
+.pcell .nm{position:absolute;left:7px;bottom:7px;right:7px;background:rgba(10,14,26,.78);color:#fff;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:4px 7px;border-radius:var(--r-pill)}
+.pcell .nm.has{background:var(--blue)}
+
+.sigwrap{border:1px solid var(--brd);border-radius:var(--r);padding:10px;background:#fff;margin-top:8px}
+.sigwrap canvas{width:100%;height:150px;background:#fff;border:1px dashed var(--brd2);border-radius:12px;display:block;touch-action:none}
+.sigwrap .a{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.sigwrap .a span{font-size:11px;color:var(--txt2);font-weight:700}
+.sigwrap .a button{border:1px solid var(--brd2);background:#fff;border-radius:var(--r-pill);padding:7px 12px;font-size:11px;font-weight:800;cursor:pointer}
+
+.chk{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--brd);border-radius:var(--r);background:#fff;margin-bottom:8px;cursor:pointer;transition:opacity .15s}
+.chk.done{opacity:.55}
+.chk .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--blue);flex:0 0 24px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff}
+.chk.done .box{background:var(--blue)}
+.chk .t{font-size:13.5px;font-weight:800;color:var(--ink)}
+.chk .s{font-size:11.5px;color:var(--txt2);margin-top:2px;line-height:1.4}
+
+.note{font-size:11.5px;color:var(--txt2);line-height:1.5;background:var(--card2);border:1px solid var(--brd);border-radius:var(--r);padding:12px;margin:10px 0}
+.note b{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;padding:5px 10px;border-radius:var(--r-pill);background:var(--blue2);color:var(--blue)}
+.pill.green{background:var(--greenbg);color:var(--green)}
+.pill.red{background:var(--redbg);color:var(--red)}
+
+.listitem{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;border:1px solid var(--brd);border-radius:var(--r);background:#fff;margin-bottom:8px;cursor:pointer}
+.listitem .m{font-size:13px;font-weight:800;color:var(--ink)}
+.listitem .x{font-size:11px;color:var(--txt2);margin-top:2px}
+.listitem .r{text-align:right;flex:0 0 auto}
+.listitem .r .am{font-size:14px;font-weight:900;color:var(--ink)}
+
+.stickybar{position:fixed;left:0;right:0;bottom:0;background:rgba(244,246,250,.92);backdrop-filter:blur(10px);border-top:1px solid var(--brd);padding:12px 16px;z-index:40}
+.stickybar .inner{max-width:680px;margin:0 auto}
+.stickybar .btn{margin:0}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+/* ===== DOCUMENT / PROTOCOL (print-stable, never clips) ===== */
+#screen-doc .docbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.doc{background:#e9edf3;padding:16px 0;border-radius:var(--r)}
+.doc .page{width:210mm;min-height:297mm;margin:0 auto 16px;background:#fff;box-shadow:var(--shadow);overflow:visible;break-after:page;page-break-after:always;box-sizing:border-box}
+.doc .page:last-child{break-after:auto;page-break-after:auto}
+@media(max-width:760px){.doc{overflow-x:auto}.doc .page{transform-origin:top left}}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}body{background:#fff!important}.wrap{max-width:none!important;padding:0!important;min-height:0!important}.screen:not(.active){display:none!important}.topbar,.docbar,.stickybar,.toast,#sig-full,#file-input{display:none!important}.doc{background:#fff!important;padding:0!important;border-radius:0!important}.doc .page{width:210mm!important;min-height:0!important;margin:0!important;box-shadow:none!important;border-radius:0!important;page-break-after:always;break-after:page}.doc .page:last-child{page-break-after:auto}@page{size:A4;margin:0}}
+#sig-full{display:none;position:fixed;inset:0;background:#fff;z-index:300;flex-direction:column}
+#sig-full.show{display:flex}
+.sigfull-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--brd)}
+.sigfull-bar span{font-size:13px;font-weight:800;color:var(--ink)}
+.sigfull-btn{border:1px solid var(--brd2);background:#fff;border-radius:var(--r-pill);padding:11px 20px;font-size:14px;font-weight:800;cursor:pointer;color:var(--ink)}
+.sigfull-btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+#sig-full-canvas{flex:1;width:100%;touch-action:none;display:block;background:#fff}
+.sigfull-hint{text-align:center;font-size:11px;color:var(--muted);padding:8px}
+.nobreak,.pair{break-inside:avoid;page-break-inside:avoid}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="brand"><div class="word">Oskar<b style="color:var(--blue);font-weight:900">Koch</b></div><div class="tag">Fahrzeugaufbereitung · Chemnitz</div></div>
+  <div class="card tap" onclick="startNew()"><h3>Neuer Auftrag</h3><p>Kunde, Fotos, Aufbereitung & Protokoll</p></div>
+  <div class="card tap" onclick="openList()"><h3>Aufträge</h3><p>Gespeicherte Aufträge & Protokolle öffnen</p></div>
+  <div class="card tap" onclick="openDocs()"><h3>Dokumentencenter</h3><p>Vorlagen & eigene Dateien speichern und herunterladen</p></div>
+  <div class="card tap" onclick="openSettings()"><h3>Einstellungen</h3><p>Stammdaten, IBAN, Anrede & Backup</p></div>
+  <div class="row" style="margin-top:16px">
+    <button class="btn btn-o btn-sm" onclick="exportBackup()">Backup speichern</button>
+    <label class="btn btn-o btn-sm" style="cursor:pointer"><input type="file" accept=".json" style="display:none" onchange="importBackup(this)">Backup laden</label>
+  </div>
+  <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:24px">Daten liegen lokal & sicher auf diesem Gerät (IndexedDB).</p>
+</div>
+
+<!-- KUNDE -->
+<div class="screen" id="screen-customer">
+  <div class="topbar"><div class="back" onclick="syncCustomer();go('screen-home')">‹</div><div><h2>Kunde & Fahrzeug</h2><div class="sub">Schritt 1 von 4</div></div></div>
+  <div class="card">
+    <label class="lbl">Anrede</label>
+    <div class="chips" id="anrede-chips">
+      <div class="chip on" onclick="pickChip(this,'anrede','Herr')">Herr</div>
+      <div class="chip" onclick="pickChip(this,'anrede','Frau')">Frau</div>
+      <div class="chip" onclick="pickChip(this,'anrede','')">—</div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div><label class="lbl">Vorname</label><input id="f-vn"></div>
+      <div><label class="lbl">Nachname</label><input id="f-nn"></div>
+    </div>
+    <div class="grid2">
+      <div><label class="lbl">Telefon</label><input id="f-tel" inputmode="tel"></div>
+      <div><label class="lbl">E-Mail</label><input id="f-email" inputmode="email"></div>
+    </div>
+    <label class="lbl">Kennzeichen</label><input id="f-plate" style="text-transform:uppercase">
+    <div class="grid2">
+      <div><label class="lbl">Fahrzeug</label><input id="f-car" placeholder="z. B. BMW 3er"></div>
+      <div><label class="lbl">Farbe</label><input id="f-color"></div>
+    </div>
+    <div class="grid2">
+      <div><label class="lbl">Kilometerstand</label><input id="f-km" inputmode="numeric"></div>
+      <div><label class="lbl">Datum</label><input id="f-date" type="date"></div>
+    </div>
+    <label class="lbl">Ort</label><input id="f-place" placeholder="Chemnitz">
+  </div>
+  <div class="stickybar"><div class="inner" style="display:flex;gap:8px"><button class="btn btn-o" id="cust-protocol" style="display:none;flex:1" onclick="syncCustomer();openDoc('protocol')">Protokoll</button><button class="btn btn-p" style="flex:2" onclick="saveCustomer()">Weiter zum Paket</button></div></div>
+</div>
+
+<!-- PAKET -->
+<div class="screen" id="screen-package">
+  <div class="topbar"><div class="back" onclick="go('screen-customer')">‹</div><div><h2>Paket & Preis</h2><div class="sub">Schritt 2 von 4</div></div></div>
+  <label class="lbl">Fahrzeugklasse</label>
+  <div class="chips" id="class-chips"></div>
+  <div style="height:8px"></div>
+  <div id="pkg-list"></div>
+  <label class="lbl">Extras</label>
+  <div class="chips" id="extra-chips"></div>
+  <label class="lbl">Rabatt</label>
+  <div class="chips" id="discount-chips"></div>
+  <div class="total"><div class="n" id="total-n">0,00 €</div><div class="l" id="total-l">Gesamtpreis</div></div>
+  <div class="stickybar"><div class="inner"><button class="btn btn-p" id="pkg-next" onclick="goToBefore()" disabled>Weiter zu Vorher-Fotos</button></div></div>
+</div>
+
+<!-- VORHER -->
+<div class="screen" id="screen-before">
+  <div class="topbar"><div class="back" onclick="go('screen-package')">‹</div><div><h2>Vorher & Vorschäden</h2><div class="sub">Schritt 3 von 4 · Haftungsschutz</div></div></div>
+  <div class="note"><b>Wichtig für dich:</b> Vorschäden vor Arbeitsbeginn fotografieren und vom Kunden quittieren lassen. Das schützt dich später gegen „der Kratzer war vorher nicht da".</div>
+  <label class="lbl">Vorher-Fotos</label>
+  <div class="pgrid" id="grid-before"></div>
+  <label class="lbl" style="margin-top:16px">Sichtbare Vorschäden / Hinweise</label>
+  <textarea id="f-damage" placeholder="z. B. Kratzer Stoßstange hinten links, Steinschlag Motorhaube, Felge vorne rechts beschädigt, Lederriss Fahrersitz …"></textarea>
+  <label class="lbl" style="margin-top:6px">Unterschrift Kunde — Vorschäden bestätigt</label>
+  <div class="sigwrap"><canvas id="sig-before" width="900" height="300"></canvas><div class="a"><span>Mit Finger unterschreiben</span><div style="display:flex;gap:6px"><button onclick="openSigFull('before')">Vergrößern</button><button onclick="clearSig('before')">Löschen</button></div></div></div>
+  <div class="stickybar"><div class="inner"><button class="btn btn-p" onclick="goToWork()">Aufbereitung starten</button></div></div>
+</div>
+
+<!-- ARBEIT / CHECKLISTE -->
+<div class="screen" id="screen-work">
+  <div class="topbar"><div class="back" onclick="go('screen-before')">‹</div><div><h2>Aufbereitung</h2><div class="sub">Qualitäts-Check (optional)</div></div></div>
+  <div id="check-progress" class="pill" style="margin-bottom:12px">0 / 0 erledigt</div>
+  <div id="check-list"></div>
+  <div class="stickybar"><div class="inner"><button class="btn btn-p" onclick="goToAfter()">Weiter zu Nachher-Fotos</button></div></div>
+</div>
+
+<!-- NACHHER -->
+<div class="screen" id="screen-after">
+  <div class="topbar"><div class="back" onclick="go('screen-work')">‹</div><div><h2>Nachher & Abnahme</h2><div class="sub">Schritt 4 von 4</div></div></div>
+  <div class="note">Für ein starkes Protokoll: gleiche Winkel wie vorher fotografieren — dann entsteht der Vorher/Nachher-Vergleich automatisch. Das <b>Gesamtbild</b> wird zum Titelbild.</div>
+  <label class="lbl">Nachher-Fotos</label>
+  <div class="pgrid" id="grid-after"></div>
+  <label class="lbl" style="margin-top:16px">Unterschrift Kunde — Abnahme & Übergabe</label>
+  <div class="sigwrap"><canvas id="sig-after" width="900" height="300"></canvas><div class="a"><span>Mit Finger unterschreiben</span><div style="display:flex;gap:6px"><button onclick="openSigFull('after')">Vergrößern</button><button onclick="clearSig('after')">Löschen</button></div></div></div>
+  <div class="stickybar"><div class="inner"><button class="btn btn-p" onclick="finishOrder()">Auftrag abschließen</button></div></div>
+</div>
+
+<!-- ABSCHLUSS -->
+<div class="screen" id="screen-done">
+  <div class="topbar"><div class="back" onclick="go('screen-home')">‹</div><div><h2>Auftrag</h2><div class="sub" id="done-num"></div></div></div>
+  <div class="card" id="done-summary"></div>
+  <button class="btn btn-p" onclick="editOrder()">Auftrag bearbeiten</button>
+  <button class="btn btn-o" onclick="openDoc('protocol')">Protokoll öffnen</button>
+  <button class="btn btn-o" onclick="openDoc('invoice')">Rechnung öffnen</button>
+  <button class="btn btn-o" onclick="go('screen-home')">Zum Start</button>
+</div>
+
+<!-- DOKUMENT -->
+<div class="screen" id="screen-doc">
+  <div class="topbar"><div class="back" onclick="go(docReturn)">‹</div><div><h2 id="doc-title">Dokument</h2><div class="sub" id="doc-sub"></div></div></div>
+  <div class="docbar">
+    <button class="btn btn-p btn-sm" id="btn-pdf" style="flex:1" onclick="exportPDF()">Als PDF speichern</button>
+    <button class="btn btn-o btn-sm" style="flex:1" onclick="window.print()">Drucken</button>
+  </div>
+  <div class="doc" id="doc-body"></div>
+</div>
+
+<!-- LISTE -->
+<div class="screen" id="screen-list">
+  <div class="topbar"><div class="back" onclick="go('screen-home')">‹</div><div><h2>Aufträge</h2><div class="sub" id="list-sub"></div></div></div>
+  <input id="list-search" placeholder="Suchen: Name, Kennzeichen, Nummer …" oninput="renderList()" style="margin-bottom:12px">
+  <div id="list-body"></div>
+</div>
+
+<!-- EINSTELLUNGEN -->
+<div class="screen" id="screen-settings">
+  <div class="topbar"><div class="back" onclick="go('screen-home')">‹</div><div><h2>Einstellungen</h2><div class="sub">Stammdaten & Rechnung</div></div></div>
+  <div class="card">
+    <label class="lbl">Name / Inhaber</label><input id="s-name">
+    <label class="lbl">Adresse</label><input id="s-addr">
+    <div class="grid2">
+      <div><label class="lbl">Telefon</label><input id="s-tel"></div>
+      <div><label class="lbl">E-Mail</label><input id="s-email"></div>
+    </div>
+    <label class="lbl">Steuernummer</label><input id="s-tax">
+    <label class="lbl">IBAN</label><input id="s-iban">
+    <label class="lbl">Google-Bewertungslink (optional)</label><input id="s-google" placeholder="https://g.page/...">
+    <label class="lbl">Zahlungshinweis</label><input id="s-paynote">
+    <label class="lbl">Ansprache im Protokoll</label>
+    <div class="chips" id="tone-chips">
+      <div class="chip on" onclick="pickChip(this,'_tone','du')">Du</div>
+      <div class="chip" onclick="pickChip(this,'_tone','sie')">Sie</div>
+    </div>
+  </div>
+  <button class="btn btn-p" onclick="saveSettings()">Speichern</button>
+  <div class="note" style="margin-top:16px"><b>Nebengewerbe-Tipp:</b> Betriebshaftpflicht mit explizit eingeschlossenen <b>Tätigkeits-/Obhutsschäden</b> abschließen — Standardpolicen schließen Schäden am gerade bearbeiteten Fahrzeug oft aus, also genau dein Hauptrisiko.</div>
+</div>
+
+<!-- DOKUMENTENCENTER -->
+<div class="screen" id="screen-docs">
+  <div class="topbar"><div class="back" onclick="go('screen-home')">‹</div><div><h2>Dokumentencenter</h2><div class="sub">Vorlagen & eigene Dateien</div></div></div>
+  <label class="lbl">Vorlagen — öffnen, dann „Als PDF speichern"</label>
+  <div class="card tap" onclick="openTemplate('uebergabe')"><h3>Übergabe- & Vorschädenprotokoll</h3><p>Blanko zum Ausdrucken und Unterschreiben</p></div>
+  <div class="card tap" onclick="openTemplate('agb')"><h3>Auftrag & Bedingungen</h3><p>Leistung, Vorschäden, Haftung, § 19 UStG</p></div>
+  <div class="card tap" onclick="openTemplate('vergleich')"><h3>Paketvergleich (mit Häkchen)</h3><p>Drei Pakete nebeneinander, alle Leistungen + Nutzen</p></div>
+  <div class="card tap" onclick="openTemplate('preise')"><h3>Preise & Pakete</h3><p>Frisch · Makellos · Perfektion mit Leistungen</p></div>
+  <label class="lbl" style="margin-top:18px">Meine Dokumente</label>
+  <label class="btn btn-p btn-sm" style="cursor:pointer;margin-bottom:12px"><input type="file" style="display:none" onchange="uploadDoc(this)">Datei hinzufügen</label>
+  <div id="docs-body"></div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+<div id="sig-full">
+  <div class="sigfull-bar"><button class="sigfull-btn" onclick="sigFullClear()">Löschen</button><span>Hier unterschreiben</span><button class="sigfull-btn primary" onclick="sigFullSave()">Fertig</button></div>
+  <canvas id="sig-full-canvas"></canvas>
+  <div class="sigfull-hint">Gerät quer halten für mehr Platz</div>
+</div>
+
+<script>
+/* ===================== STORAGE (IndexedDB) ===================== */
+var DB_NAME='oskoch_detailing',STORE='orders',DBV=2;
+function idb(){return new Promise(function(res,rej){var r=indexedDB.open(DB_NAME,DBV);r.onupgradeneeded=function(e){var db=e.target.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:'id'});if(!db.objectStoreNames.contains('docs'))db.createObjectStore('docs',{keyPath:'id'});};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
+function docPut(o){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('docs','readwrite');tx.objectStore('docs').put(o);tx.oncomplete=function(){res(o);};tx.onerror=function(){rej(tx.error);};});});}
+function docAll(){return idb().then(function(db){return new Promise(function(res,rej){var rq=db.transaction('docs','readonly').objectStore('docs').getAll();rq.onsuccess=function(){res(rq.result||[]);};rq.onerror=function(){rej(rq.error);};});});}
+function docDel(id){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('docs','readwrite');tx.objectStore('docs').delete(id);tx.oncomplete=function(){res();};tx.onerror=function(){rej(tx.error);};});});}
+function idbPut(o){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(o);tx.oncomplete=function(){res(o);};tx.onerror=function(){rej(tx.error);};});});}
+function idbAll(){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction(STORE,'readonly');var rq=tx.objectStore(STORE).getAll();rq.onsuccess=function(){res(rq.result||[]);};rq.onerror=function(){rej(rq.error);};});});}
+function idbGet(id){return idb().then(function(db){return new Promise(function(res,rej){var rq=db.transaction(STORE,'readonly').objectStore(STORE).get(id);rq.onsuccess=function(){res(rq.result);};rq.onerror=function(){rej(rq.error);};});});}
+function idbDel(id){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=function(){res();};tx.onerror=function(){rej(tx.error);};});});}
+
+/* ===================== SETTINGS (localStorage, klein) ===================== */
+var SET_KEY='oskoch_settings';
+var defaults={name:'Oskar Koch',addr:'Heinrich-Beck-Straße 9, 09112 Chemnitz',tel:'015772948189',email:'koch.oskar@proton.me',tax:'42317296050',iban:'DE83 8709 6124 0200 0991 84',google:'',paynote:'Zahlung bar oder per Überweisung innerhalb von 14 Tagen.',tone:'du'};
+var settings=Object.assign({},defaults,JSON.parse(localStorage.getItem(SET_KEY)||'{}'));
+
+/* ===================== STATE & CONSTANTS ===================== */
+var PKG={Kleinwagen:{Frisch:89,Makellos:189,Perfektion:349},Mittelklasse:{Frisch:119,Makellos:219,Perfektion:379},'SUV+Kombi':{Frisch:149,Makellos:249,Perfektion:409},Van:{Frisch:179,Makellos:279,Perfektion:439}};
+var PKG_DESC={Frisch:'Innenreinigung komplett · Außenwäsche · Felgen · Glas innen/außen',Makellos:'Alles aus Frisch · Lackschutz · Felgen- & Scheibenversiegelung · Reifenpflege',Perfektion:'Premium-Aufbereitung mit Politur/Coating · maximale Detailtiefe'};
+var PKG_SERVICES={
+ Frisch:{
+  'Innenraum':['Innenraum und Kofferraum gründlich aussaugen','Fußmatten ausklopfen und aussaugen','Armaturenbrett und Kunststoffflächen abwischen','Mittelkonsole, Ablagen und Türtaschen reinigen','Cockpitpflege aufgetragen','Aschenbecher und Becherhalter gereinigt','Scheiben innen streifenfrei reinigen'],
+  'Außen & Lack':['Vorwäsche mit Aktivschaum (berührungslos)','Schonende Handwäsche, 2-Eimer-Methode','Türeinstiege grob gereinigt','Felgen sichtbar gereinigt','Reifen abgewaschen','Fahrzeug mit weichem Tuch abgetrocknet','Scheiben und Spiegel außen streifenfrei'],
+  'Abschluss':['Sicht- und Endkontrolle','Vorher/Nachher-Fotodokumentation']
+ },
+ Makellos:{
+  'Innenraum':['Fußmatten nass gewaschen und getrocknet','Enge Ritzen und Fugen mit Druckluft ausgeblasen','Türeinstiege und Kanten im Detail gereinigt','Dachhimmel bei Bedarf gereinigt'],
+  'Außen & Lack':['Felgen-Tiefenreinigung inkl. Flugrostentfernung','Reifen mit Glanz gepflegt'],
+  'Schutz & Finish':['Lackversiegelung als Schutzschicht','Felgenversiegelung aufgetragen','Scheibenversiegelung außen aufgetragen']
+ },
+ Perfektion:{
+  'Innenraum':['Polster und Sitze dampfgereinigt','Leder gereinigt und gepflegt (falls vorhanden)','Tür- und Kofferraumscharniere im Detail'],
+  'Schutz & Finish':['Lack vor Coating entfettet','Hochglanzpolitur (Lackbild aufgefrischt)','Lang anhaltendes Coating aufgetragen']
+ }
+};
+var SERVICE_GROUP_ORDER=['Innenraum','Außen & Lack','Schutz & Finish','Abschluss'];
+function packageServices(pkt){var order=['Frisch','Makellos','Perfektion'];var idx=order.indexOf(pkt);if(idx<0)idx=0;var g={};for(var i=0;i<=idx;i++){var lvl=PKG_SERVICES[order[i]]||{};for(var k in lvl){g[k]=(g[k]||[]).concat(lvl[k]);}}return g;}
+function nextAppt(){var d=new Date(cur.date||todayISO());if(isNaN(d.getTime()))d=new Date();d.setDate(d.getDate()+70);return deDate(d.toISOString().split('T')[0]);}
+function rebookBy(){var d=new Date(cur.date||todayISO());if(isNaN(d.getTime()))d=new Date();d.setDate(d.getDate()+56);return deDate(d.toISOString().split('T')[0]);}
+var EXTRAS={'Tierhaare':25,'Raucherfahrzeug':35,'Lederpflege':29,'Starke Verschmutzung':30,'Geruchsneutralisierung':20};
+var ANGLES=['Front schräg','Heck schräg','Seite links','Seite rechts','Felge vorne links','Felge vorne rechts','Felge hinten links','Felge hinten rechts','Innenraum vorn','Innenraum hinten','Armaturenbrett','Mittelkonsole','Kofferraum','Detail / Problemzone'];
+var HERO='Gesamtaufnahme';
+var CHECKLIST=[
+ {t:'Vorbereitung & Sichtprüfung',s:'Fahrzeug inspizieren, Vorschäden dokumentieren, Kunde quittiert'},
+ {t:'Vorwäsche & Felgen',s:'Schaum/Vorreiniger, Felgen säurefrei, Insekten/Teer lösen'},
+ {t:'Handwäsche & Trocknung',s:'2-Eimer-Methode, sauberes Trockentuch, Wasserflecken vermeiden'},
+ {t:'Innenraum & Oberflächen',s:'Aussaugen, Fußmatten, Kunststoff pflegen, Leder (falls gebucht)'},
+ {t:'Glas & Lackschutz',s:'Glas streifenfrei, Versiegelung dünn & gleichmäßig (nur Makellos/Perfektion)'},
+ {t:'Reifen & Endkontrolle',s:'Reifenpflege, Kopflampen-Check, Übergabe & Unterschrift'}
+];
+var cur=null,docReturn='screen-home',docKind='protocol',editingDone=false;
+
+/* ===================== HELPERS ===================== */
+function esc(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function money(v){return (parseFloat(v||0)).toFixed(2).replace('.',',')+' €';}
+function go(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});var t=document.getElementById(id);if(t)t.classList.add('active');window.scrollTo(0,0);}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},1600);}
+function pickChip(el,key,val){var p=el.parentElement;p.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');if(key==='_tone'){settings.tone=val;return;}if(cur)cur[key]=val;}
+function fullName(o){return ((o.anrede||'')+' '+(o.vorname||'')+' '+(o.nachname||'')).trim();}
+function todayISO(){return new Date().toISOString().split('T')[0];}
+function deDate(iso){if(!iso)return'';var p=String(iso).split('-');return p.length===3?p[2]+'.'+p[1]+'.'+p[0]:iso;}
+function formatDateTime(iso){if(!iso)return'';var d=new Date(iso);var day=String(d.getDate()).padStart(2,'0');var month=String(d.getMonth()+1).padStart(2,'0');var year=d.getFullYear();var hours=String(d.getHours()).padStart(2,'0');var mins=String(d.getMinutes()).padStart(2,'0');return day+'.'+month+'.'+year+' '+hours+':'+mins;}
+
+/* debounced autosave so tapping never lags */
+var _t=null;function save(now){if(!cur)return;if(now){return idbPut(cur);}if(_t)clearTimeout(_t);_t=setTimeout(function(){idbPut(cur);},500);}
+
+/* ===================== HOME / NEW ===================== */
+function blankOrder(){return {id:'o'+Date.now()+Math.random().toString(36).slice(2,6),number:'',status:'draft',createdAt:new Date().toISOString(),anrede:'Herr',date:todayISO(),place:'Chemnitz',klasse:'Mittelklasse',paket:null,extras:[],discountPct:0,photosBefore:{},photosAfter:{},checks:{},damage:'',sigBefore:'',sigAfter:'',sigBeforeTime:'',sigAfterTime:''};}
+function startNew(){cur=blankOrder();editingDone=false;var b=document.getElementById('cust-protocol');if(b)b.style.display='none';fillCustomerForm();go('screen-customer');renderClassChips();renderExtraChips();renderDiscountChips();renderPackages();}
+
+function fillCustomerForm(){
+  var m={'f-vn':'vorname','f-nn':'nachname','f-tel':'tel','f-email':'email','f-plate':'plate','f-car':'car','f-color':'color','f-km':'km','f-place':'place','f-date':'date'};
+  for(var id in m){var el=document.getElementById(id);if(el)el.value=cur[m[id]]||'';}
+  document.querySelectorAll('#anrede-chips .chip').forEach(function(c){c.classList.remove('on');});
+  var want=cur.anrede||'';document.querySelectorAll('#anrede-chips .chip').forEach(function(c){if(c.textContent.trim()===(want||'—'))c.classList.add('on');});
+}
+function syncCustomer(){if(!cur)return;cur.vorname=val('f-vn');cur.nachname=val('f-nn');cur.tel=val('f-tel');cur.email=val('f-email');cur.plate=val('f-plate').toUpperCase();cur.car=val('f-car');cur.color=val('f-color');cur.km=val('f-km');cur.place=val('f-place')||'Chemnitz';cur.date=val('f-date')||todayISO();save();}
+function saveCustomer(){syncCustomer();renderPackages();updateTotal();go('screen-package');}
+function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+/* ===================== PACKAGE ===================== */
+function renderClassChips(){var box=document.getElementById('class-chips');box.innerHTML=Object.keys(PKG).map(function(k){return '<div class="chip'+(cur.klasse===k?' on':'')+'" onclick="setClass(\''+k+'\')">'+k+'</div>';}).join('');}
+function setClass(k){cur.klasse=k;renderClassChips();renderPackages();updateTotal();save();}
+function renderPackages(){
+  var box=document.getElementById('pkg-list');var cls=cur.klasse||'Mittelklasse';
+  box.innerHTML=['Frisch','Makellos','Perfektion'].map(function(p){
+    return '<div class="pkg'+(cur.paket===p?' on':'')+'" onclick="setPkg(\''+p+'\')"><div class="h"><h3>'+p+'</h3><div class="price">'+PKG[cls][p]+' €</div></div><p>'+PKG_DESC[p]+'</p></div>';
+  }).join('');
+}
+function setPkg(p){cur.paket=p;renderPackages();updateTotal();document.getElementById('pkg-next').disabled=!cur.paket;save();}
+function renderExtraChips(){var box=document.getElementById('extra-chips');box.innerHTML=Object.keys(EXTRAS).map(function(k){var on=(cur.extras||[]).indexOf(k)>=0;return '<div class="chip'+(on?' on':'')+'" onclick="toggleExtra(\''+k+'\')">'+k+' +'+EXTRAS[k]+'€</div>';}).join('');}
+function toggleExtra(k){cur.extras=cur.extras||[];var i=cur.extras.indexOf(k);if(i>=0)cur.extras.splice(i,1);else cur.extras.push(k);renderExtraChips();updateTotal();save();}
+function renderDiscountChips(){var box=document.getElementById('discount-chips');if(!box)return;var opts=[['Kein',0],['10%',10],['15%',15],['Wiederbucher 20%',20]];box.innerHTML=opts.map(function(o){return '<div class="chip'+(((cur&&cur.discountPct)||0)===o[1]?' on':'')+'" onclick="setDiscount('+o[1]+')">'+o[0]+'</div>';}).join('');}
+function setDiscount(p){cur.discountPct=p;renderDiscountChips();updateTotal();save();}
+function orderGross(){if(!cur||!cur.paket)return 0;var t=(PKG[cur.klasse]&&PKG[cur.klasse][cur.paket])||0;(cur.extras||[]).forEach(function(e){t+=EXTRAS[e]||0;});return t;}
+function orderTotal(){var g=orderGross();var d=(cur&&cur.discountPct)||0;return Math.round(g*(1-d/100)*100)/100;}
+function invTotalBlock(){var disc=(cur.discountPct||0);var gross=orderGross();var net=cur.price;var extra='';if(disc>0){extra='<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:11px;color:#6b7686"><span>Zwischensumme</span><span>'+money(gross)+'</span></div><div style="display:flex;justify-content:space-between;padding:5px 0;font-size:11px;color:#16745c"><span>Rabatt '+disc+'%</span><span>\u2212'+money(gross-net)+'</span></div>';}return '<div style="display:flex;justify-content:flex-end"><div style="min-width:64mm">'+extra+'<div style="display:flex;justify-content:space-between;padding:10px 0;border-top:2px solid #0a0e1a;font-size:16px;font-weight:900;color:#0a0e1a"><span>Gesamt</span><span>'+money(net)+'</span></div></div></div>';}
+function updateTotal(){cur.price=orderTotal();var n=document.getElementById('total-n');if(n)n.textContent=money(cur.price);var l=document.getElementById('total-l');if(l)l.textContent=(cur.paket?(cur.paket+' · '+cur.klasse):'Gesamtpreis')+((cur.discountPct)?'  ·  \u2212'+cur.discountPct+'%':'');}
+
+function goToBefore(){buildGrid('before');renderChecklist();go('screen-before');bindSig('before');}
+function goToWork(){cur.damage=val('f-damage');save();renderChecklist();go('screen-work');}
+function goToAfter(){buildGrid('after');go('screen-after');bindSig('after');}
+
+/* ===================== PHOTOS ===================== */
+var photoSide='before',photoAngle='';
+function buildGrid(side){
+  var g=document.getElementById('grid-'+side);if(!g)return;
+  var list=side==='after'?[HERO].concat(ANGLES):ANGLES;
+  var store=side==='before'?cur.photosBefore:cur.photosAfter;
+  g.innerHTML=list.map(function(a){
+    var src=store[a];
+    return '<div class="pcell" onclick="pickPhoto(\''+side+'\',\''+a.replace(/'/g,"\\'")+'\')">'+(src?'<img src="'+src+'">':'<span class="ph">📷</span>')+'<span class="nm'+(src?' has':'')+'">'+esc(a)+'</span></div>';
+  }).join('');
+}
+function pickPhoto(side,angle){photoSide=side;photoAngle=angle;document.getElementById('file-input').click();}
+function onPhoto(input){
+  var file=input.files&&input.files[0];if(!file){return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var W=1400,w=img.width,h=img.height;if(w>W){h=Math.round(h*(W/w));w=W;}
+      var cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      var data=cv.toDataURL('image/jpeg',0.82);
+      var store=photoSide==='before'?cur.photosBefore:cur.photosAfter;
+      store[photoAngle]=data;
+      buildGrid(photoSide);save();toast('Foto gespeichert');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);input.value='';
+}
+
+/* ===================== SIGNATURE (lightweight, serialize on lift only) ===================== */
+function bindSig(which){
+  var id=which==='before'?'sig-before':'sig-after';var key=which==='before'?'sigBefore':'sigAfter';var timeKey=which==='before'?'sigBeforeTime':'sigAfterTime';
+  var c=document.getElementById(id);if(!c||c._bound)return;c._bound=true;
+  var ctx=c.getContext('2d');ctx.lineWidth=3;ctx.lineCap='round';ctx.strokeStyle='#0a0e1a';
+  if(cur[key]){var im=new Image();im.onload=function(){ctx.drawImage(im,0,0,c.width,c.height);};im.src=cur[key];}
+  var drawing=false,last=null;
+  function pos(e){var r=c.getBoundingClientRect();var p=e.touches?e.touches[0]:e;return {x:(p.clientX-r.left)*(c.width/r.width),y:(p.clientY-r.top)*(c.height/r.height)};}
+  function down(e){e.preventDefault();drawing=true;last=pos(e);}
+  function move(e){if(!drawing)return;e.preventDefault();var p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;}
+  function up(){if(!drawing)return;drawing=false;cur[key]=c.toDataURL('image/png');cur[timeKey]=new Date().toISOString();save();}
+  c.addEventListener('mousedown',down);c.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
+  c.addEventListener('touchstart',down,{passive:false});c.addEventListener('touchmove',move,{passive:false});c.addEventListener('touchend',up);
+}
+function clearSig(which){var id=which==='before'?'sig-before':'sig-after';var key=which==='before'?'sigBefore':'sigAfter';var timeKey=which==='before'?'sigBeforeTime':'sigAfterTime';var c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height);cur[key]='';cur[timeKey]='';save();}
+
+/* ===================== CHECKLIST (single-node toggle) ===================== */
+function renderChecklist(){
+  var box=document.getElementById('check-list');if(!box)return;cur.checks=cur.checks||{};
+  box.innerHTML=CHECKLIST.map(function(it,i){var d=!!cur.checks[i];return '<div class="chk'+(d?' done':'')+'" data-i="'+i+'" onclick="toggleCheck('+i+')"><div class="box">'+(d?'✓':'')+'</div><div><div class="t">'+esc(it.t)+'</div><div class="s">'+esc(it.s)+'</div></div></div>';}).join('');
+  updateProgress();
+}
+function toggleCheck(i){cur.checks[i]=!cur.checks[i];var on=cur.checks[i];var n=document.querySelector('.chk[data-i="'+i+'"]');if(n){n.classList.toggle('done',on);n.querySelector('.box').textContent=on?'✓':'';}updateProgress();save();}
+function updateProgress(){var done=Object.keys(cur.checks||{}).filter(function(k){return cur.checks[k];}).length;var el=document.getElementById('check-progress');if(el)el.textContent=done+' / '+CHECKLIST.length+' erledigt';}
+
+/* ===================== FINISH ===================== */
+function nextNumber(){var y=new Date().getFullYear();var n=parseInt(localStorage.getItem('oskoch_inv')||'0')+1;localStorage.setItem('oskoch_inv',String(n));return 'OK-'+y+'-'+String(n).padStart(3,'0');}
+function finishOrder(){
+  cur.price=orderTotal();
+  if(!cur.number)cur.number=nextNumber();
+  cur.status='done';cur.finishedAt=new Date().toISOString();
+  save(true).then(function(){renderDone();go('screen-done');toast('Auftrag gespeichert');});
+}
+function renderDone(){document.getElementById('done-num').textContent=cur.number||'';document.getElementById('done-summary').innerHTML='<h3>'+esc(fullName(cur)||'Kunde')+'</h3><p>'+esc(cur.car||'Fahrzeug')+' · '+esc(cur.plate||'')+'</p><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><span class="pill">'+esc(cur.paket||'')+'</span><span class="pill green">'+money(cur.price)+'</span>'+(cur.number?'<span class="pill">'+esc(cur.number)+'</span>':'')+'</div>';}
+function editOrder(){editingDone=true;var b=document.getElementById('cust-protocol');if(b)b.style.display='';fillCustomerForm();renderClassChips();renderExtraChips();renderDiscountChips();renderPackages();updateTotal();go('screen-customer');}
+
+/* ===================== DOCUMENTS ===================== */
+function pcWords(){var du=(settings.tone||'du')!=='sie';return {you:du?'du':'Sie',your:du?'dein':'Ihr',yourCap:du?'Dein':'Ihr',thanks:du?'Danke für dein Vertrauen.':'Danke für Ihr Vertrauen.',happy:du?'Zufrieden? Eine kurze Bewertung hilft enorm.':'Zufrieden? Eine kurze Bewertung hilft enorm.'};}
+function openDoc(kind){docKind=kind;docReturn=cur&&cur.status==='done'?'screen-done':'screen-list';
+  document.getElementById('doc-title').textContent=kind==='invoice'?'Rechnung':'Protokoll';
+  document.getElementById('doc-sub').textContent=(cur.number||'')+' · '+esc(cur.plate||'');
+  document.getElementById('doc-body').innerHTML=kind==='invoice'?genInvoice():genProtocol();
+  go('screen-doc');
+}
+function imgBox(src,h){h=h||'78mm';
+  if(src)return '<div class="pair" style="border-radius:14px;overflow:hidden;border:1px solid #e7eaf0;background:#f7f9fc;height:'+h+'"><img src="'+src+'" style="width:100%;height:100%;object-fit:cover;display:block"></div>';
+  return '<div class="pair" style="border-radius:14px;border:1px dashed #d4d9e3;background:#f7f9fc;height:'+h+';display:flex;align-items:center;justify-content:center;color:#9aa3b2;font-size:10px">Kein Foto</div>';
+}
+function pageHead(kicker,title,right){return '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9mm;border-bottom:1px solid #e7eaf0;padding-bottom:5mm"><div><div style="font-size:8px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;color:#2447ff;margin-bottom:4px">'+kicker+'</div><h1 style="font-size:25px;letter-spacing:-1px;color:#0a0e1a;line-height:1.05">'+title+'</h1></div><div style="font-size:9px;color:#6b7686;text-align:right;line-height:1.5">'+(right||'')+'</div></div>';}
+function metric(l,v,n){return '<div class="nobreak" style="border:1px solid #e7eaf0;border-radius:14px;padding:11px;background:#fff"><div style="font-size:7.5px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#6b7686;margin-bottom:4px">'+l+'</div><div style="font-size:14px;font-weight:900;letter-spacing:-.3px;color:#0a0e1a;line-height:1.15">'+v+'</div>'+(n?'<div style="font-size:9px;color:#6b7686;margin-top:3px;line-height:1.3">'+n+'</div>':'')+'</div>';}
+function serviceText(){var p=cur.paket||'Aufbereitung';var b={Frisch:'Außenwäsche mit schonender Vorreinigung, Kontaktwäsche, Trocknung, Felgen- und Reifensichtpflege, Glasreinigung innen und außen, Innenraum aussaugen und Staubentfernung auf gut erreichbaren Flächen, Endkontrolle',Makellos:'gründliche Innen- und Außenaufbereitung mit Vorreinigung, schonender Kontaktwäsche, Detailreinigung von Felgen, Einstiegen und Kanten, Innenraumreinigung, Glasreinigung, Lackschutz sowie Felgen- und Scheibenversiegelung und Reifenpflege',Perfektion:'Premium-Aufbereitung mit maximaler Detailtiefe inklusive Politur/Coating-Umfang nach Ausstattung, intensiver Außen- und Innenreinigung, Glas, Schutz und dokumentierter Endkontrolle'}[p]||'professionelle Fahrzeugaufbereitung nach vereinbartem Umfang';var ex=(cur.extras||[]);return b+(ex.length?' inklusive Zusatzleistungen: '+ex.join(', '):'')+'.';}
+
+function svcRow(t){return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:2.6mm"><span style="color:#2447ff;font-weight:900;font-size:11px;line-height:1.25">\u2713</span><span style="font-size:10.5px;color:#1a2232;line-height:1.4">'+esc(t)+'</span></div>';}
+function pkgPage(){var g=packageServices(cur.paket);var blocks='';SERVICE_GROUP_ORDER.forEach(function(name){if(!g[name])return;blocks+='<div class="nobreak" style="break-inside:avoid;margin-bottom:7mm"><div style="font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#2447ff;margin-bottom:4mm">'+name+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2mm 10mm">'+g[name].map(svcRow).join('')+'</div></div>';});var ex=(cur.extras||[]);if(ex.length)blocks+='<div class="nobreak" style="break-inside:avoid;border-top:1px dashed #d4d9e3;padding-top:6mm"><div style="font-size:8px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:#6b7686;margin-bottom:4mm">Zusätzlich gebucht</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2mm 10mm">'+ex.map(svcRow).join('')+'</div></div>';return '<section class="page" style="padding:15mm 16mm">'+pageHead('Leistungspaket','Paket '+esc(cur.paket||''),'Auftrag '+esc(cur.number||'')+'<br>'+money(cur.price))+'<p style="font-size:10px;color:#6b7686;line-height:1.55;margin-bottom:8mm">Diese Leistungen wurden an deinem Fahrzeug durchgeführt — vollständig abgearbeitet und kontrolliert.</p>'+blocks+'</section>';}
+
+function genProtocol(){
+  var c=pcWords();var hero=cur.photosAfter[HERO]||cur.photosAfter['Front']||'';
+  var addr=esc(settings.addr||'');var right='Auftrag '+esc(cur.number||'')+'<br>'+deDate(cur.date)+'<br>'+esc(cur.plate||'');
+  var h='';
+  /* Cover */
+  h+='<section class="page" style="padding:0;display:flex;flex-direction:column">'+
+    (hero?'<div style="height:170mm;overflow:hidden;background:#f4f6fa"><img src="'+hero+'" style="width:100%;height:100%;object-fit:cover;display:block"></div>':'')+
+    '<div style="padding:'+(hero?'15mm 18mm 16mm':'46mm 18mm 18mm')+';flex:1;display:flex;flex-direction:column">'+
+      '<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:'+(hero?'19':'22')+'px;font-weight:900;letter-spacing:-.8px;color:#0a0e1a">Oskar<span style="color:#2447ff">Koch</span></div><div style="font-size:9px;color:#9aa3b2;font-weight:700">'+deDate(cur.date)+'</div></div>'+
+      '<div style="width:48px;height:3px;background:#2447ff;border-radius:2px;margin-top:'+(hero?'13mm':'16mm')+'"></div>'+
+      '<div style="font-size:9px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;color:#2447ff;margin-top:6mm">Aufbereitungsprotokoll</div>'+
+      '<h1 style="font-size:'+(hero?'36':'42')+'px;line-height:1;letter-spacing:-1.6px;color:#0a0e1a;margin-top:4mm">'+esc(cur.car||'Fahrzeug')+'</h1>'+
+      '<div style="font-size:10.5px;color:#6b7686;margin-top:4mm;font-weight:600">'+esc(cur.paket||'')+' · '+esc(cur.klasse||'')+'</div>'+
+      '<div style="margin-top:auto;border-top:1px solid #e7eaf0;padding-top:6mm;display:flex;justify-content:space-between;font-size:8.5px;color:#9aa3b2;line-height:1.5"><span>'+addr+'</span><span>Auftrag '+esc(cur.number||'')+' · '+esc(cur.plate||'')+'</span></div>'+
+    '</div>'+
+    '</section>';
+  /* Leistungspaket – direkt nach dem Deckblatt aufgeschlüsselt */
+  h+=pkgPage();
+  /* Übersicht */
+  h+='<section class="page" style="padding:14mm 16mm">'+pageHead('Auf einen Blick','Dein Fahrzeug nach der Aufbereitung',right)+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:6mm">'+
+    metric('Kunde',esc(fullName(cur)),'')+metric('Fahrzeug',esc(cur.car||''),esc(cur.color||'')+' · '+esc(cur.km||'k.A.')+' km')+
+    metric('Leistung',esc(cur.paket||'')+' · '+esc(cur.klasse||''),'Extras: '+((cur.extras||[]).length?esc(cur.extras.join(', ')):'keine'))+
+    metric('Datum / Ort',deDate(cur.date),esc(cur.place||'Chemnitz'))+'</div>'+
+    (cur.damage?'<div class="nobreak" style="border-left:4px solid #2447ff;background:#f7f9fc;border-radius:12px;padding:12px"><div style="font-size:8px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#2447ff;margin-bottom:4px">Vor Start dokumentierte sichtbare Vorschäden</div><div style="font-size:10px;line-height:1.5;color:#6b7686;white-space:pre-wrap">'+esc(cur.damage)+'</div></div>':'')+
+    '</section>';
+  /* Foto-Vergleich */
+  h+=photoPages();
+  /* Pflege & Werterhalt */
+  h+='<section class="page" style="padding:14mm 16mm;display:flex;flex-direction:column">'+pageHead('Pflege & Werterhalt','So bleibt das Ergebnis lange schön','')+
+    '<div style="font-size:9px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#2447ff;margin-bottom:4mm">So pflegst du richtig</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:8mm">'+
+    careCard('Erste 48 Stunden','Schutz & Versiegelung härten aus — Fahrzeug möglichst trocken halten und nicht waschen.')+
+    careCard('Handwäsche','Sanfte Handwäsche mit zwei Eimern erhält Glanz und Schutz am längsten.')+
+    careCard('Innenraum','Stehende Feuchtigkeit vermeiden, Flecken früh abtupfen statt reiben.')+
+    careCard('Regelmäßig','Vogelkot, Insekten und Baumharz zeitnah entfernen — sie ätzen den Lack an.')+
+    '</div>'+
+    '<div style="font-size:9px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#b42318;margin-bottom:4mm">Bitte vermeiden</div>'+
+    '<div class="nobreak" style="border:1px solid #f3c9c4;background:#fdeeec;border-radius:14px;padding:14px;margin-bottom:8mm;font-size:10px;color:#7a2a22;line-height:1.85">'+
+      '\u2022 Waschanlagen mit harten Bürsten (Kratzer & Swirls)<br>\u2022 Aggressive oder saure Reiniger auf Lack und Versiegelung<br>\u2022 Trocken über den Lack wischen<br>\u2022 Eingetrocknete Verschmutzung trocken \u201eabrubbeln\u201c<br>\u2022 In den ersten 48 Stunden waschen oder polieren'+
+    '</div>'+
+    '<div class="nobreak" style="border-radius:16px;background:linear-gradient(135deg,#0a0e1a,#2447ff);color:#fff;padding:16px;margin-bottom:6mm;display:flex;justify-content:space-between;align-items:center">'+
+      '<div><div style="font-size:8px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;opacity:.82">Nächster Termin empfohlen</div><div style="font-size:16px;font-weight:900;margin-top:3px">alle 8\u201312 Wochen</div></div>'+
+      '<div style="text-align:right"><div style="font-size:8px;opacity:.82;font-weight:700">ca. ab</div><div style="font-size:16px;font-weight:900">'+nextAppt()+'</div></div>'+
+    '</div>'+
+    '<div class="nobreak" style="border:1px dashed #2447ff;border-radius:12px;padding:11px 14px;margin-bottom:6mm;font-size:10px;color:#1a2232;background:#eef2ff">Tipp: Folgetermin bis <b>'+rebookBy()+'</b> buchen und <b style="color:#2447ff">20% Wiederbucher-Rabatt</b> sichern.</div>'+
+    (settings.google?'<div class="nobreak" style="border:1px solid #e7eaf0;border-radius:14px;padding:12px;text-align:center;margin-bottom:6mm"><div style="font-size:10.5px;font-weight:900;color:#0a0e1a;margin-bottom:3px">'+c.happy+'</div><div style="font-size:9px;color:#2447ff;word-break:break-all">'+esc(settings.google)+'</div></div>':'')+
+    '<div style="margin-top:auto;border-top:1px solid #e7eaf0;padding-top:6mm;text-align:center"><div style="font-size:20px;font-weight:900;letter-spacing:-.8px;color:#0a0e1a;margin-bottom:5px">'+c.thanks+'</div><div style="font-size:9px;color:#6b7686;line-height:1.5"><b style="color:#0a0e1a">Oskar<span style="color:#2447ff">Koch</span></b> · '+addr+' · '+esc(settings.tel||'')+'</div></div>'+
+    '</section>';
+  /* Recht & Unterschriften */
+  h+='<section class="page" style="padding:15mm 16mm">'+pageHead('Dokumentation','Bestätigung & rechtlicher Rahmen','Auftrag '+esc(cur.number||''))+
+    '<div style="font-size:9.5px;line-height:1.7;color:#1a2232">'+
+    '<p><b>§1 Sichtprüfung:</b> Vor Beginn wurde das Fahrzeug gemeinsam mit dem Auftraggeber auf sichtbare Vorschäden geprüft und dokumentiert. Die Prüfung erfolgt als äußere Sichtprüfung; verdeckte oder sehr feine Vorschäden können nicht vollständig ausgeschlossen werden.</p>'+
+    '<p><b>§2 Auftrag & Haftung:</b> Der Auftraggeber erteilt Oskar Koch ('+addr+') den verbindlichen Auftrag zur Fahrzeugaufbereitung gemäß gewähltem Paket zum vereinbarten Preis ('+money(cur.price)+'). Für nachweislich verursachte Schäden gelten die gesetzlichen Regeln; gesetzliche Kundenrechte bleiben unberührt.</p>'+
+    '<p><b>§3 Abnahme:</b> Mit der Unterschrift unter „Abnahme" bestätigt der Auftraggeber die Übergabe des aufbereiteten Fahrzeugs.</p>'+
+    '<p><b>§4 Rechnung:</b> Abrechnung als Kleinunternehmer gemäß § 19 UStG ohne gesonderten Umsatzsteuerausweis.</p>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14mm">'+
+    sigBlock(cur.sigBefore,'Vorschäden bestätigt (vor Start)',cur.sigBeforeTime)+
+    sigBlock(cur.sigAfter,'Abnahme & Übergabe',cur.sigAfterTime)+
+    '</div>'+
+    '<p style="font-size:8px;color:#9aa3b2;margin-top:10mm;line-height:1.5">Verantwortlich: '+esc(settings.name||'Oskar Koch')+' · '+addr+' · '+esc(settings.tel||'')+' · '+esc(settings.email||'')+' · Steuernr. '+esc(settings.tax||'')+'</p>'+
+    '</section>';
+  return '<div class="doc-inner">'+h+'</div>';
+}
+function careCard(t,s){return '<div class="nobreak" style="border:1px solid #e7eaf0;border-radius:14px;padding:12px"><div style="font-size:11px;font-weight:900;color:#0a0e1a;margin-bottom:3px">'+t+'</div><p style="font-size:9px;color:#6b7686;line-height:1.45">'+s+'</p></div>';}
+function sigBlock(img,label,timestamp){var inner=img?'<img src="'+img+'" style="max-width:100%;height:62px;object-fit:contain;display:block">':'<div style="height:62px"></div>';var ts=timestamp?'<div style="font-size:8px;color:#9aa3b2;margin-top:3px">'+formatDateTime(timestamp)+'</div>':'';return '<div class="nobreak"><div style="border-bottom:1px solid #0a0e1a;padding-bottom:4px">'+inner+'</div><div style="font-size:9px;color:#6b7686;margin-top:5px">'+label+'</div>'+ts+'</div>';}
+function photoPages(){
+  var pairs=ANGLES.filter(function(a){return cur.photosBefore[a]||cur.photosAfter[a];});
+  if(!pairs.length)return '';
+  var out='';
+  for(var i=0;i<pairs.length;i+=2){
+    var a1=pairs[i],a2=pairs[i+1];
+    out+='<section class="page" style="padding:12mm 14mm">'+pageHead('Vorher / Nachher','Bildvergleich','Oskar Koch')+
+      pairRow(a1)+(a2?'<div style="height:6mm"></div>'+pairRow(a2):'')+
+      '</section>';
+  }
+  return out;
+}
+function pairRow(a){
+  return '<div class="nobreak" style="margin-bottom:3mm"><div style="font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#0a0e1a;margin-bottom:4mm">'+esc(a)+'</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm">'+
+    '<div><div style="font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#6b7686;margin-bottom:3px">Vorher</div>'+imgBox(cur.photosBefore[a],'72mm')+'</div>'+
+    '<div><div style="font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#2447ff;margin-bottom:3px">Nachher</div>'+imgBox(cur.photosAfter[a],'72mm')+'</div>'+
+    '</div></div>';
+}
+
+function genInvoice(){
+  var addr=esc(settings.addr||'');
+  var rows=[['Aufbereitung '+esc(cur.paket||'')+' · '+esc(cur.klasse||''),PKG[cur.klasse]?PKG[cur.klasse][cur.paket]:0]];
+  (cur.extras||[]).forEach(function(e){rows.push([esc(e),EXTRAS[e]||0]);});
+  var body=rows.map(function(r){return '<tr><td style="padding:9px 0;border-bottom:1px solid #eef1f6;font-size:11px">'+r[0]+'</td><td style="padding:9px 0;border-bottom:1px solid #eef1f6;font-size:11px;text-align:right;white-space:nowrap">'+money(r[1])+'</td></tr>';}).join('');
+  return '<div class="doc-inner"><section class="page" style="padding:20mm 18mm">'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14mm"><div><div style="font-size:18px;font-weight:900;letter-spacing:-.8px;color:#0a0e1a">Oskar<span style="color:#2447ff">Koch</span></div><div style="font-size:9px;color:#6b7686;margin-top:3px;line-height:1.5">'+addr.replace(/, /g,'<br>')+'</div></div><div style="text-align:right"><div style="font-size:8px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;color:#2447ff">Rechnung</div><div style="font-size:20px;font-weight:900;letter-spacing:-.6px;color:#0a0e1a;margin-top:4px">'+esc(cur.number||'')+'</div></div></div>'+
+    '<table style="width:100%;font-size:11px;margin-bottom:10mm"><tr><td style="color:#6b7686;padding:3px 0">Kunde</td><td style="text-align:right;font-weight:700">'+esc(fullName(cur))+'</td></tr><tr><td style="color:#6b7686;padding:3px 0">Fahrzeug</td><td style="text-align:right">'+esc(cur.car||'')+' · '+esc(cur.plate||'')+'</td></tr><tr><td style="color:#6b7686;padding:3px 0">Datum / Ort</td><td style="text-align:right">'+deDate(cur.date)+' · '+esc(cur.place||'Chemnitz')+'</td></tr></table>'+
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:6mm"><thead><tr><th style="text-align:left;font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:#6b7686;padding-bottom:6px;border-bottom:2px solid #0a0e1a">Leistung</th><th style="text-align:right;font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:#6b7686;padding-bottom:6px;border-bottom:2px solid #0a0e1a">Betrag</th></tr></thead><tbody>'+body+'</tbody></table>'+
+    invTotalBlock()+
+    '<p style="font-size:9px;color:#6b7686;line-height:1.7;margin-top:12mm">Gemäß § 19 UStG (Kleinunternehmer) wird keine Umsatzsteuer ausgewiesen.<br>'+esc(settings.paynote||'')+'</p>'+
+    '<div style="border-top:1px solid #e7eaf0;margin-top:10mm;padding-top:6mm;font-size:8.5px;color:#9aa3b2;line-height:1.6">'+esc(settings.name||'Oskar Koch')+' · '+addr+'<br>IBAN '+esc(settings.iban||'')+' · Steuernr. '+esc(settings.tax||'')+' · '+esc(settings.tel||'')+' · '+esc(settings.email||'')+'</div>'+
+    '</section></div>';
+}
+
+/* ===================== PDF EXPORT (preload images first) ===================== */
+function exportPDF(){var prev=document.title;var base=docKind==='invoice'?'Rechnung_':docKind==='template'?'Vorlage_':'Protokoll_';document.title=base+((cur&&cur.number)||'OskarKoch')+((cur&&cur.plate)?'_'+String(cur.plate).replace(/\s/g,''):'');var restore=function(){document.title=prev;window.removeEventListener('afterprint',restore);};window.addEventListener('afterprint',restore);setTimeout(function(){window.print();},80);}
+
+/* ===================== LIST ===================== */
+function openList(){renderList();go('screen-list');}
+function renderList(){
+  idbAll().then(function(all){
+    all.sort(function(a,b){return (b.finishedAt||b.createdAt||'').localeCompare(a.finishedAt||a.createdAt||'');});
+    var q=(document.getElementById('list-search').value||'').toLowerCase();
+    if(q)all=all.filter(function(o){return (fullName(o)+' '+(o.plate||'')+' '+(o.number||'')+' '+(o.car||'')).toLowerCase().indexOf(q)>=0;});
+    document.getElementById('list-sub').textContent=all.length+' Aufträge';
+    document.getElementById('list-body').innerHTML=all.length?all.map(function(o){
+      var draft=o.status!=='done';
+      return '<div class="listitem" onclick="openOrder(\''+o.id+'\')"><div><div class="m">'+esc(fullName(o)||'Kunde')+(draft?' <span class="pill" style="vertical-align:middle">Entwurf</span>':'')+'</div><div class="x">'+esc(o.car||'')+' · '+esc(o.plate||'')+' · '+deDate(o.date)+(o.number?' · '+esc(o.number):'')+'</div></div><div class="r"><div class="am">'+money(o.price)+'</div><button class="btn btn-d btn-sm" style="margin-top:6px;min-height:32px;padding:0 12px" onclick="event.stopPropagation();delOrder(\''+o.id+'\')">Löschen</button></div></div>';
+    }).join(''):'<p style="text-align:center;color:var(--muted);font-size:13px;margin-top:30px">Noch keine Aufträge.</p>';
+  });
+}
+function openOrder(id){idbGet(id).then(function(o){if(!o)return;cur=o;if(o.status==='done'){renderDone();go('screen-done');}else{editingDone=false;var b=document.getElementById('cust-protocol');if(b)b.style.display='none';fillCustomerForm();renderClassChips();renderExtraChips();renderDiscountChips();renderPackages();updateTotal();go('screen-customer');}});}
+function delOrder(id){if(!confirm('Auftrag wirklich löschen? Das kann nicht rückgängig gemacht werden.'))return;idbDel(id).then(renderList);}
+
+/* ===================== SETTINGS ===================== */
+function openSettings(){
+  document.getElementById('s-name').value=settings.name||'';document.getElementById('s-addr').value=settings.addr||'';
+  document.getElementById('s-tel').value=settings.tel||'';document.getElementById('s-email').value=settings.email||'';
+  document.getElementById('s-tax').value=settings.tax||'';document.getElementById('s-iban').value=settings.iban||'';
+  document.getElementById('s-google').value=settings.google||'';document.getElementById('s-paynote').value=settings.paynote||'';
+  document.querySelectorAll('#tone-chips .chip').forEach(function(c){c.classList.remove('on');});
+  document.querySelectorAll('#tone-chips .chip').forEach(function(c){if(c.textContent.trim().toLowerCase()===(settings.tone==='sie'?'sie':'du'))c.classList.add('on');});
+  go('screen-settings');
+}
+function saveSettings(){
+  settings.name=document.getElementById('s-name').value;settings.addr=document.getElementById('s-addr').value;
+  settings.tel=document.getElementById('s-tel').value;settings.email=document.getElementById('s-email').value;
+  settings.tax=document.getElementById('s-tax').value;settings.iban=document.getElementById('s-iban').value;
+  settings.google=document.getElementById('s-google').value;settings.paynote=document.getElementById('s-paynote').value;
+  localStorage.setItem(SET_KEY,JSON.stringify(settings));toast('Einstellungen gespeichert');go('screen-home');
+}
+
+/* ===================== BACKUP ===================== */
+function exportBackup(){
+  idbAll().then(function(all){
+    var data={app:'oskoch',version:1,exportedAt:new Date().toISOString(),settings:settings,invCounter:localStorage.getItem('oskoch_inv')||'0',orders:all};
+    var blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='OskarKoch_Backup_'+todayISO()+'.json';a.click();
+    toast('Backup gespeichert');
+  });
+}
+function importBackup(input){
+  var f=input.files&&input.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    try{
+      var d=JSON.parse(e.target.result);
+      if(d.settings){settings=Object.assign({},defaults,d.settings);localStorage.setItem(SET_KEY,JSON.stringify(settings));}
+      if(d.invCounter)localStorage.setItem('oskoch_inv',d.invCounter);
+      var orders=d.orders||[];
+      Promise.all(orders.map(function(o){return idbPut(o);})).then(function(){toast('Backup geladen ('+orders.length+' Aufträge)');renderList&&renderList();});
+    }catch(err){alert('Backup konnte nicht gelesen werden.');}
+  };
+  r.readAsText(f);input.value='';
+}
+
+/* ===================== DOKUMENTENCENTER ===================== */
+function openDocs(){renderDocs();go('screen-docs');}
+function fmtSize(b){b=b||0;return b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';}
+function renderDocs(){docAll().then(function(all){all.sort(function(a,b){return (b.addedAt||'').localeCompare(a.addedAt||'');});document.getElementById('docs-body').innerHTML=all.length?all.map(function(d){return '<div class="listitem"><div><div class="m">'+esc(d.name)+'</div><div class="x">'+fmtSize(d.size)+' · '+deDate((d.addedAt||'').split("T")[0])+'</div></div><div class="r" style="display:flex;gap:6px"><button class="btn btn-o btn-sm" style="min-height:34px;padding:0 12px" onclick="downloadDoc(\''+d.id+'\')">Download</button><button class="btn btn-d btn-sm" style="min-height:34px;padding:0 12px" onclick="delDoc(\''+d.id+'\')">Löschen</button></div></div>';}).join(''):'<p style="text-align:center;color:var(--muted);font-size:13px;margin:14px 0">Noch keine Dateien. Tippe „Datei hinzufügen".</p>';});}
+function uploadDoc(input){var f=input.files&&input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){docPut({id:'d'+Date.now()+Math.random().toString(36).slice(2,6),name:f.name,type:f.type||'application/octet-stream',size:f.size,data:e.target.result,addedAt:new Date().toISOString()}).then(function(){renderDocs();toast('Datei gespeichert');});};r.readAsDataURL(f);input.value='';}
+function downloadDoc(id){docAll().then(function(all){var d=all.filter(function(x){return x.id===id;})[0];if(!d)return;var a=document.createElement('a');a.href=d.data;a.download=d.name;document.body.appendChild(a);a.click();document.body.removeChild(a);});}
+function delDoc(id){if(!confirm('Datei löschen?'))return;docDel(id).then(renderDocs);}
+function blankRow(l){return '<div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:7mm"><span style="font-size:9px;font-weight:800;color:#6b7686;min-width:42mm">'+l+'</span><span style="flex:1;border-bottom:1px solid #cfd6e2;height:14px"></span></div>';}
+function sigLine(l){return '<div><div style="border-bottom:1px solid #0a0e1a;height:55px"></div><div style="font-size:9px;color:#6b7686;margin-top:5px;font-weight:700">'+l+'</div></div>';}
+function openTemplate(kind){docKind='template';docReturn='screen-docs';document.getElementById('doc-title').textContent='Vorlage';document.getElementById('doc-sub').textContent='zum Ausdrucken / als PDF';document.getElementById('doc-body').innerHTML=genTemplate(kind);go('screen-doc');}
+var BENEFITS={
+ 'Vorwäsche mit Aktivschaum (berührungslos)':'Löst groben Schmutz ohne Kratzerrisiko',
+ 'Schonende Handwäsche, 2-Eimer-Methode':'Maximaler Lackschutz, keine Waschkratzer',
+ 'Druckluft-Reinigung enger Ritzen & Fugen':'Holt Staub aus Stellen, die der Sauger nicht erreicht',
+ 'Felgen-Tiefenreinigung inkl. Flugrostentfernung':'Entfernt eingebrannten Bremsstaub bis in die Tiefe',
+ 'Reifen mit Glanz gepflegt':'Tiefes Schwarz, frischer Look',
+ 'Lackversiegelung als Schutzschicht':'Wasser perlt ab, Schmutz haftet weniger, bleibt länger sauber',
+ 'Felgenversiegelung aufgetragen':'Bremsstaub haftet weniger, leichter zu reinigen',
+ 'Scheibenversiegelung außen aufgetragen':'Bessere Sicht bei Regen, Wasser perlt ab',
+ 'Polster und Sitze dampfgereinigt':'Löst Flecken und Gerüche tief aus dem Gewebe',
+ 'Leder gereinigt und gepflegt (falls vorhanden)':'Bleibt geschmeidig, beugt Rissen vor',
+ 'Hochglanzpolitur (Lackbild aufgefrischt)':'Reduziert feine Kratzer, mehr Tiefe und Glanz',
+ 'Lang anhaltendes Coating aufgetragen':'Schutz über Monate, deutlich pflegeleichter'
+};
+function pkgMatrix(){var levels=['Frisch','Makellos','Perfektion'];var groups={};levels.forEach(function(lv,li){var o=PKG_SERVICES[lv]||{};for(var g in o){o[g].forEach(function(name){groups[g]=groups[g]||[];var ex=null;for(var k=0;k<groups[g].length;k++){if(groups[g][k].name===name){ex=groups[g][k];break;}}if(!ex){ex={name:name,inc:[false,false,false]};groups[g].push(ex);}for(var j=li;j<3;j++)ex.inc[j]=true;});}});return groups;}
+function genTemplate(kind){var addr=esc(settings.addr||'');var co='<b style="color:#0a0e1a">Oskar<span style="color:#2447ff">Koch</span></b> · '+addr+' · '+esc(settings.tel||'')+' · '+esc(settings.email||'');
+  if(kind==='uebergabe'){return '<div class="doc-inner"><section class="page" style="padding:18mm">'+pageHead('Vorlage','Übergabe- & Vorschädenprotokoll','')+blankRow('Kunde')+blankRow('Telefon')+blankRow('Fahrzeug / Kennzeichen')+blankRow('Kilometerstand')+blankRow('Datum')+'<div style="margin-top:6mm;font-size:9px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#2447ff;margin-bottom:4mm">Sichtbare Vorschäden</div><div style="border:1px solid #e7eaf0;border-radius:12px;height:48mm"></div><p style="font-size:9px;color:#6b7686;line-height:1.6;margin-top:7mm">Der Auftraggeber bestätigt, dass die oben dokumentierten Vorschäden vor Beginn der Arbeiten vorhanden waren. Die Sichtprüfung erfolgt äußerlich; verdeckte Vorschäden können nicht ausgeschlossen werden.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14mm">'+sigLine('Vorschäden bestätigt (vor Start)')+sigLine('Abnahme & Übergabe')+'</div><p style="font-size:8px;color:#9aa3b2;margin-top:12mm">'+co+'</p></section></div>';}
+  if(kind==='agb'){return '<div class="doc-inner"><section class="page" style="padding:18mm">'+pageHead('Vorlage','Auftrag & Bedingungen','')+'<div style="font-size:10px;line-height:1.75;color:#1a2232">'+'<p><b>§1 Leistung:</b> Oskar Koch erbringt Fahrzeugaufbereitung im vereinbarten Paketumfang. Der Umfang richtet sich nach dem gebuchten Paket.</p>'+'<p><b>§2 Vorschäden:</b> Vor Beginn wird das Fahrzeug gemeinsam auf sichtbare Vorschäden geprüft und dokumentiert. Die Prüfung erfolgt als äußere Sichtprüfung.</p>'+'<p><b>§3 Haftung:</b> Für nachweislich verursachte Schäden gelten die gesetzlichen Regeln. Gesetzliche Kundenrechte bleiben unberührt.</p>'+'<p><b>§4 Abnahme:</b> Mit Unterschrift bestätigt der Auftraggeber die Übergabe des aufbereiteten Fahrzeugs.</p>'+'<p><b>§5 Zahlung & Rechnung:</b> Abrechnung als Kleinunternehmer gemäß § 19 UStG ohne gesonderten Umsatzsteuerausweis. '+esc(settings.paynote||'')+'</p>'+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18mm">'+sigLine('Auftraggeber')+sigLine('Oskar Koch')+'</div><p style="font-size:8px;color:#9aa3b2;margin-top:12mm">'+co+'</p></section></div>';}
+  if(kind==='vergleich'){var groups=pkgMatrix();var pkn=['Frisch','Makellos','Perfektion'];
+    var minp=function(p){var v=Object.keys(PKG).map(function(k){return PKG[k][p];});return Math.min.apply(null,v);};
+    var head='<tr><th style="text-align:left;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:#6b7686;padding:0 0 6px;border-bottom:2px solid #0a0e1a">Leistung</th>'+pkn.map(function(p){return '<th style="text-align:center;width:24mm;padding:0 0 6px;border-bottom:2px solid #0a0e1a"><div style="font-size:11px;font-weight:900;color:#0a0e1a">'+p+'</div><div style="font-size:8px;color:#6b7686;font-weight:600">ab '+minp(p)+' €</div></th>';}).join('')+'</tr>';
+    var rows='';SERVICE_GROUP_ORDER.forEach(function(g){if(!groups[g])return;rows+='<tr><td colspan="4" style="padding:6mm 0 2mm;font-size:8px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#2447ff">'+g+'</td></tr>';groups[g].forEach(function(it){var ben=BENEFITS[it.name]?'<div style="font-size:8px;color:#9aa3b2;line-height:1.3;margin-top:1px">'+esc(BENEFITS[it.name])+'</div>':'';rows+='<tr style="border-bottom:1px solid #eef1f6"><td style="padding:6px 10px 6px 0;font-size:10px;color:#1a2232;line-height:1.3">'+esc(it.name)+ben+'</td>'+it.inc.map(function(on){return '<td style="text-align:center">'+(on?'<span style="color:#2447ff;font-weight:900;font-size:12px">\u2713</span>':'<span style="color:#cfd6e2">\u2013</span>')+'</td>';}).join('')+'</tr>';});});
+    var extras='<div style="margin-top:7mm;border-top:1px solid #e7eaf0;padding-top:6mm"><div style="font-size:9px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#6b7686;margin-bottom:4mm">Optional zubuchbar</div>'+Object.keys(EXTRAS).map(function(e){return '<div style="display:flex;justify-content:space-between;font-size:10px;padding:4px 0;border-bottom:1px solid #f3f5f9"><span style="color:#1a2232">'+esc(e)+'</span><b style="color:#0a0e1a">+'+EXTRAS[e]+' €</b></div>';}).join('')+'</div>';
+    return '<div class="doc-inner"><section class="page" style="padding:14mm 15mm">'+pageHead('Übersicht','Paketvergleich','Frisch · Makellos · Perfektion')+'<table style="width:100%;border-collapse:collapse"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table>'+extras+'<p style="font-size:8px;color:#9aa3b2;margin-top:7mm">Wiederbucher-Vorteil: Folgetermin innerhalb von 8 Wochen \u2192 20% Rabatt. '+co+'</p></section></div>';}
+  var pk=['Frisch','Makellos','Perfektion'];var body=pk.map(function(p){var prices=Object.keys(PKG).map(function(k){return '<span style="font-size:10px;color:#6b7686">'+k+' <b style="color:#0a0e1a">'+PKG[k][p]+' €</b></span>';}).join('&nbsp;&nbsp;·&nbsp;&nbsp;');var g=packageServices(p);var items=[];SERVICE_GROUP_ORDER.forEach(function(n){if(g[n])items=items.concat(g[n]);});return '<div class="nobreak" style="border:1px solid #e7eaf0;border-radius:16px;padding:14px;margin-bottom:7mm"><h3 style="font-size:16px;color:#0a0e1a;margin-bottom:6px">'+p+'</h3><div style="margin-bottom:8px;display:flex;gap:4px;flex-wrap:wrap">'+prices+'</div><div style="font-size:9.5px;color:#6b7686;line-height:1.7">'+items.map(esc).join(' · ')+'</div></div>';}).join('');
+  return '<div class="doc-inner"><section class="page" style="padding:16mm">'+pageHead('Vorlage','Preise & Pakete','')+body+'<p style="font-size:9px;color:#6b7686;margin-top:3mm">Extras zubuchbar: '+Object.keys(EXTRAS).map(function(e){return esc(e)+' '+EXTRAS[e]+' €';}).join(' · ')+'</p><p style="font-size:8px;color:#9aa3b2;margin-top:10mm">'+co+'</p></section></div>';}
+
+/* ===================== VOLLBILD-UNTERSCHRIFT ===================== */
+var sigFullWhich=null,sigFullCtx=null,sigFullCanvas=null,sigFullBound=false;
+function openSigFull(which){sigFullWhich=which;document.getElementById('sig-full').classList.add('show');var c=document.getElementById('sig-full-canvas');sigFullCanvas=c;requestAnimationFrame(function(){var r=c.getBoundingClientRect();c.width=Math.max(300,Math.round(r.width));c.height=Math.max(200,Math.round(r.height));var ctx=c.getContext('2d');sigFullCtx=ctx;ctx.lineWidth=4;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#0a0e1a';var key=which==='before'?'sigBefore':'sigAfter';if(cur&&cur[key]){var im=new Image();im.onload=function(){ctx.drawImage(im,0,0,c.width,c.height);};im.src=cur[key];}});bindSigFull(c);}
+function bindSigFull(c){if(sigFullBound)return;sigFullBound=true;var drawing=false,last=null;function pos(e){var r=c.getBoundingClientRect();var p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top};}function down(e){e.preventDefault();drawing=true;last=pos(e);}function move(e){if(!drawing)return;e.preventDefault();var p=pos(e);sigFullCtx.beginPath();sigFullCtx.moveTo(last.x,last.y);sigFullCtx.lineTo(p.x,p.y);sigFullCtx.stroke();last=p;}function up(){drawing=false;}c.addEventListener('mousedown',down);c.addEventListener('mousemove',move);window.addEventListener('mouseup',up);c.addEventListener('touchstart',down,{passive:false});c.addEventListener('touchmove',move,{passive:false});c.addEventListener('touchend',up);}
+function sigFullClear(){if(sigFullCtx&&sigFullCanvas)sigFullCtx.clearRect(0,0,sigFullCanvas.width,sigFullCanvas.height);}
+function sigFullSave(){var which=sigFullWhich;var key=which==='before'?'sigBefore':'sigAfter';var timeKey=which==='before'?'sigBeforeTime':'sigAfterTime';if(cur&&sigFullCanvas){cur[key]=sigFullCanvas.toDataURL('image/png');cur[timeKey]=new Date().toISOString();save();var small=document.getElementById(which==='before'?'sig-before':'sig-after');if(small){var sctx=small.getContext('2d');sctx.clearRect(0,0,small.width,small.height);var im=new Image();im.onload=function(){sctx.drawImage(im,0,0,small.width,small.height);};im.src=cur[key];}}document.getElementById('sig-full').classList.remove('show');toast('Unterschrift gespeichert');}
+
+/* ===================== INIT ===================== */
+(function(){
+  var fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.id='file-input';fi.style.display='none';
+  fi.addEventListener('change',function(){onPhoto(fi);});
+  document.body.appendChild(fi);
+  var d=document.getElementById('f-date');if(d)d.value=todayISO();
+})();
+</script>
+</body>
+</html>
